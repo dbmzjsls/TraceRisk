@@ -34,6 +34,6 @@ LangGraph 使用 PostgreSQL checkpoint、`thread_id=run_id` 和同步持久化�
 
 PostgreSQL 同时承载业务、队列、checkpoint 与 pgvector，一个 combined worker 降低演示运维复杂度，但需要共同健康检查和明确初始化顺序。没有额外 broker、Redis 或对象存储。见 [架构](design/system-architecture.md)、[Compose](../compose.yaml)。
 
-[CI](../.github/workflows/ci.yml) 锁定依赖并使用 Mock/Fake，执行后端测试/静态检查和前端契约/构建。本地两次 8/8 E2E 证据保留；Git、hosted CI、fresh-clone Docker 和五分钟演练的当前结论见[验收入口](acceptance.md)，历史阶段记录不覆盖该状态。
+[CI](../.github/workflows/ci.yml) 锁定依赖并使用 Mock/Fake，执行后端测试/静态检查和前端契约/构建；hosted backend / frontend 已通过，后端覆盖 410 项测试。本地两次 8/8 E2E 证据保留，另从远端提交完成独立 fresh-clone Docker 四服务启动和五分钟人工复核演练；资源隔离、受控清理与提交链接见[验收入口](acceptance.md)，历史阶段记录不覆盖该状态。
 
 生产工作仍包括真实数据授权与质量、真实模型独立评测、容量/成本测量、部署和备份演练，均未作为现有能力交付。保留数据只读，临时目标由生成名/所有权记录清理，密钥和认证日志不进入交付。见 [lifecycle](../scripts/database_lifecycle.py)和[验收入口](acceptance.md)。

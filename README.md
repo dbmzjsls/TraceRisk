@@ -3,7 +3,7 @@
 可追溯的企业风险调查演示：确定性规则评分、冻结检索证据、结构化 AI 发现、人工复核，以及不可变报告。Web 使用 Vue 3 / Naive UI，API 使用 FastAPI，后台以一个 combined worker 管理 Outbox 与 Procrastinate，业务数据、队列和 LangGraph checkpoint 保存在 PostgreSQL / pgvector。
 
 > [!IMPORTANT]
-> 合成数据，仅供演示。当前验收使用 Mock 生成与 Fake embedding，无真实模型质量、吞吐、延迟或成本结论。两次本地 Vite/API/worker/PostgreSQL E2E 各覆盖 8/8 路径；2026-10-05 Docker recovery 已通过四服务健康、当前镜像、历史路由及 API/SSE 代理验收。
+> 合成数据，仅供演示。当前验收使用 Mock 生成与 Fake embedding，无真实模型质量、吞吐、延迟或成本结论。两次本地 Vite/API/worker/PostgreSQL E2E 各覆盖 8/8 路径；2026-10-08 hosted CI、fresh-clone Docker 与五分钟演练均已通过，详情见[当前验收状态](docs/acceptance.md)。
 
 ## 看项目
 
