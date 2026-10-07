@@ -26,8 +26,15 @@ task*-space/
 task*-pnpm-store/
 docs/evaluation/runs/*-tmp/
 
-# Internal implementation plans and historical recovery state are not release docs.
-docs/superpowers/
+# Internal implementation plans are not release docs, except the two approved
+# Stage 6 inputs whose hashes are part of the reproducible evaluation contract.
+docs/superpowers/*
+!docs/superpowers/specs/
+docs/superpowers/specs/*
+!docs/superpowers/specs/2026-09-28-stage-6-design.md
+!docs/superpowers/plans/
+docs/superpowers/plans/*
+!docs/superpowers/plans/2026-09-28-stage-6.md
 docs/operations/restart-and-resume.md
 docs/evaluation/stage-6.md
 docs/evaluation/stage-6-validation.json
