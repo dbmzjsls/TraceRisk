@@ -1,0 +1,557 @@
+{
+  "started_at": "2026-09-16T04:04:49Z",
+  "baseline": "2026-09-11",
+  "scenarios": {
+    "normal": {
+      "company_id": "f63fcb7e-dccf-52a6-9f30-a6de1cd58bf0",
+      "before_review": {
+        "investigation_id": "d5e1e876-efb4-4e93-b6e5-d18a090cc7b4",
+        "run_id": "a63bc933-3a81-49cb-87a5-a31a31260168",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "b876a06b-43e1-4d35-8689-191181c5d593",
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [
+          "intellectual_property"
+        ],
+        "retrieved_count": 1,
+        "ai_finding_count": 0,
+        "decision_count": 0
+      },
+      "review_mode": null,
+      "review_decision_ids": [],
+      "terminal": {
+        "investigation_id": "d5e1e876-efb4-4e93-b6e5-d18a090cc7b4",
+        "run_id": "a63bc933-3a81-49cb-87a5-a31a31260168",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "b876a06b-43e1-4d35-8689-191181c5d593",
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [
+          "intellectual_property"
+        ],
+        "retrieved_count": 1,
+        "ai_finding_count": 0,
+        "decision_count": 0
+      },
+      "report": {
+        "report_id": "b876a06b-43e1-4d35-8689-191181c5d593",
+        "rule_score": 0,
+        "review_reasons": [],
+        "coverage": {
+          "scope": [
+            "business",
+            "judicial",
+            "news",
+            "intellectual_property"
+          ],
+          "entries": [
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "3d83f8bb-5290-5008-8ee5-f08dfaa2e370",
+              "source_type": "business"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "d53d1e61-eb45-52ea-bfd8-e11c7c8b2808",
+              "source_type": "judicial"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "f7d7b342-ea8d-5236-bf59-cfcae301dcbd",
+              "source_type": "news"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "7e37a497-12c3-5e47-ba33-83158ed17da8",
+              "source_type": "intellectual_property"
+            }
+          ],
+          "evidence_sufficiency": "sufficient",
+          "insufficiency_details": []
+        },
+        "conflicts": [],
+        "retrieved_risk_types": [
+          "intellectual_property"
+        ],
+        "final_finding_count": 0
+      }
+    },
+    "all-rules-95": {
+      "company_id": "b2902304-8515-50fc-81d4-20c548e6861a",
+      "before_review": {
+        "investigation_id": "c98dd94f-610f-4b20-9937-1aa6fc365cd1",
+        "run_id": "a19d3e00-326c-4f7b-9603-c9d5633ab6e7",
+        "run_number": 1,
+        "status": "awaiting_review",
+        "report_id": null,
+        "rule_score": 95,
+        "rule_findings": [
+          {
+            "rule_code": "BUSINESS_ABNORMAL_V1",
+            "score": 25,
+            "evidence_ids": [
+              "5cab899c-3280-5902-a2ed-834ffae971f5"
+            ]
+          },
+          {
+            "rule_code": "CORE_IP_ANOMALY_V1",
+            "score": 15,
+            "evidence_ids": [
+              "7d793a5b-f6eb-562b-b3c4-634df3cfafe9"
+            ]
+          },
+          {
+            "rule_code": "JUDICIAL_OPEN_CASE_V1",
+            "score": 35,
+            "evidence_ids": [
+              "86892125-38bd-5fc5-89f4-07003ee5be18"
+            ]
+          },
+          {
+            "rule_code": "NEGATIVE_NEWS_V1",
+            "score": 20,
+            "evidence_ids": [
+              "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+              "6529afed-76c6-52bc-b0e1-a332d26de157"
+            ]
+          }
+        ],
+        "retrieved_risk_types": [
+          "business",
+          "intellectual_property",
+          "judicial",
+          "news"
+        ],
+        "retrieved_count": 6,
+        "ai_finding_count": 1,
+        "decision_count": 0
+      },
+      "review_mode": "finding",
+      "review_decision_ids": [
+        "326be7c0-db89-4940-9e4e-878818308cff"
+      ],
+      "terminal": {
+        "investigation_id": "c98dd94f-610f-4b20-9937-1aa6fc365cd1",
+        "run_id": "a19d3e00-326c-4f7b-9603-c9d5633ab6e7",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "3fee0687-e1ed-4a3a-bcb8-8a854664b4b8",
+        "rule_score": 95,
+        "rule_findings": [
+          {
+            "rule_code": "BUSINESS_ABNORMAL_V1",
+            "score": 25,
+            "evidence_ids": [
+              "5cab899c-3280-5902-a2ed-834ffae971f5"
+            ]
+          },
+          {
+            "rule_code": "CORE_IP_ANOMALY_V1",
+            "score": 15,
+            "evidence_ids": [
+              "7d793a5b-f6eb-562b-b3c4-634df3cfafe9"
+            ]
+          },
+          {
+            "rule_code": "JUDICIAL_OPEN_CASE_V1",
+            "score": 35,
+            "evidence_ids": [
+              "86892125-38bd-5fc5-89f4-07003ee5be18"
+            ]
+          },
+          {
+            "rule_code": "NEGATIVE_NEWS_V1",
+            "score": 20,
+            "evidence_ids": [
+              "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+              "6529afed-76c6-52bc-b0e1-a332d26de157"
+            ]
+          }
+        ],
+        "retrieved_risk_types": [
+          "business",
+          "intellectual_property",
+          "judicial",
+          "news"
+        ],
+        "retrieved_count": 6,
+        "ai_finding_count": 1,
+        "decision_count": 1
+      },
+      "report": {
+        "report_id": "3fee0687-e1ed-4a3a-bcb8-8a854664b4b8",
+        "rule_score": 95,
+        "review_reasons": [
+          "high_risk",
+          "model_recommended"
+        ],
+        "coverage": {
+          "scope": [
+            "business",
+            "judicial",
+            "news",
+            "intellectual_property"
+          ],
+          "entries": [
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "04b47c12-9be0-53cd-8b7d-f4b9413dcf9b",
+              "source_type": "business"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "9451fafb-7d0e-51c8-9cc4-edd283f2b09b",
+              "source_type": "judicial"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "6bd9084c-ee4b-5cfe-a3cb-83fe92284e10",
+              "source_type": "news"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "4d6baf79-ff67-52e6-9b38-a8b62aa22439",
+              "source_type": "intellectual_property"
+            }
+          ],
+          "evidence_sufficiency": "sufficient",
+          "insufficiency_details": []
+        },
+        "conflicts": [],
+        "retrieved_risk_types": [
+          "business",
+          "intellectual_property",
+          "judicial",
+          "news"
+        ],
+        "final_finding_count": 1
+      }
+    },
+    "coverage-missing": {
+      "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+      "before_review": {
+        "investigation_id": "4e4e7dc1-efe2-47da-9a3f-6666da139222",
+        "run_id": "d882ad9e-c527-4c47-8bc5-35f6ef817832",
+        "run_number": 1,
+        "status": "awaiting_review",
+        "report_id": null,
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [],
+        "retrieved_count": 0,
+        "ai_finding_count": 0,
+        "decision_count": 0
+      },
+      "review_mode": "run",
+      "review_decision_ids": [
+        "5c798384-6c96-4719-8325-794c93ffd24a"
+      ],
+      "terminal": {
+        "investigation_id": "4e4e7dc1-efe2-47da-9a3f-6666da139222",
+        "run_id": "d882ad9e-c527-4c47-8bc5-35f6ef817832",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "dd7277a0-ca83-4be1-9725-878296c790bd",
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [],
+        "retrieved_count": 0,
+        "ai_finding_count": 0,
+        "decision_count": 1
+      },
+      "report": {
+        "report_id": "dd7277a0-ca83-4be1-9725-878296c790bd",
+        "rule_score": 0,
+        "review_reasons": [
+          "evidence_insufficient"
+        ],
+        "coverage": {
+          "scope": [
+            "business",
+            "judicial",
+            "news",
+            "intellectual_property"
+          ],
+          "entries": [
+            {
+              "status": "unavailable",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "d0191bb3-3c0e-51fa-9b6e-f16770406344",
+              "source_type": "business"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "f5fdb86a-3fb1-5c4a-9f97-54b833358076",
+              "source_type": "judicial"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "2c437172-4366-5f5a-8408-1e6f6ea8d305",
+              "source_type": "news"
+            },
+            {
+              "status": "stale",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "6f346bb6-c0df-59d4-9a52-b32e83df1fcb",
+              "source_type": "intellectual_property"
+            }
+          ],
+          "evidence_sufficiency": "insufficient",
+          "insufficiency_details": [
+            "business:unavailable",
+            "intellectual_property:stale"
+          ]
+        },
+        "conflicts": [],
+        "retrieved_risk_types": [],
+        "final_finding_count": 0
+      }
+    },
+    "authoritative-conflict": {
+      "company_id": "60e57e9c-a40d-59d5-b2bb-f09fc2a8d757",
+      "before_review": {
+        "investigation_id": "9329aab7-f2d4-4091-9c44-3a72bcfff4ca",
+        "run_id": "f994633f-e9e5-4bde-bc48-e75e52f2705a",
+        "run_number": 1,
+        "status": "awaiting_review",
+        "report_id": null,
+        "rule_score": 35,
+        "rule_findings": [
+          {
+            "rule_code": "JUDICIAL_OPEN_CASE_V1",
+            "score": 35,
+            "evidence_ids": [
+              "4c24bf5f-4f86-5aad-adec-adbeddac9539"
+            ]
+          }
+        ],
+        "retrieved_risk_types": [
+          "judicial"
+        ],
+        "retrieved_count": 2,
+        "ai_finding_count": 1,
+        "decision_count": 0
+      },
+      "review_mode": "finding",
+      "review_decision_ids": [
+        "8c1c8dd3-8735-40f3-bdb1-28568cd1ed1e"
+      ],
+      "terminal": {
+        "investigation_id": "9329aab7-f2d4-4091-9c44-3a72bcfff4ca",
+        "run_id": "f994633f-e9e5-4bde-bc48-e75e52f2705a",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "f520ec5b-f527-4678-96c3-e63f6ba56377",
+        "rule_score": 35,
+        "rule_findings": [
+          {
+            "rule_code": "JUDICIAL_OPEN_CASE_V1",
+            "score": 35,
+            "evidence_ids": [
+              "4c24bf5f-4f86-5aad-adec-adbeddac9539"
+            ]
+          }
+        ],
+        "retrieved_risk_types": [
+          "judicial"
+        ],
+        "retrieved_count": 2,
+        "ai_finding_count": 1,
+        "decision_count": 1
+      },
+      "report": {
+        "report_id": "f520ec5b-f527-4678-96c3-e63f6ba56377",
+        "rule_score": 35,
+        "review_reasons": [
+          "conflict",
+          "model_recommended"
+        ],
+        "coverage": {
+          "scope": [
+            "business",
+            "judicial",
+            "news",
+            "intellectual_property"
+          ],
+          "entries": [
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "b8f6caa2-b6f8-59e2-af63-4cade116ad53",
+              "source_type": "business"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "e634aa2c-9123-5993-9553-b1ff15c8286a",
+              "source_type": "judicial"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "6a0e2fbb-0736-5726-9e4a-39555f200582",
+              "source_type": "news"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "1a8ed925-6c2a-5c1f-b4e2-38ae856041dd",
+              "source_type": "intellectual_property"
+            }
+          ],
+          "evidence_sufficiency": "sufficient",
+          "insufficiency_details": []
+        },
+        "conflicts": [
+          {
+            "sides": [
+              {
+                "fact_value": "closed",
+                "evidence_id": "f256d128-5465-50ac-ae5c-2d7adcb866a3",
+                "observed_at": "2026-09-11",
+                "source_type": "business",
+                "content_hash": "e911a79481bc2a19ad72c20e7dc2fedc9d1cc5adc6bf6d63055042e01f1d893a"
+              },
+              {
+                "fact_value": "open",
+                "evidence_id": "4c24bf5f-4f86-5aad-adec-adbeddac9539",
+                "observed_at": "2026-09-11",
+                "source_type": "judicial",
+                "content_hash": "3016efaba79e707e8bfebb8194047e99a32f7d3d1b3a5faa6a92ca4132a9bb15"
+              }
+            ],
+            "fact_key": "CONFLICT-CASE-001",
+            "fact_type": "judicial_case_status",
+            "risk_type": "judicial",
+            "company_id": "60e57e9c-a40d-59d5-b2bb-f09fc2a8d757",
+            "resolved_value": "open",
+            "authority_source": "judicial"
+          }
+        ],
+        "retrieved_risk_types": [
+          "judicial"
+        ],
+        "final_finding_count": 1
+      }
+    },
+    "prompt-injection": {
+      "company_id": "15815921-29e1-524b-86a4-18d36eb53d62",
+      "before_review": {
+        "investigation_id": "11609062-6ad2-474a-802e-1fc8b4c75deb",
+        "run_id": "7984a42c-973d-4686-bcc1-41a935f620da",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "52cc45c1-c008-4b6f-88d5-30916a7c0647",
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [
+          "news"
+        ],
+        "retrieved_count": 1,
+        "ai_finding_count": 0,
+        "decision_count": 0
+      },
+      "review_mode": null,
+      "review_decision_ids": [],
+      "terminal": {
+        "investigation_id": "11609062-6ad2-474a-802e-1fc8b4c75deb",
+        "run_id": "7984a42c-973d-4686-bcc1-41a935f620da",
+        "run_number": 1,
+        "status": "completed",
+        "report_id": "52cc45c1-c008-4b6f-88d5-30916a7c0647",
+        "rule_score": 0,
+        "rule_findings": [],
+        "retrieved_risk_types": [
+          "news"
+        ],
+        "retrieved_count": 1,
+        "ai_finding_count": 0,
+        "decision_count": 0
+      },
+      "report": {
+        "report_id": "52cc45c1-c008-4b6f-88d5-30916a7c0647",
+        "rule_score": 0,
+        "review_reasons": [],
+        "coverage": {
+          "scope": [
+            "business",
+            "judicial",
+            "news",
+            "intellectual_property"
+          ],
+          "entries": [
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "20fbd8ed-a50f-5bf2-a1e3-8f5e8f353516",
+              "source_type": "business"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "88ae3c9f-85a0-5583-bf05-c270e3168b41",
+              "source_type": "judicial"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "dd57011b-840e-5a3b-b633-e3c38e371a46",
+              "source_type": "news"
+            },
+            {
+              "status": "available",
+              "checked_at": "2026-09-11T00:00:00+00:00",
+              "coverage_id": "6c307d0c-4670-5902-91bf-a8e7f3fbe7a1",
+              "source_type": "intellectual_property"
+            }
+          ],
+          "evidence_sufficiency": "sufficient",
+          "insufficiency_details": []
+        },
+        "conflicts": [],
+        "retrieved_risk_types": [
+          "news"
+        ],
+        "final_finding_count": 0
+      }
+    }
+  },
+  "rerun": {
+    "investigation_id": "d5e1e876-efb4-4e93-b6e5-d18a090cc7b4",
+    "prior_run_id": "a63bc933-3a81-49cb-87a5-a31a31260168",
+    "prior_run_number": 1,
+    "prior_report_id": "b876a06b-43e1-4d35-8689-191181c5d593",
+    "new_run_id": "0377bccb-bc61-4b3c-9daf-d31e05b3ebd5",
+    "new_run_number": 2,
+    "new_terminal": {
+      "investigation_id": "d5e1e876-efb4-4e93-b6e5-d18a090cc7b4",
+      "run_id": "0377bccb-bc61-4b3c-9daf-d31e05b3ebd5",
+      "run_number": 2,
+      "status": "completed",
+      "report_id": "ab641811-756e-486c-a021-ec4c879bc138",
+      "rule_score": 0,
+      "rule_findings": [],
+      "retrieved_risk_types": [
+        "intellectual_property"
+      ],
+      "retrieved_count": 1,
+      "ai_finding_count": 0,
+      "decision_count": 0
+    },
+    "prior_report_unchanged": true
+  },
+  "finished_at": "2026-09-16T04:05:11Z"
+}

@@ -1,0 +1,4 @@
+storeDir: ../../.cache/pnpm-store
+registry: https://registry.npmjs.org
+allowBuilds:
+  vue-demi: true

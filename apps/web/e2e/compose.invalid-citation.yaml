@@ -1,0 +1,17 @@
+# Apply only for an owned disposable E2E database after stopping the normal
+# worker. Compose recreates the same worker service with this command; it must
+# never run alongside a normal worker pointed at that database.
+services:
+  worker:
+    command: ["python", "/e2e/invalid_citation_worker.py"]
+    volumes:
+      - ./apps/web/e2e/invalid_citation_worker.py:/e2e/invalid_citation_worker.py:ro
+      - ./scripts/e2e_runtime.py:/app/scripts/e2e_runtime.py:ro
+      - ./scripts/seed_e2e.py:/app/scripts/seed_e2e.py:ro
+      - ${E2E_OWNERSHIP_RECORD:?Set the owned E2E record}:/e2e/owned.json:ro
+    environment:
+      E2E_CITATION_MUTATION: ${E2E_CITATION_MUTATION:?Set a named E2E mutation}
+      E2E_OWNERSHIP_RECORD: /e2e/owned.json
+      E2E_WORKER_PROOF: /tmp/e2e-worker-proof.json
+      E2E_DB_NAME: ${APP_POSTGRES_DB:?Set owned E2E database}
+      PYTHONPATH: /app/apps/api/src:/app:/app/scripts

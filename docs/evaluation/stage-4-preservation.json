@@ -1,0 +1,68 @@
+{
+  "frozen_runs_replayed": 11,
+  "historical_rows_preserved": true,
+  "pre_manifest_runs_preserved_as_rows": 4,
+  "ready_index": "bge:BAAI/bge-small-zh-v1.5:512:cosine:v1",
+  "tables": {
+    "ai_findings": {
+      "after": 7,
+      "before": 6
+    },
+    "audit_events": {
+      "after": 26,
+      "before": 15
+    },
+    "companies": {
+      "after": 10,
+      "before": 10
+    },
+    "company_aliases": {
+      "after": 1,
+      "before": 1
+    },
+    "evidence": {
+      "after": 25,
+      "before": 25
+    },
+    "evidence_chunks": {
+      "after": 37,
+      "before": 12
+    },
+    "investigations": {
+      "after": 13,
+      "before": 9
+    },
+    "retrieved_evidence": {
+      "after": 29,
+      "before": 19
+    },
+    "review_decisions": {
+      "after": 5,
+      "before": 4
+    },
+    "risk_reports": {
+      "after": 11,
+      "before": 7
+    },
+    "rule_finding_evidence": {
+      "after": 20,
+      "before": 14
+    },
+    "rule_findings": {
+      "after": 14,
+      "before": 9
+    },
+    "source_coverage": {
+      "after": 40,
+      "before": 40
+    },
+    "workflow_runs": {
+      "after": 15,
+      "before": 10
+    },
+    "workflow_steps": {
+      "after": 70,
+      "before": 46
+    }
+  }
+}

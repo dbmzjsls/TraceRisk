@@ -1,0 +1,48 @@
+[project]
+name = "tracerisk"
+version = "0.1.0"
+description = "TraceRisk risk evidence analysis API"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "alembic>=1.16,<2",
+    "fastapi>=0.115,<1",
+    "httpx>=0.28.1,<1",
+    "pgvector>=0.4,<1",
+    "langgraph>=1,<2",
+    "langgraph-checkpoint-postgres>=3,<4",
+    "procrastinate>=3,<4",
+    "psycopg[binary]>=3,<4",
+    "pwdlib[argon2]>=0.3,<1",
+    "pydantic>=2,<3",
+    "pydantic-settings>=2,<3",
+    "pyjwt>=2.10,<3",
+    "sqlalchemy[asyncio]>=2.0,<2.1",
+    "uvicorn>=0.34,<1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.1",
+    "pytest>=9.1.1",
+    "ruff>=0.16.6",
+]
+
+[project.optional-dependencies]
+bge = ["sentence-transformers>=5,<6"]

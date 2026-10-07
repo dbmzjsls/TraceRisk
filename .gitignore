@@ -1,0 +1,34 @@
+.env
+.env.*
+!.env.example
+.venv/
+node_modules/
+.cache/
+.pnpm-store/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tmp/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.egg-info/
+*.log
+worker-health*.json
+
+# Local acceptance/orchestration workspaces and private execution evidence.
+.superpowers/
+task*-space/
+task*-pnpm-store/
+docs/evaluation/runs/*-tmp/
+
+# Internal implementation plans and historical recovery state are not release docs.
+docs/superpowers/
+docs/operations/restart-and-resume.md
+docs/evaluation/stage-6.md
+docs/evaluation/stage-6-validation.json
+scripts/resume-status.ps1

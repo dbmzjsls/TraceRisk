@@ -1,0 +1,234 @@
+{
+  "repository": "https://github.com/zclzone/vue-naive-admin.git",
+  "commit": "a55f0a2e6fe0561ce62c3452b96ec4b4cbcb8553",
+  "license": "MIT",
+  "copyright": "Copyright (c) 2023 Ronnie Zhang(大脸怪)",
+  "strategy": "Minimal selected source extraction; no full clone, Git initialization, wholesale template copy or claim that adapted files are unchanged.",
+  "originalInventory": ".cache/upstream/tree.json",
+  "hashAlgorithm": "SHA-256 of downloaded original bytes",
+  "entries": [
+    {
+      "source": "LICENSE",
+      "sha256": "ec04c5ae7bbbfe370d1f851bafae51bc9559f21021d2ed54435ec5d0e0b24748",
+      "local": [
+        "LICENSE.upstream"
+      ],
+      "category": "retained",
+      "changes": "Full MIT license verbatim.",
+      "cachedOriginal": ".cache/upstream/source/LICENSE"
+    },
+    {
+      "source": "package.json",
+      "sha256": "5754044b2c1787a1a166ddd33848049b01baaebb8cd10f1e0f3b23b101e04f0f",
+      "local": [
+        "package.json"
+      ],
+      "category": "adapted",
+      "changes": "Retained six core stack packages, explicit locked versions; new TypeScript, query, validation, generator and lint tools; removed unrelated dependencies and hooks.",
+      "cachedOriginal": ".cache/upstream/source/package.json"
+    },
+    {
+      "source": "uno.config.js",
+      "sha256": "59d583d91d8788453f9faa80526a4d82579a9bfd95a887b65a5ca1c2df8c6b2a",
+      "local": [
+        "uno.config.ts",
+        "src/styles.css"
+      ],
+      "category": "adapted",
+      "changes": "Retained presetWind3, wh-full/f-c-c/flex-col/auto-bg shortcuts, card-shadow rule, dark/border colors. Omitted icons, attributify and rem conversion.",
+      "cachedOriginal": ".cache/upstream/source/uno.config.js"
+    },
+    {
+      "source": "vite.config.js",
+      "sha256": "58eebe6929b56725f1b613fdf1eba413c4d4aca481a68197b03790a905eb51d7",
+      "local": [
+        "vite.config.ts"
+      ],
+      "category": "adapted",
+      "changes": "Retained Vue/UnoCSS plugins and /api prefix-strip proxy pattern; local target/host. Removed JSX, auto-import, custom build plugins, devtools, external proxy.",
+      "cachedOriginal": ".cache/upstream/source/vite.config.js"
+    },
+    {
+      "source": "src/App.vue",
+      "sha256": "7800ba06255e39dff2b8de9202dd9365f9c486a1d9fede55a266a030b53774b8",
+      "local": [
+        "src/App.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained NConfigProvider Chinese locale/date locale, dark theme binding and router outlet; removed dynamic layouts, KeepAlive tabs and layout settings.",
+      "cachedOriginal": ".cache/upstream/source/src/App.vue"
+    },
+    {
+      "source": "src/components/common/ToggleTheme.vue",
+      "sha256": "111de6d523417a1dbb75fb4f4a114ae2ad175141eafdb586799fba1c361c48e5",
+      "local": [
+        "src/ui/theme.ts",
+        "src/layouts/WorkspaceLayout.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained user light/dark toggle and theme-conditioned sun/moon action; replaces VueUse/Pinia with module shallowRef. View-transition animation excluded.",
+      "cachedOriginal": ".cache/upstream/source/src/components/common/ToggleTheme.vue"
+    },
+    {
+      "source": "src/layouts/components/SideLogo.vue",
+      "sha256": "63193dee7f46af8fb8ab6385acd7e5d6d9c95afa0cef739d680189d09138d232",
+      "local": [
+        "src/layouts/WorkspaceLayout.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained centered 60px home RouterLink/logo and collapsed title pattern; uses domain text instead of template asset.",
+      "cachedOriginal": ".cache/upstream/source/src/layouts/components/SideLogo.vue"
+    },
+    {
+      "source": "src/layouts/components/SideMenu.vue",
+      "sha256": "46aeea7681eab68f9d9c5a3bb02b54211b0b171cdbb20c298ac51385e20f2cab",
+      "local": [
+        "src/layouts/WorkspaceLayout.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained NMenu options/active value/collapse64 and navigation structure; replaced dynamic permission menus and external-link dialog with static internal RouterLinks.",
+      "cachedOriginal": ".cache/upstream/source/src/layouts/components/SideMenu.vue"
+    },
+    {
+      "source": "src/layouts/normal/index.vue",
+      "sha256": "4365698f9577436ab4141841eae8889225695190c2c47d2f730e096c6875de02",
+      "local": [
+        "src/layouts/WorkspaceLayout.vue",
+        "src/styles.css"
+      ],
+      "category": "adapted",
+      "changes": "Retained full-size flex aside/article shell, 220/64 widths and 300ms width transition. Header/slot becomes header/router outlet; added narrow viewport behavior.",
+      "cachedOriginal": ".cache/upstream/source/src/layouts/normal/index.vue"
+    },
+    {
+      "source": "src/layouts/normal/header/index.vue",
+      "sha256": "5af514e31a3c168612cb003333c61e2d6b5acd1d25d8e64f241818975b1e5b0e",
+      "local": [
+        "src/layouts/WorkspaceLayout.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained 60px flex header with collapse/theme/user actions; replaced tabs by business title and removed guide/fullscreen/social/settings.",
+      "cachedOriginal": ".cache/upstream/source/src/layouts/normal/header/index.vue"
+    },
+    {
+      "source": "src/layouts/normal/sidebar/index.vue",
+      "sha256": "f9d154285e2fdcb4a1fba0a7b562110682abc244050f81259a87484fa84a0078",
+      "local": [
+        "src/layouts/WorkspaceLayout.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained bordered SideLogo plus scrollable SideMenu composition, inlined into scoped shell.",
+      "cachedOriginal": ".cache/upstream/source/src/layouts/normal/sidebar/index.vue"
+    },
+    {
+      "source": "src/styles/global.css",
+      "sha256": "8496fd2828f48e2ce5bae27c87ad6e5ddf42a808a55eb8a23923fc42444b2b60",
+      "local": [
+        "src/styles.css"
+      ],
+      "category": "adapted",
+      "changes": "Retained html/body/app width/height/overflow viewport structure and cus-scroll-y behavior. Removed unused transitions, custom WebKit scrollbar and view transition rules.",
+      "cachedOriginal": ".cache/upstream/source/src/styles/global.css"
+    },
+    {
+      "source": "src/styles/reset.css",
+      "sha256": "82d60882162ecd7d14c3cb39c00f305f0efdd1069eae67153cf890e3674843d3",
+      "local": [],
+      "category": "inspected-not-extracted",
+      "changes": "Read; complete reset not extracted. Naive NGlobalStyle and minimal domain CSS handle normalization.",
+      "cachedOriginal": ".cache/upstream/source/src/styles/reset.css"
+    },
+    {
+      "source": "src/views/error-page/403.vue",
+      "sha256": "7329bfff028375483f09297d6824652e4c4d4e0c96ff66277f74351ebd2be21a",
+      "local": [
+        "src/pages/ErrorPage.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained centered large NResult 403 with footer NButton home navigation; removed history/dynamic permission redirect manipulation.",
+      "cachedOriginal": ".cache/upstream/source/src/views/error-page/403.vue"
+    },
+    {
+      "source": "src/views/error-page/404.vue",
+      "sha256": "29e9471ebc56895229643d8b6cb2a02edfbea419a829451c0e0e61981ae390ff",
+      "local": [
+        "src/pages/ErrorPage.vue"
+      ],
+      "category": "adapted",
+      "changes": "Retained centered large NResult 404 and home footer button; unified status prop and added honest unavailable result.",
+      "cachedOriginal": ".cache/upstream/source/src/views/error-page/404.vue"
+    },
+    {
+      "source": "src/views/login/index.vue",
+      "sha256": "62a1c84422e0f6faf4edd1468d64d0c38179cee45bfd236cb8e6d7380ad1d048",
+      "local": [
+        "src/features/auth/LoginPage.vue",
+        "src/features/auth/LoginForm.vue",
+        "src/styles.css"
+      ],
+      "category": "adapted",
+      "changes": "Retained centered max700/min345 responsive split card, hidden narrow intro, width320 form/padding32/20, username/password Naive inputs and loading login button/footer. Replaced image assets with domain text. Deleted captcha, quicklogin and remember/passwordstorage from extracted structure; new labels/form submit/auth orchestration.",
+      "cachedOriginal": ".cache/upstream/source/src/views/login/index.vue"
+    }
+  ],
+  "excluded": [
+    {
+      "category": "not-extracted",
+      "sources": [
+        "src/views/base/**",
+        "src/views/demo/**",
+        "src/views/home/**",
+        "src/views/pms/**",
+        "src/views/profile/**",
+        "src/views/iframe/**",
+        "src/views/login/api.js",
+        "src/api/**",
+        "src/utils/http/**",
+        "src/store/**",
+        "src/layouts/components/RoleSelect.vue",
+        "src/layouts/components/BeginnerGuide.vue",
+        "src/layouts/components/tab/**",
+        "src/layouts/full/**",
+        "src/layouts/simple/**",
+        "build/**",
+        "src/assets/**"
+      ],
+      "reason": "Excluded inventory entries, not downloaded or copied. No claims of file deletion/hashes for these unextracted files."
+    }
+  ],
+  "newLocalFiles": [
+    "src/main.ts",
+    "src/features/auth/store.ts",
+    "src/features/auth/useAuth.ts",
+    "src/api/client.ts",
+    "src/api/schemas.ts",
+    "src/api/generated.ts",
+    "src/router/index.ts",
+    "src/pages/NotReadyPage.vue",
+    "scripts/generate-api.mjs",
+    "index.html",
+    "tsconfig.json",
+    "eslint.config.js",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml",
+    "scripts/test-auth.mjs",
+    "tests/auth-boundaries.ts"
+  ],
+  "removedExamplesWithinAdaptedSource": [
+    "captcha",
+    "quicklogin",
+    "remember/passwordstorage",
+    "dynamic permission/role picker menus",
+    "guide/fullscreen/settings/social actions",
+    "KeepAlive/dynamic layouts",
+    "external proxy"
+  ],
+  "removedDependencyCategories": [
+    "chart/Excel",
+    "business HTTP/template requests",
+    "hooks",
+    "icon datasets/custom build",
+    "auto-import/JSX/devtools",
+    "VueUse/persistedstate/utility packages"
+  ]
+}

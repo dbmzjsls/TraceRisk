@@ -1,0 +1,86 @@
+name: tracerisk
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg17
+    environment:
+      POSTGRES_DB: ${POSTGRES_INIT_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-tracerisk}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tracerisk_local_demo}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  api:
+    image: tracerisk-api:stage6
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment: &api_environment
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: ${APP_POSTGRES_DB:-tracerisk_demo}
+      POSTGRES_USER: ${POSTGRES_USER:-tracerisk}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tracerisk_local_demo}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in a local .env file}
+      MODEL_ADAPTER: mock
+      EMBEDDING_PROVIDER: fake
+      EMBEDDING_MODEL: fake-sha256-v1
+      LANGSMITH_TRACING: "false"
+      LANGCHAIN_TRACING_V2: "false"
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  worker:
+    image: tracerisk-api:stage6
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ["python", "-m", "tracerisk.workflows.service"]
+    stop_grace_period: 30s
+    environment: *api_environment
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-m", "tracerisk.workflows.health", "--check"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    image: tracerisk-web:stage6
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+volumes:
+  postgres_data:

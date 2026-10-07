@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  MODEL_ADAPTER: mock
+  EMBEDDING_PROVIDER: fake
+  EMBEDDING_MODEL: fake-sha256-v1
+  LANGSMITH_TRACING: "false"
+  LANGCHAIN_TRACING_V2: "false"
+  POSTGRES_HOST: 127.0.0.1
+  POSTGRES_PORT: "5432"
+  POSTGRES_USER: tracerisk
+  POSTGRES_PASSWORD: tracerisk_local_demo
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/apps/api/src
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.6-pg17
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: tracerisk
+          POSTGRES_PASSWORD: tracerisk_local_demo
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tracerisk -d postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.8"
+      - name: Install locked backend dependencies
+        working-directory: apps/api
+        run: uv sync --frozen
+      - name: Migrate isolated CI database
+        working-directory: apps/api
+        env:
+          POSTGRES_DB: tracerisk_ci
+        run: |
+          uv run python -c "import psycopg; from tracerisk.config import Settings; url = Settings().database_url.set(drivername='postgresql', database='postgres').render_as_string(hide_password=False); conn = psycopg.connect(url, autocommit=True); conn.execute('CREATE DATABASE tracerisk_ci'); conn.close()"
+          uv run alembic upgrade head
+      - name: Backend tests and static checks
+        working-directory: apps/api
+        env:
+          POSTGRES_DB: tracerisk_ci
+        run: |
+          uv run pytest -v
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.8"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.13.1 --activate
+      - name: Install locked backend dependencies for API export
+        working-directory: apps/api
+        run: uv sync --frozen
+      - name: Install locked frontend dependencies
+        working-directory: apps/web
+        run: pnpm install --frozen-lockfile
+      - name: Frontend checks
+        working-directory: apps/web
+        run: |
+          pnpm api:check
+          pnpm test:auth
+          pnpm test:business
+          pnpm test:stage5
+          pnpm lint
+          pnpm typecheck
+          pnpm build

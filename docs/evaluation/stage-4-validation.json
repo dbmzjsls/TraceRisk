@@ -1,0 +1,55 @@
+{
+  "alembic_current": {
+    "exit_code": 0,
+    "output": "0010 (head)"
+  },
+  "alembic_drift": {
+    "exit_code": 0,
+    "output": "No new upgrade operations detected."
+  },
+  "alembic_upgrade": {
+    "exit_code": 0,
+    "output": ""
+  },
+  "api_contract": {
+    "exit_code": 0,
+    "output": "API types are consistent with local OpenAPI."
+  },
+  "backend_pytest": {
+    "exit_code": 1,
+    "output": "FF...................................................................... [ 24%]\n........................................................................ [ 49%]\n........................................................................ [ 73%]\n........................................................................ [ 98%]\n....                                                                     [100%]\n================================== FAILURES ===================================\n_____________ test_persisted_review_new_process_resume_and_replay _____________\n\nresources = (Settings(postgres_host='127.0.0.1', postgres_port=5432, postgres_db='tracerisk_test_1967e4bc2a7a4d42a5f6b8be270d9e93'...[redacted-token]'}}, UUID('0c16173b-7d62-4476-9c1c-dbb4b19a63bf'))\n\n    async def test_persisted_review_new_process_resume_and_replay(\n        resources: Resources,\n    ) -> None:\n        settings, sessions, queue, client, headers, run_id = resources\n        assert await dispatch_once(sessions, queue) == 1\n        await worker_process()\n        finding = await saved_finding(sessions, run_id)\n        assert finding.review_recommended\n        async with sessions() as session:\n            assert await session.scalar(select(WorkflowRun.status)) == \"awaiting_review\"\n            assert await session.scalar(\n                text(\"SELECT DISTINCT thread_id FROM checkpoints\")\n            ) == str(run_id)\n        conninfo = settings.database_url.set(drivername=\"postgresql\").render_as_string(\n            hide_password=False\n        )\n        async with AsyncPostgresSaver.from_conn_string(conninfo) as saver:\n            state = await build_graph(saver, sessions).aget_state(\n                {\"configurable\": {\"thread_id\": str(run_id)}}\n            )\n            interrupts = [item for task in state.tasks for item in task.interrupts]\n            assert len(interrupts) == 1\n>           assert interrupts[0].value == {\n                \"run_id\": str(run_id),\n                \"reason\": [\"model_recommended\"],\n            }\nE           AssertionError: assert {'run_id': '0...t_extension']} == {'run_id': '0...recommended']}\nE             \nE             Omitting 1 identical items, use -vv to show\nE             Differing items:\nE             {'reason': ['model_evidence_insufficient', 'model_recommended', 'unverified_free_text_extension']} != {'reason': ['model_recommended']}\nE             Use -v to get more diff\n\ntests\\e2e\\test_minimal_investigation.py:198: AssertionError\n______________________ test_score35_graph_direct_report _______________________\n\nresources = (Settings(postgres_host='127.0.0.1', postgres_port=5432, postgres_db='tracerisk_test_8b3ee6b181a547e489be9351d5c59d0d'...[redacted-token]'}}, UUID('393302d1-ccf4-40e4-b325-d015fb74bdd3'))\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002DB444D53D0>\n\n    async def test_score35_graph_direct_report(\n        resources: Resources, monkeypatch: pytest.MonkeyPatch\n    ) -> None:\n        _, sessions, queue, client, headers, run_id = resources\n        original = MockModelAdapter.analyze_risk\n    \n        async def direct(\n            self: MockModelAdapter, context: RiskContext\n        ) -> StructuredRiskFindings:\n            result = await original(self, context)\n            return result.model_copy(\n                update={\n                    \"findings\": [\n                        finding.model_copy(update={\"review_recommended\": False})\n                        for finding in result.findings\n                    ]\n                }\n            )\n    \n        monkeypatch.setattr(MockModelAdapter, \"analyze_risk\", direct)\n        assert await dispatch_once(sessions, queue) == 1\n        await queue.run_worker_async(\n            wait=False, install_signal_handlers=False, queues=[\"tracerisk\"]\n        )\n        finding = await saved_finding(sessions, run_id)\n>       assert not finding.review_recommended\nE       assert not True\nE        +  where True = <tracerisk.ai.models.AIFinding object at 0x000002DB441DA240>.review_recommended\n\ntests\\e2e\\test_minimal_investigation.py:314: AssertionError\n============================== warnings summary ===============================\n.venv\\Lib\\site-packages\\starlette\\testclient.py:53\n  C:\\Project\\TraceRisk\\apps\\api\\.venv\\Lib\\site-packages\\starlette\\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nFAILED tests/e2e/test_minimal_investigation.py::test_persisted_review_new_process_resume_and_replay\nFAILED tests/e2e/test_minimal_investigation.py::test_score35_graph_direct_report\n2 failed, 290 passed, 1 warning in 349.46s (0:05:49)"
+  },
+  "final_status": {
+    "corrected_tests_passed": 2,
+    "full_suite_invocations": 1,
+    "full_suite_repeated": false,
+    "initial_failed": 2,
+    "initial_passed": 290,
+    "remaining_failures": 0,
+    "warning": "One dependency deprecation warning from Starlette/AnyIO"
+  },
+  "followup_e2e": {
+    "command": "python -m pytest tests/e2e/test_minimal_investigation.py -q --tb=short",
+    "exit_code": 0,
+    "format": "1 file already formatted",
+    "output": "2 passed in 16.88s",
+    "ruff": "All checks passed",
+    "scope": "Only the two stale Stage 2 E2E expectations/fixtures changed. Production source unchanged after the complete suite."
+  },
+  "format": {
+    "exit_code": 0,
+    "output": "137 files already formatted"
+  },
+  "mypy": {
+    "exit_code": 0,
+    "output": "Success: no issues found in 83 source files"
+  },
+  "preserved_database": {
+    "exit_code": 0,
+    "output": "{\"frozen_runs_replayed\": 11, \"historical_rows_preserved\": true, \"pre_manifest_runs_preserved_as_rows\": 4, \"ready_index\": \"bge:BAAI/bge-small-zh-v1.5:512:cosine:v1\", \"tables\": {\"ai_findings\": {\"after\": 7, \"before\": 6}, \"audit_events\": {\"after\": 26, \"before\": 15}, \"companies\": {\"after\": 10, \"before\": 10}, \"company_aliases\": {\"after\": 1, \"before\": 1}, \"evidence\": {\"after\": 25, \"before\": 25}, \"evidence_chunks\": {\"after\": 37, \"before\": 12}, \"investigations\": {\"after\": 13, \"before\": 9}, \"retrieved_evidence\": {\"after\": 29, \"before\": 19}, \"review_decisions\": {\"after\": 5, \"before\": 4}, \"risk_reports\": {\"after\": 11, \"before\": 7}, \"rule_finding_evidence\": {\"after\": 20, \"before\": 14}, \"rule_findings\": {\"after\": 14, \"before\": 9}, \"source_coverage\": {\"after\": 40, \"before\": 40}, \"workflow_runs\": {\"after\": 15, \"before\": 10}, \"workflow_steps\": {\"after\": 70, \"before\": 46}}}"
+  },
+  "ruff": {
+    "exit_code": 0,
+    "output": "All checks passed!"
+  }
+}

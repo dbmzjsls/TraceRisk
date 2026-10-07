@@ -1,0 +1,592 @@
+{
+  "schema_version": "stage6-e2e-v1",
+  "status": "complete",
+  "topology_executed": "Two fresh local Vite Web + public API + sequential guarded normal/invalid combined workers + PostgreSQL passes; eight paths passed in each; independent backend and frontend/E2E/package reviews approved",
+  "configured_topology": "Local Vite Web + API + combined worker + PostgreSQL against recorded owned E2E databases",
+  "passes": [
+    {
+      "pass_id": "886b91bc8b194f6e8499119369b379b0",
+      "database": "tracerisk_e2e_886b91bc8b194f6e8499119369b379b0",
+      "topology": "local Vite Web + API + guarded sequential combined workers + PostgreSQL",
+      "alembic_revision": "0012",
+      "normal_phase": {
+        "passed": 7,
+        "skipped": 1
+      },
+      "invalid_citation_phase": {
+        "passed": 1,
+        "skipped": 0,
+        "mutation": "content_hash"
+      },
+      "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+      "owned_database_dropped": true,
+      "screenshot_refs": []
+    },
+    {
+      "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+      "database": "tracerisk_e2e_046afad18d1b4fc889578e1771a2bfde",
+      "topology": "local Vite Web + API + guarded sequential combined workers + PostgreSQL",
+      "alembic_revision": "0012",
+      "normal_phase": {
+        "passed": 7,
+        "skipped": 1
+      },
+      "invalid_citation_phase": {
+        "passed": 1,
+        "skipped": 0,
+        "mutation": "content_hash"
+      },
+      "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+      "owned_database_dropped": true,
+      "screenshot_refs": []
+    }
+  ],
+  "task3_completion": {
+    "runtime_acceptance": "8/8 paths passed twice",
+    "backend_review": "APPROVED P1/P2/P3 0/0/0; .superpowers/sdd/stage-6-task-3-path3-backend-review.md",
+    "frontend_e2e_package_review": "APPROVED P1/P2/P3 0/0/0; .superpowers/sdd/stage-6-task-3-path3-final-review.md",
+    "complete": true
+  },
+  "blockers": [],
+  "remaining_completion_requirements": [],
+  "task2_boundary": "Separate four-service Docker Web image/proxy acceptance remains open; local Vite evidence does not complete Task 2",
+  "limitations": [
+    "Per-phase Playwright list output was observed; no per-pass machine reporter artifact or success screenshot is retained; linked state.json files are read-only database captures",
+    "The executed topology is local Vite/API/workers/PostgreSQL, not the separate Task 2 four-service Docker Web acceptance",
+    "Real-model calls, token usage and cost were not run or measured"
+  ],
+  "supporting_checks": {
+    "frontend": "api:generate, api:check, test:auth, test:business, test:stage5, lint, typecheck and build passed; large-chunk advisory remains",
+    "backend_review": "Independent backend follow-up 3 migration cases passed; approved review reports full modification module 7 passed",
+    "browser": "Each selected fresh pass: normal 7 passed/1 skipped (path 7), invalid-citation path 7 1 passed; no fixture substitution",
+    "owned_cleanup": "Both failed current attempts and both selected successful databases were removed through recorded ownership guard; final_integrity.py checks all ten historical/current targets absent and retained revision 0011 unchanged",
+    "results_consistency": "check_runtime_results.py verifies sixteen state references, Path 3 original/human provenance and 8/8 matching logical outcomes",
+    "artifact_scan": "scan_artifacts.py checks report/package/manifest/checklist/results/progress and both selected safe state files; synthetic canary must be detected"
+  },
+  "historical_results": {
+    "status": "superseded by the two selected 8/8 passes above",
+    "paths": "7/8; Path 3 formerly open_product_gap",
+    "selected_passes": [
+      {
+        "pass_id": "965e2cb1d49640678684b979ec947952",
+        "database": "tracerisk_e2e_965e2cb1d49640678684b979ec947952",
+        "topology": "local Vite Web + API + guarded combined worker + PostgreSQL",
+        "normal_phase": {
+          "passed": 6,
+          "skipped": 2
+        },
+        "invalid_citation_phase": {
+          "passed": 1,
+          "skipped": 0,
+          "mutation": "content_hash"
+        },
+        "state_ref": "task3-e2e-space/pass-965e2cb1d49640678684b979ec947952/state.json",
+        "owned_database_dropped": true,
+        "screenshot_refs": []
+      },
+      {
+        "pass_id": "a7a2aa7bfb524b6db65047df9c614457",
+        "database": "tracerisk_e2e_a7a2aa7bfb524b6db65047df9c614457",
+        "topology": "local Vite Web + API + guarded combined worker + PostgreSQL",
+        "normal_phase": {
+          "passed": 6,
+          "skipped": 2
+        },
+        "invalid_citation_phase": {
+          "passed": 1,
+          "skipped": 0,
+          "mutation": "content_hash"
+        },
+        "state_ref": "task3-e2e-space/pass-a7a2aa7bfb524b6db65047df9c614457/state.json",
+        "owned_database_dropped": true,
+        "screenshot_refs": []
+      }
+    ],
+    "lifecycle_regression_passes": [
+      {
+        "pass_id": "71d27ed3d47c4cfeace537be77f38881",
+        "database": "tracerisk_e2e_71d27ed3d47c4cfeace537be77f38881",
+        "normal_phase": {
+          "passed": 6,
+          "skipped": 2
+        },
+        "invalid_citation_phase": {
+          "passed": 1,
+          "skipped": 0,
+          "mutation": "content_hash"
+        },
+        "state_ref": "task3-e2e-space/pass-71d27ed3d47c4cfeace537be77f38881/state.json",
+        "owned_database_dropped_before_completion_marker": true,
+        "purpose": "Verify fail-closed worker switching, aggregated cleanup, and completion-marker ordering after R7"
+      }
+    ],
+    "failed_current_attempts": [
+      {
+        "pass_id": "fdfc76e574ed4e61aaafcffc53f55734",
+        "owned_database_dropped": true,
+        "accepted_as_pass": false
+      },
+      {
+        "pass_id": "689f3a054ebf4672bd52e9797b81cfb3",
+        "owned_database_dropped": true,
+        "accepted_as_pass": false
+      }
+    ]
+  },
+  "paths": [
+    {
+      "id": 1,
+      "scenario": "clean-operations",
+      "preconditions": "normal worker; analyst",
+      "ui_actions": "login, open investigation and report",
+      "visible_assertions": "completed timeline and report",
+      "api_database_assertions": "score 0; no review; one report and completion event",
+      "status": "passed",
+      "run_id": "e308039f-c38c-41e3-b818-e591b0e2573d",
+      "report_id": "e02d444a-3d57-41d2-b462-5c366c89d942",
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 0,
+          "investigation_id": "45ec1834-171f-420b-b3cd-a4b27bf74007",
+          "run_id": "e308039f-c38c-41e3-b818-e591b0e2573d",
+          "report_id": "e02d444a-3d57-41d2-b462-5c366c89d942",
+          "status": "completed",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "62de7c2d02c59c34eaaa7720d7ff5f41b9c08b64d871fc1db92f77c07b06ed88",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 0,
+          "investigation_id": "98b84bc6-10b5-4084-ad59-6e7f44206897",
+          "run_id": "c17056a0-0e3b-4907-8c2e-f4c1059fd89f",
+          "report_id": "8074fdf1-ae4e-4070-a0d4-4373c4228d37",
+          "status": "completed",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "62de7c2d02c59c34eaaa7720d7ff5f41b9c08b64d871fc1db92f77c07b06ed88",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "scenario": "all-rules-95",
+      "preconditions": "normal worker; analyst and reviewer",
+      "ui_actions": "reviewer views pending finding; analyst opens completed investigation",
+      "visible_assertions": "review wait then completed timeline",
+      "api_database_assertions": "score 95; decisions; one resume transition and report",
+      "status": "passed",
+      "run_id": "28ac6a25-9822-44a3-95a2-a175b001980f",
+      "report_id": "4fdf39dd-704b-4b27-84d4-9921fec010ff",
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 1,
+          "investigation_id": "f2af6c94-8c9c-401e-a2f5-b643b591ef35",
+          "run_id": "28ac6a25-9822-44a3-95a2-a175b001980f",
+          "report_id": "4fdf39dd-704b-4b27-84d4-9921fec010ff",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "998423c0e92deb14a409f8b64f187a12e085217b2bcf431047decd84d4bcba1a",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 1,
+          "investigation_id": "1a1fe9b0-f19f-4bcc-be5c-9aec8d02c0ee",
+          "run_id": "f5454b87-676d-4365-8853-ac48f3e3fbe9",
+          "report_id": "e2ad0416-c39c-4d9b-87cf-6d48ce88d69f",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "a0b06f15b1e4beccfe71b6beaacd9cd3def4b6ef69d9243d7a79a0209eae8a25",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "scenario": "all-rules-95",
+      "preconditions": "normal worker; distinct analyst/reviewer; public modify and RiskFindingDraft replacement contract",
+      "ui_actions": "reviewer selects visible modify label, verifies AI-prefilled draft, edits title/summary/reasoning, submits on the page, then approves any remaining findings on the page",
+      "visible_assertions": "required title blocks blank submission; original AI stays visible and unchanged; human decision/version appear separately; completed report final uses edited text with human source and retains original AI snapshot",
+      "api_database_assertions": "complete strict draft without score; original AI content SHA-256 unchanged before/after; one modify decision and one human version; final source=human and original AI ID/version match; one resume/report/completion event; rule score unchanged",
+      "status": "passed",
+      "run_id": "09fa0899-b83f-4fe9-9909-be5174bed30b",
+      "report_id": "bcb4ed52-2be1-4207-9849-a8584260ba32",
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 2,
+          "investigation_id": "7cf3acbd-680d-40a4-854d-45dbb30a4e00",
+          "run_id": "09fa0899-b83f-4fe9-9909-be5174bed30b",
+          "report_id": "bcb4ed52-2be1-4207-9849-a8584260ba32",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "71e362aac9ceaff2b5c991b0371811d37de4c20f413971f62a27b34e14ac3231",
+          "human_versions": 1,
+          "modify_decisions": 1,
+          "human_version_links": [
+            {
+              "decision_id": "82c87dcf-79c7-41b8-b308-f2d8a8f83201",
+              "finding_version": 1,
+              "human_version": 1,
+              "id": "a9d4512d-45d7-4a0e-a4fd-6a5eac4efa34",
+              "original_ai_finding_id": "d688547e-2b73-49d0-b964-95ef3ac2ebca"
+            }
+          ],
+          "report_human_links": [
+            {
+              "human_version": 1,
+              "id": "a9d4512d-45d7-4a0e-a4fd-6a5eac4efa34",
+              "original_ai_finding_id": "d688547e-2b73-49d0-b964-95ef3ac2ebca",
+              "source": "human"
+            }
+          ],
+          "ai_snapshot_matches": true
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 2,
+          "investigation_id": "194abf89-bd5d-485c-afa6-d8b7a9619515",
+          "run_id": "fa5a3062-cac6-44e6-bcd7-50a09f4650aa",
+          "report_id": "4484c267-cb15-4a00-9ddf-86820552f08e",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "fee653240609088f5d7b9dcecf83add00c212041838fb455f77479e5aae72455",
+          "human_versions": 1,
+          "modify_decisions": 1,
+          "human_version_links": [
+            {
+              "decision_id": "889c70a3-16de-4bbc-bd02-6a93afd0fb77",
+              "finding_version": 1,
+              "human_version": 1,
+              "id": "7dc6cf4a-16be-449f-bedf-fc79ce005e89",
+              "original_ai_finding_id": "33b34208-3ea9-40b7-b0c5-6b57e05bcd87"
+            }
+          ],
+          "report_human_links": [
+            {
+              "human_version": 1,
+              "id": "7dc6cf4a-16be-449f-bedf-fc79ce005e89",
+              "original_ai_finding_id": "33b34208-3ea9-40b7-b0c5-6b57e05bcd87",
+              "source": "human"
+            }
+          ],
+          "ai_snapshot_matches": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "scenario": "all-rules-95",
+      "preconditions": "normal worker; analyst and reviewer",
+      "ui_actions": "reject finding and inspect report",
+      "visible_assertions": "original AI and rejection shown",
+      "api_database_assertions": "original and decision persist; final findings empty",
+      "status": "passed",
+      "run_id": "016f7d0f-2428-41c0-96ad-f6bd8017aa14",
+      "report_id": "1ce8734b-d750-48a8-942e-70a9e667b336",
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 3,
+          "investigation_id": "76114623-c200-431e-a840-c5fe079a8740",
+          "run_id": "016f7d0f-2428-41c0-96ad-f6bd8017aa14",
+          "report_id": "1ce8734b-d750-48a8-942e-70a9e667b336",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "6afe4a20bb7b34f25407278616a25ed85032f61a1f98656c378c1fc729d8e76a",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 3,
+          "investigation_id": "4dd5dbe0-7693-4390-a312-19887bd29fe8",
+          "run_id": "2d51b1cb-d540-445a-8de4-147faa46ec0e",
+          "report_id": "d7c6034f-fa06-4da0-bebb-233df90d645c",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "c4bff2b20eb591cc91a40eda7508abab398b6ba664db15c4eeb1d1aab0d05473",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "scenario": "cross-source-conflict",
+      "preconditions": "normal worker",
+      "ui_actions": "open investigation",
+      "visible_assertions": "CONFLICT-CASE-001 record visibly shows judicial/open and business/closed sides, judicial authority/open resolution, and review-wait timeline",
+      "api_database_assertions": "resolved authority conflict forces review below score 60",
+      "status": "passed",
+      "run_id": "8fe3f4b7-bb05-442e-9ade-e2c43f4a195e",
+      "report_id": null,
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 4,
+          "investigation_id": "f4bca1c1-4ab3-4c81-b2af-f26e92d056fe",
+          "run_id": "8fe3f4b7-bb05-442e-9ade-e2c43f4a195e",
+          "report_id": null,
+          "status": "awaiting_review",
+          "ai_findings": 1,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 0,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 4,
+          "investigation_id": "6219d206-d844-42ae-a3cf-401648277ec8",
+          "run_id": "da73047e-eae7-43fc-8aa1-a5072815c339",
+          "report_id": null,
+          "status": "awaiting_review",
+          "ai_findings": 1,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 0,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "scenario": "unavailable-source",
+      "preconditions": "normal worker",
+      "ui_actions": "open investigation",
+      "visible_assertions": "insufficient coverage and run review",
+      "api_database_assertions": "score 0; no AI finding or report; awaiting_review",
+      "status": "passed",
+      "run_id": "66c864d0-4838-400d-84d3-17a2e94e3603",
+      "report_id": null,
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 5,
+          "investigation_id": "3d72be91-9f04-451a-a214-341f27e7c352",
+          "run_id": "66c864d0-4838-400d-84d3-17a2e94e3603",
+          "report_id": null,
+          "status": "awaiting_review",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 0,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 5,
+          "investigation_id": "45455638-ec01-41ac-8b96-5311d12d2b35",
+          "run_id": "5e59d28c-60e2-4d76-bbb6-a7e153397df3",
+          "report_id": null,
+          "status": "awaiting_review",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 0,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "scenario": "all-rules-95",
+      "preconditions": "normal worker stopped; replacement worker with named citation mutation",
+      "ui_actions": "open failed investigation",
+      "visible_assertions": "failure timeline; no report",
+      "api_database_assertions": "run.failed; no AI finding or report; focused tests cover all mutation classes",
+      "status": "passed",
+      "run_id": "e81b70de-0ad5-4bbf-85ea-4177bde2ce93",
+      "report_id": null,
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 7,
+          "investigation_id": "528decbe-07bb-45a7-80ec-35a24fb46ae9",
+          "run_id": "e81b70de-0ad5-4bbf-85ea-4177bde2ce93",
+          "report_id": null,
+          "status": "failed",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 1,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 7,
+          "investigation_id": "578648ab-b482-4ed7-97e0-17f1bb8fe310",
+          "run_id": "b4c3d862-106b-4296-9ea8-b59c1c165cf3",
+          "report_id": null,
+          "status": "failed",
+          "ai_findings": 0,
+          "decisions": 0,
+          "report_count": 0,
+          "terminal_events": 1,
+          "report_sha256": null,
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "scenario": "all-rules-95",
+      "preconditions": "normal worker; analyst and reviewer; owned DB record",
+      "ui_actions": "repeat review key, replay resume, inspect investigation",
+      "visible_assertions": "single completed report",
+      "api_database_assertions": "one decision, resume transition, report and terminal event; stable bytes",
+      "status": "passed",
+      "run_id": "b46e685b-d6bb-484b-89fc-02c58aa4f1ec",
+      "report_id": "a4f2400b-3dd5-4c9c-a8bf-554ea4182ceb",
+      "evidence": [
+        {
+          "pass_id": "886b91bc8b194f6e8499119369b379b0",
+          "state_ref": "task3-e2e-space/pass-886b91bc8b194f6e8499119369b379b0/state.json",
+          "state_index": 6,
+          "investigation_id": "309427b4-41ff-4eaf-b707-2e55fbb2a70f",
+          "run_id": "b46e685b-d6bb-484b-89fc-02c58aa4f1ec",
+          "report_id": "a4f2400b-3dd5-4c9c-a8bf-554ea4182ceb",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "9c8ebf603131ec9be3cdabdf43fea045bdeea49fe15dc94451175248e2741244",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        },
+        {
+          "pass_id": "046afad18d1b4fc889578e1771a2bfde",
+          "state_ref": "task3-e2e-space/pass-046afad18d1b4fc889578e1771a2bfde/state.json",
+          "state_index": 6,
+          "investigation_id": "9e7a9f41-c1ed-4568-b736-dd46847d9c6a",
+          "run_id": "bc04644f-fd12-49e4-bc8d-d7f04b9b8f8f",
+          "report_id": "debc7460-0ef2-4cda-9084-4ddc87a5190d",
+          "status": "completed",
+          "ai_findings": 1,
+          "decisions": 1,
+          "report_count": 1,
+          "terminal_events": 1,
+          "report_sha256": "20addc0d5e4712a3be65e21127f266eff866598ac298305d4bcacee005a94e94",
+          "human_versions": 0,
+          "modify_decisions": 0,
+          "human_version_links": [],
+          "report_human_links": [],
+          "ai_snapshot_matches": true
+        }
+      ]
+    }
+  ],
+  "logical_comparison": {
+    "matching_executed_paths": "8/8",
+    "fields": [
+      "scenario",
+      "status",
+      "ai_findings",
+      "decisions",
+      "report_count",
+      "terminal_events",
+      "human_versions",
+      "modify_decisions",
+      "ai_snapshot_matches"
+    ],
+    "generated_ids_and_timestamps_excluded": true,
+    "cross_pass_report_bytes": "Low-risk report SHA-256 matched; other non-null hashes differed across fresh databases; path 8 independently asserted stable bytes within each replay"
+  }
+}

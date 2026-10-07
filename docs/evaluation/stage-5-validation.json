@@ -1,0 +1,587 @@
+{
+  "status": "Stage 5 complete; final independent integrated review READY",
+  "final_review_followup": {
+    "date": "2026-09-27",
+    "p2_sse_generation_race": "corrected with executable Run-switch, disposal, stale control, and stale response regressions",
+    "p3_package_digest": "generator now hashes saved package bytes; regenerated package, manifest, and scan verified separately",
+    "frontend_commands_passed": ["test:stage5", "test:auth", "test:business", "lint", "typecheck", "build", "api:check"],
+    "backend_suite_repeated": false,
+    "browser_repeated": false,
+    "retained_database_written": false,
+    "independent_re_review": "READY; P1 0, P2 0, P3 0"
+  },
+  "baseline_revision": "0010",
+  "retained_revision": "0011",
+  "volume": {
+    "container": "tracerisk-postgres-1",
+    "destination": "/var/lib/postgresql/data",
+    "name": "tracerisk_postgres_data",
+    "source": "/var/lib/docker/volumes/tracerisk_postgres_data/_data"
+  },
+  "original_tables": {
+    "ai_findings": 7,
+    "alembic_version": 1,
+    "audit_events": 26,
+    "checkpoint_blobs": 29,
+    "checkpoint_migrations": 10,
+    "checkpoint_writes": 171,
+    "checkpoints": 119,
+    "chunk_embeddings": 25,
+    "companies": 10,
+    "company_aliases": 1,
+    "dispatch_outbox": 20,
+    "embedding_index_versions": 1,
+    "evidence": 25,
+    "evidence_chunks": 37,
+    "index_query_embeddings": 4,
+    "investigations": 13,
+    "model_invocations": 6,
+    "procrastinate_events": 60,
+    "procrastinate_jobs": 20,
+    "procrastinate_periodic_defers": 0,
+    "procrastinate_workers": 1,
+    "rerun_requests": 2,
+    "retrieved_evidence": 29,
+    "review_decisions": 5,
+    "risk_reports": 11,
+    "rule_finding_evidence": 20,
+    "rule_findings": 14,
+    "source_coverage": 40,
+    "users": 3,
+    "workflow_runs": 15,
+    "workflow_steps": 70
+  },
+  "final_tables": {
+    "ai_findings": 8,
+    "alembic_version": 1,
+    "audit_events": 29,
+    "checkpoint_blobs": 31,
+    "checkpoint_migrations": 10,
+    "checkpoint_writes": 186,
+    "checkpoints": 128,
+    "chunk_embeddings": 25,
+    "companies": 10,
+    "company_aliases": 1,
+    "dispatch_outbox": 22,
+    "embedding_index_versions": 1,
+    "evidence": 25,
+    "evidence_chunks": 37,
+    "index_query_embeddings": 4,
+    "investigations": 14,
+    "model_invocations": 6,
+    "procrastinate_events": 72,
+    "procrastinate_jobs": 24,
+    "procrastinate_periodic_defers": 0,
+    "procrastinate_workers": 1,
+    "rerun_requests": 2,
+    "retrieved_evidence": 35,
+    "review_decisions": 6,
+    "risk_reports": 12,
+    "rule_finding_evidence": 25,
+    "rule_findings": 18,
+    "source_coverage": 40,
+    "users": 3,
+    "workflow_events": 13,
+    "workflow_runs": 16,
+    "workflow_steps": 75
+  },
+  "original_rows_preserved": true,
+  "browser_no_retained_changes": true,
+  "acceptance": {
+    "awaiting_review_heartbeat": true,
+    "company_id": "b2902304-8515-50fc-81d4-20c548e6861a",
+    "event_count": 13,
+    "events": [
+      {
+        "event": "run.queued",
+        "id": 1,
+        "node_name": null
+      },
+      {
+        "event": "run.running",
+        "id": 2,
+        "node_name": null
+      },
+      {
+        "event": "node.completed",
+        "id": 3,
+        "node_name": "prepare_context"
+      },
+      {
+        "event": "node.completed",
+        "id": 4,
+        "node_name": "retrieve_evidence"
+      },
+      {
+        "event": "node.completed",
+        "id": 5,
+        "node_name": "apply_rules"
+      },
+      {
+        "event": "node.completed",
+        "id": 6,
+        "node_name": "generate_validate_findings"
+      },
+      {
+        "event": "node.completed",
+        "id": 7,
+        "node_name": "route_result"
+      },
+      {
+        "event": "run.awaiting_review",
+        "id": 8,
+        "node_name": "review_interrupt"
+      },
+      {
+        "event": "run.resume_queued",
+        "id": 9,
+        "node_name": null
+      },
+      {
+        "event": "run.running",
+        "id": 10,
+        "node_name": null
+      },
+      {
+        "event": "node.completed",
+        "id": 11,
+        "node_name": "review_interrupt"
+      },
+      {
+        "event": "node.completed",
+        "id": 12,
+        "node_name": "generate_report"
+      },
+      {
+        "event": "run.completed",
+        "id": 13,
+        "node_name": null
+      }
+    ],
+    "evidence_note": "Initial acceptance.py completed all mutation/live/replay assertions and failed only final read-only assertion due to wrong harness field name high_water_sequence. This read-only follow-up verified high_water_mark on the same single Run; no mutation phase was rerun.",
+    "external_llm_calls": 0,
+    "history_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "immutable_report": true,
+    "investigation_id": "3d39851f-62e9-4ba8-b2fb-60547dc54fc7",
+    "model_adapter": "mock",
+    "queue_jobs": [
+      {
+        "operation": "start",
+        "status": "succeeded"
+      },
+      {
+        "operation": "resume",
+        "status": "succeeded"
+      },
+      {
+        "operation": "start",
+        "status": "succeeded"
+      },
+      {
+        "operation": "resume",
+        "status": "succeeded"
+      }
+    ],
+    "reconnect_after": 1,
+    "report_id": "5c169574-df47-45d5-8d3d-8bc96316928a",
+    "run_id": "2a32e7f2-ada6-4318-a893-1f911b624c63",
+    "safe_redelivery_no_duplicates": true,
+    "status": "PASS",
+    "terminal_closed": true,
+    "terminal_control": {
+      "high_water_mark": 13,
+      "history_available": true,
+      "history_drained": true,
+      "run_status": "completed"
+    },
+    "terminal_reconnect_no_rows": true,
+    "transport": "loopback-only",
+    "worker_stale_pruning_timeout_seconds": 3153600000
+  },
+  "full_backend_suite": {
+    "invocations": 1,
+    "passed": 341,
+    "failed": 2,
+    "setup_errors": 16,
+    "warnings": 1,
+    "exit_code": 1,
+    "seconds": 518.54,
+    "followup_passed": 18,
+    "second_full_suite_run": false
+  },
+  "static": [
+    {
+      "name": "ruff",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\ruff.exe",
+        "check",
+        "."
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 0,
+      "log": "ruff.log",
+      "already_executed": true
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\ruff.exe",
+        "format",
+        "--check",
+        "."
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 0,
+      "log": "format.log",
+      "already_executed": true
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\mypy.exe",
+        "--no-incremental",
+        "src"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 2,
+      "log": "mypy.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-test-auth",
+      "command": [
+        "pnpm.cmd",
+        "test:auth"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-test-auth.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-test-business",
+      "command": [
+        "pnpm.cmd",
+        "test:business"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-test-business.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-test-stage5",
+      "command": [
+        "pnpm.cmd",
+        "test:stage5"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-test-stage5.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-lint",
+      "command": [
+        "pnpm.cmd",
+        "lint"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-lint.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-typecheck",
+      "command": [
+        "pnpm.cmd",
+        "typecheck"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-typecheck.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-build",
+      "command": [
+        "pnpm.cmd",
+        "build"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "log": "web-build.log",
+      "already_executed": true
+    },
+    {
+      "name": "web-api-check",
+      "command": [
+        "pnpm.cmd",
+        "api:check"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\web",
+      "returncode": 0,
+      "seconds": 5.06,
+      "log": "web-api-check.log"
+    },
+    {
+      "name": "alembic-upgrade",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\python.exe",
+        "-m",
+        "alembic",
+        "upgrade",
+        "head"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 0,
+      "seconds": 1.92,
+      "log": "alembic-upgrade.log"
+    },
+    {
+      "name": "alembic-current",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\python.exe",
+        "-m",
+        "alembic",
+        "current"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 0,
+      "seconds": 1.84,
+      "log": "alembic-current.log"
+    },
+    {
+      "name": "alembic-check",
+      "command": [
+        "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\python.exe",
+        "-m",
+        "alembic",
+        "check"
+      ],
+      "cwd": "C:\\Project\\TraceRisk\\apps\\api",
+      "returncode": 0,
+      "seconds": 2.12,
+      "log": "alembic-check.log"
+    }
+  ],
+  "mypy_followup": {
+    "exit_code": 0,
+    "source_files": 86,
+    "log": "mypy-followup.log"
+  },
+  "browser": {
+    "checks": [
+      {
+        "page": "login",
+        "passed": true,
+        "real_role": "analyst"
+      },
+      {
+        "page": "companies",
+        "passed": true,
+        "real_catalog": true
+      },
+      {
+        "creation_not_submitted": true,
+        "page": "company detail",
+        "passed": true
+      },
+      {
+        "page": "investigation list",
+        "passed": true
+      },
+      {
+        "exact_citation_focus_and_delayed_return": true,
+        "mobile": true,
+        "page": "investigation detail",
+        "passed": true,
+        "real_events": 13
+      },
+      {
+        "actual_modern_and_immutable_legacy": true,
+        "page": "report",
+        "passed": true
+      },
+      {
+        "investigation_id": "11609062-6ad2-474a-802e-1fc8b4c75deb",
+        "page": "legacy investigation",
+        "passed": true
+      },
+      {
+        "no_review_submitted": true,
+        "page": "review list/detail",
+        "passed": true,
+        "real_role": "reviewer"
+      },
+      {
+        "page": "admin role",
+        "passed": true
+      }
+    ],
+    "page_errors": [],
+    "run_id": "2a32e7f2-ada6-4318-a893-1f911b624c63",
+    "stack": {
+      "api_port": 8000,
+      "database": "tracerisk",
+      "revision": "0011",
+      "web_port": 3200
+    },
+    "status": "PASS",
+    "unexpected_write_attempts": []
+  },
+  "forced_state_matrix": {
+    "status": "passed",
+    "web_origin": "http://127.0.0.1:3200",
+    "api_origin": "http://127.0.0.1:8000",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "roles": [
+      "analyst",
+      "reviewer",
+      "admin"
+    ],
+    "page_families": [
+      "login",
+      "companies",
+      "company-detail-create",
+      "investigations",
+      "investigation-detail",
+      "reviews",
+      "report"
+    ],
+    "checks": [
+      {
+        "name": "isolated API",
+        "status": "passed",
+        "evidence": "distinct-port API health, authenticated identity and ten-company synthetic catalog passed without recording credentials"
+      },
+      {
+        "name": "login",
+        "status": "passed",
+        "evidence": "synthetic notice and explicit invalid-session feedback rendered"
+      },
+      {
+        "name": "company list",
+        "status": "passed",
+        "evidence": "populated and empty states rendered with protected-page synthetic notice"
+      },
+      {
+        "name": "company detail/create",
+        "status": "passed",
+        "evidence": "analyst 422/409 and reviewer permission copy rendered"
+      },
+      {
+        "name": "investigation list",
+        "status": "passed",
+        "evidence": "populated and empty list states rendered without SSE"
+      },
+      {
+        "name": "citation and dossier",
+        "status": "passed",
+        "evidence": "exact Chunk target received focus; highlight expired after 2.4s while delayed return remained usable at desktop and mobile widths"
+      },
+      {
+        "name": "investigation states",
+        "status": "passed",
+        "evidence": "awaiting-review, failed, legacy-unavailable, completed and ready-insufficient/conflict states rendered"
+      },
+      {
+        "name": "awaiting-review continuation",
+        "status": "passed",
+        "evidence": "same Run reconnected with Last-Event-ID 1 after review; resume/running/node/completion reached terminal high-water 5 in sequence and the dossier remained usable"
+      },
+      {
+        "name": "SSE polling fallback",
+        "status": "passed",
+        "evidence": "503 stream failure activated the visible polling fallback"
+      },
+      {
+        "name": "SSE resume and terminal drain",
+        "status": "passed",
+        "evidence": "reconnect sent Last-Event-ID 1; terminal event and ready high-water closed cleanly"
+      },
+      {
+        "name": "review list/detail",
+        "status": "passed",
+        "evidence": "reviewer detail and admin empty state rendered; analyst route permission is enforced separately"
+      },
+      {
+        "name": "report",
+        "status": "passed",
+        "evidence": "modern/legacy provenance and distinct 404/403 feedback rendered; 403 preserved session"
+      },
+      {
+        "name": "shared 401",
+        "status": "passed",
+        "evidence": "malformed 401 cleared session and redirected to login"
+      },
+      {
+        "name": "route 403",
+        "status": "passed",
+        "evidence": "analyst review navigation reached the distinct 403 page without clearing session"
+      }
+    ],
+    "console_errors": [],
+    "expected_negative_http_console_messages": 7,
+    "uncategorized_failed_requests": [],
+    "expected_scope_or_redirect_cancellations": 8,
+    "awaiting_review_continuation": {
+      "run_id": "00000000-0000-4000-8000-000000000003",
+      "reconnected_with_last_event_id": "1",
+      "event_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "event_order": [
+        "等待人工复核",
+        "复核完成，等待恢复执行",
+        "调查开始执行",
+        "风险报告生成完成",
+        "调查完成，风险报告已生成"
+      ],
+      "terminal_high_water_mark": 5,
+      "dossier_usable_after_completion": true
+    },
+    "secrets_recorded": false
+  },
+  "stage6": {
+    "sha256": "b45e232aca286df9bf133eda7d5fac174485168e808b2029630977557acb45d7",
+    "checked_boxes": 0
+  },
+  "warnings": [
+    "Starlette/AnyIO BlockingPortal deprecation",
+    "Vite chunk 651.56 kB exceeds 500 kB warning threshold"
+  ],
+  "limitations": [
+    "No external LLM calls; mock model and loopback-only runtime guard",
+    "Forced negative browser states use intercepted local fixtures",
+    "Full backend suite was not wholly green; all 18 affected cases passed focused follow-up",
+    "Final independent integrated review is READY; the original full backend suite remains non-green with 18 affected cases passing focused follow-up"
+  ]
+}

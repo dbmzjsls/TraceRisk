@@ -1,0 +1,119 @@
+{
+  "bge": {
+    "cases": [
+      {
+        "mutation": "missing_query_vector",
+        "reports": 0,
+        "retrieval_error": "Four fixed query embeddings are required",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "wrong_query_version",
+        "reports": 0,
+        "retrieval_error": "Four fixed query embeddings are required",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "wrong_query_hash",
+        "reports": 0,
+        "retrieval_error": "Fixed query hash differs",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "incompatible_index_metadata",
+        "reports": 0,
+        "retrieval_error": "Active embedding index is incompatible",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      }
+    ],
+    "database": "tracerisk_eval_stage4_bge",
+    "database_unchanged_after_rollbacks": true,
+    "readiness": {
+      "index_version_id": "bac1ab45-39c7-4794-8a65-a8893c99cf64",
+      "model": "BAAI/bge-small-zh-v1.5",
+      "provider": "bge",
+      "version_key": "bge:BAAI/bge-small-zh-v1.5:512:cosine:v1"
+    }
+  },
+  "fake": {
+    "cases": [
+      {
+        "mutation": "missing_query_vector",
+        "reports": 0,
+        "retrieval_error": "Four fixed query embeddings are required",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "wrong_query_version",
+        "reports": 0,
+        "retrieval_error": "Four fixed query embeddings are required",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "wrong_query_hash",
+        "reports": 0,
+        "retrieval_error": "Fixed query hash differs",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      },
+      {
+        "mutation": "incompatible_index_metadata",
+        "reports": 0,
+        "retrieval_error": "Active embedding index is incompatible",
+        "retrieved_rows": 0,
+        "transaction_rolled_back": true,
+        "worker_task": "tracerisk.dispatch_probe",
+        "worker_terminal_status": "failed",
+        "workflow_failed_audits": 1
+      }
+    ],
+    "database": "tracerisk_eval_stage4_fake",
+    "database_unchanged_after_rollbacks": true,
+    "readiness": {
+      "index_version_id": "6336a917-6fdd-4945-a2ed-f9c2f53a5447",
+      "model": "fake-sha256-v1",
+      "provider": "fake",
+      "version_key": "fake:fake-sha256-v1:512:cosine:v1"
+    }
+  },
+  "finished_at": "2026-09-18T02:31:54Z",
+  "guard": {
+    "blocked_attempts": [],
+    "blocked_imports_loaded": [],
+    "network": "loopback-only",
+    "offline": {
+      "HF_DATASETS_OFFLINE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1"
+    }
+  },
+  "started_at": "2026-09-18T02:31:52Z",
+  "status": "passed"
+}

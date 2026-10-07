@@ -1,0 +1,29 @@
+{
+  "audit_event_counts": {
+    "investigation.created": 5,
+    "investigation.rerun_created": 1,
+    "report.generated": 6,
+    "review.submitted": 3
+  },
+  "audit_total": 15,
+  "duplicate_action_keys": [],
+  "metadata_violations": [],
+  "runtime_rerun": {
+    "prior_run_id": "a63bc933-3a81-49cb-87a5-a31a31260168",
+    "prior_status": "completed",
+    "prior_run_number": 1,
+    "prior_report_id": "b876a06b-43e1-4d35-8689-191181c5d593",
+    "prior_snapshot_sha256": "059d2f4de14af8effa53decc78ce894451d94222458eb5d404146d0ab2f34724",
+    "new_run_id": "0377bccb-bc61-4b3c-9daf-d31e05b3ebd5",
+    "new_status": "completed",
+    "new_run_number": 2,
+    "start_outbox": [
+      {
+        "operation": "start",
+        "dispatched": true
+      }
+    ],
+    "rerun_request_count": 1,
+    "current_pointer_matches": true
+  }
+}

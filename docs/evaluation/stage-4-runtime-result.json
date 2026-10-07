@@ -1,0 +1,342 @@
+{
+  "baseline": "2026-09-11",
+  "database": {
+    "audit_events": [
+      {
+        "action_key": "investigation:5e5cf15d-6fb4-4c32-9442-707efe6a50fd:created",
+        "event_type": "investigation.created",
+        "run_id": "1a99807a-6d54-4ff5-9191-70eb602f6e21"
+      },
+      {
+        "action_key": "report:df42f3b7-6e35-41f6-af69-b0e57d0a57e2:generated",
+        "event_type": "report.generated",
+        "run_id": "1a99807a-6d54-4ff5-9191-70eb602f6e21"
+      },
+      {
+        "action_key": "investigation:c63877e2-da40-4e3a-bbb5-a1221f38bcb3:created",
+        "event_type": "investigation.created",
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47"
+      },
+      {
+        "action_key": "review:dee5da69-558a-4d09-a480-7866bf40a1ab:submitted",
+        "event_type": "review.submitted",
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47"
+      },
+      {
+        "action_key": "report:055384b7-0029-433b-ba9e-f0088b3c538f:generated",
+        "event_type": "report.generated",
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47"
+      },
+      {
+        "action_key": "investigation:146501e4-cbf9-42ea-8cd3-b1b7366ad346:created",
+        "event_type": "investigation.created",
+        "run_id": "37273a0c-3eba-45ef-b035-a9ddc0a8dc12"
+      },
+      {
+        "action_key": "run:37273a0c-3eba-45ef-b035-a9ddc0a8dc12:failed",
+        "event_type": "workflow.failed",
+        "run_id": "37273a0c-3eba-45ef-b035-a9ddc0a8dc12"
+      },
+      {
+        "action_key": "investigation:2d2d73e8-cdb9-4d72-94a5-6bdfa8f2fe77:created",
+        "event_type": "investigation.created",
+        "run_id": "d4320c5c-0724-4ae3-8ecb-f06b19537283"
+      },
+      {
+        "action_key": "report:ac8adabf-2c52-419d-a491-29a0d1168e81:generated",
+        "event_type": "report.generated",
+        "run_id": "d4320c5c-0724-4ae3-8ecb-f06b19537283"
+      },
+      {
+        "action_key": "run:d2dc8326-862f-47ba-9a38-e8cca0d6d799:rerun",
+        "event_type": "investigation.rerun_created",
+        "run_id": "d2dc8326-862f-47ba-9a38-e8cca0d6d799"
+      },
+      {
+        "action_key": "report:c53e16c4-b474-4888-b4c0-a652a0e5cfc3:generated",
+        "event_type": "report.generated",
+        "run_id": "d2dc8326-862f-47ba-9a38-e8cca0d6d799"
+      }
+    ],
+    "invocation_row_count": 6,
+    "invocation_sensitive_fields_absent": true,
+    "model_invocations": [
+      {
+        "attempt_number": 1,
+        "error_category": null,
+        "id": "8e319cfd-49a0-4c35-9d29-44f97f113e1f",
+        "input_tokens": 17,
+        "latency_ms": 61,
+        "logical_call_id": "0790a839-9959-4b64-8b08-00bf77fc2bea",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": 9,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "1a99807a-6d54-4ff5-9191-70eb602f6e21",
+        "status": "succeeded"
+      },
+      {
+        "attempt_number": 1,
+        "error_category": "authentication",
+        "id": "27b58dcf-9370-4715-8648-b7723ae75840",
+        "input_tokens": null,
+        "latency_ms": 16,
+        "logical_call_id": "ce014029-6a91-4e42-ae21-0f62af40d4f8",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": null,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "37273a0c-3eba-45ef-b035-a9ddc0a8dc12",
+        "status": "failed"
+      },
+      {
+        "attempt_number": 1,
+        "error_category": "server",
+        "id": "e9550afb-db35-4797-9826-0091ce240e84",
+        "input_tokens": null,
+        "latency_ms": 0,
+        "logical_call_id": "a9b9fdfa-3bb1-40a2-906f-483b86e38674",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": null,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47",
+        "status": "failed"
+      },
+      {
+        "attempt_number": 2,
+        "error_category": null,
+        "id": "cd561a9f-565b-4077-b452-d5fa93358c15",
+        "input_tokens": 17,
+        "latency_ms": 15,
+        "logical_call_id": "a9b9fdfa-3bb1-40a2-906f-483b86e38674",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": 9,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47",
+        "status": "succeeded"
+      },
+      {
+        "attempt_number": 1,
+        "error_category": null,
+        "id": "a94c7e91-c0ae-476b-b5f0-ba735807e764",
+        "input_tokens": 17,
+        "latency_ms": 0,
+        "logical_call_id": "41b2c1cf-39bb-4d16-81c9-906269d37eef",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": 9,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "d2dc8326-862f-47ba-9a38-e8cca0d6d799",
+        "status": "succeeded"
+      },
+      {
+        "attempt_number": 1,
+        "error_category": null,
+        "id": "18707412-0a73-46a1-8465-cc59ba9afed7",
+        "input_tokens": 17,
+        "latency_ms": 0,
+        "logical_call_id": "25196407-c96c-4d8a-92f4-f9875a7668a5",
+        "model": "stage4-loopback-simulator",
+        "output_tokens": 9,
+        "prompt_version": "stage4-risk-v1",
+        "run_id": "d4320c5c-0724-4ae3-8ecb-f06b19537283",
+        "status": "succeeded"
+      }
+    ]
+  },
+  "external_generation_calls": 0,
+  "fake_path": {
+    "command": "C:\\Project\\TraceRisk\\apps\\api\\.venv\\Scripts\\python.exe -m pytest -p no:cacheprovider tests/integration/test_stage4_workflow_retrieval.py::test_four_top5_manifest_context_and_frozen_index tests/integration/test_stage4_workflow_retrieval.py::test_worker_retrieval_failures_are_terminal_once[query] -q",
+    "node_ids": [
+      "tests/integration/test_stage4_workflow_retrieval.py::test_four_top5_manifest_context_and_frozen_index",
+      "tests/integration/test_stage4_workflow_retrieval.py::test_worker_retrieval_failures_are_terminal_once[query]"
+    ],
+    "result": "..                                                                       [100%]\n2 passed in 8.32s",
+    "returncode": 0
+  },
+  "finished_at": "2026-09-18T02:21:24Z",
+  "model_request_counts": {
+    "permanent_failure": 1,
+    "prompt_injection": 1,
+    "retry": 2,
+    "success_and_rerun": 2
+  },
+  "preserved_bge_index": {
+    "dimensions": 512,
+    "index_version_count_preserved": 1,
+    "index_version_id": "c6d2a9a1-cb7c-41a7-9915-3bb3763f367e",
+    "model": "BAAI/bge-small-zh-v1.5",
+    "pending_outbox_before": 0,
+    "provider": "bge",
+    "query_version": "stage4-risk-queries-v1",
+    "stored_query_risks": [
+      "business",
+      "intellectual_property",
+      "judicial",
+      "news"
+    ],
+    "version_key": "bge:BAAI/bge-small-zh-v1.5:512:cosine:v1"
+  },
+  "process_logs": {
+    "api": {
+      "error_traceback_absent": true,
+      "log_tail": ""
+    },
+    "dispatcher": {
+      "error_traceback_absent": true,
+      "log_tail": ""
+    },
+    "worker": {
+      "error_traceback_absent": true,
+      "log_tail": "Skipping signal handling, does not work on Windows\n"
+    }
+  },
+  "prompt_boundary": {
+    "authorization_present": true,
+    "injection_absent_from_system": true,
+    "injection_present_in_user_data": true,
+    "path": "/v1/chat/completions",
+    "request_count": 1,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "untrusted_boundary_present": true
+  },
+  "runtime_guard_log": {
+    "blocked_attempts": [],
+    "guard_active_log_records": 2,
+    "guard_active_processes": 3
+  },
+  "runtime_guards": {
+    "api": {
+      "active": true,
+      "blocked_imports_loaded": [],
+      "network": "loopback-only",
+      "offline": {
+        "HF_DATASETS_OFFLINE": "1",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      }
+    },
+    "dispatcher": {
+      "active": true,
+      "blocked_imports_loaded": [],
+      "network": "loopback-only",
+      "offline": {
+        "HF_DATASETS_OFFLINE": "1",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      }
+    },
+    "worker": {
+      "active": true,
+      "blocked_imports_loaded": [],
+      "network": "loopback-only",
+      "offline": {
+        "HF_DATASETS_OFFLINE": "1",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      }
+    }
+  },
+  "scenarios": {
+    "permanent_failure": {
+      "ai_finding_count": 0,
+      "decision_count": 0,
+      "investigation_id": "146501e4-cbf9-42ea-8cd3-b1b7366ad346",
+      "report_id": null,
+      "retrieved_by_risk": {
+        "judicial": 1
+      },
+      "rule_score": 35,
+      "run_id": "37273a0c-3eba-45ef-b035-a9ddc0a8dc12",
+      "run_number": 1,
+      "status": "failed"
+    },
+    "prompt_injection": {
+      "ai_finding_count": 0,
+      "decision_count": 0,
+      "investigation_id": "2d2d73e8-cdb9-4d72-94a5-6bdfa8f2fe77",
+      "report_id": "ac8adabf-2c52-419d-a491-29a0d1168e81",
+      "retrieved_by_risk": {
+        "news": 1
+      },
+      "rule_score": 0,
+      "run_id": "d4320c5c-0724-4ae3-8ecb-f06b19537283",
+      "run_number": 1,
+      "status": "completed"
+    },
+    "retry_and_review": {
+      "before_review": {
+        "ai_finding_count": 1,
+        "decision_count": 0,
+        "investigation_id": "c63877e2-da40-4e3a-bbb5-a1221f38bcb3",
+        "report_id": null,
+        "retrieved_by_risk": {
+          "business": 1,
+          "intellectual_property": 2,
+          "judicial": 1,
+          "news": 2
+        },
+        "rule_score": 95,
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47",
+        "run_number": 1,
+        "status": "awaiting_review"
+      },
+      "review_decision_ids": [
+        "dee5da69-558a-4d09-a480-7866bf40a1ab"
+      ],
+      "terminal": {
+        "ai_finding_count": 1,
+        "decision_count": 1,
+        "investigation_id": "c63877e2-da40-4e3a-bbb5-a1221f38bcb3",
+        "report_id": "055384b7-0029-433b-ba9e-f0088b3c538f",
+        "retrieved_by_risk": {
+          "business": 1,
+          "intellectual_property": 2,
+          "judicial": 1,
+          "news": 2
+        },
+        "rule_score": 95,
+        "run_id": "4d701b4d-5ce2-48fa-bedd-e07b6e5d2d47",
+        "run_number": 1,
+        "status": "completed"
+      }
+    },
+    "success": {
+      "ai_finding_count": 0,
+      "decision_count": 0,
+      "investigation_id": "5e5cf15d-6fb4-4c32-9442-707efe6a50fd",
+      "report_id": "df42f3b7-6e35-41f6-af69-b0e57d0a57e2",
+      "retrieved_by_risk": {
+        "intellectual_property": 1
+      },
+      "rule_score": 0,
+      "run_id": "1a99807a-6d54-4ff5-9191-70eb602f6e21",
+      "run_number": 1,
+      "status": "completed"
+    }
+  },
+  "started_at": "2026-09-18T02:20:39Z",
+  "status": "passed",
+  "terminal_rerun": {
+    "investigation_id": "5e5cf15d-6fb4-4c32-9442-707efe6a50fd",
+    "new_run_id": "d2dc8326-862f-47ba-9a38-e8cca0d6d799",
+    "new_run_number": 2,
+    "prior_report_id": "df42f3b7-6e35-41f6-af69-b0e57d0a57e2",
+    "prior_report_unchanged": true,
+    "prior_run_id": "1a99807a-6d54-4ff5-9191-70eb602f6e21",
+    "terminal": {
+      "ai_finding_count": 0,
+      "decision_count": 0,
+      "investigation_id": "5e5cf15d-6fb4-4c32-9442-707efe6a50fd",
+      "report_id": "c53e16c4-b474-4888-b4c0-a652a0e5cfc3",
+      "retrieved_by_risk": {
+        "intellectual_property": 1
+      },
+      "rule_score": 0,
+      "run_id": "d2dc8326-862f-47ba-9a38-e8cca0d6d799",
+      "run_number": 2,
+      "status": "completed"
+    }
+  },
+  "transport": "loopback-only"
+}

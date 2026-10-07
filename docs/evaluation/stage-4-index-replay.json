@@ -1,0 +1,26 @@
+{
+  "after": {
+    "chunk_embeddings": 25,
+    "embedding_index_versions": 1,
+    "evidence": 25,
+    "evidence_chunks": 37,
+    "index_query_embeddings": 4,
+    "retrieved_evidence": 29,
+    "risk_reports": 11
+  },
+  "alembic": "0010",
+  "before": {
+    "chunk_embeddings": 25,
+    "embedding_index_versions": 1,
+    "evidence": 25,
+    "evidence_chunks": 37,
+    "index_query_embeddings": 4,
+    "retrieved_evidence": 29,
+    "risk_reports": 11
+  },
+  "cli_output": "Active index: bge:BAAI/bge-small-zh-v1.5:512:cosine:v1",
+  "model_imports_blocked": true,
+  "postgres": "17.11 (Debian 17.11-1.pgdg12+2)",
+  "unchanged": true,
+  "vector_extension": "0.8.6"
+}

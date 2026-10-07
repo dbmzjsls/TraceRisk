@@ -1,0 +1,10 @@
+{
+  "stage4_checked": 16,
+  "stage4_groups": 4,
+  "stage4_unchecked": 0,
+  "stage5_byte_unchanged": true,
+  "stage5_checked": 0,
+  "stage5_sha256_after": "09ab0d3c8a75b7e7c2aaf7c901895f98b89619cccf5bd2d6d1bf7cadc4f0c254",
+  "stage5_sha256_before": "09ab0d3c8a75b7e7c2aaf7c901895f98b89619cccf5bd2d6d1bf7cadc4f0c254",
+  "stage5_unchecked": 10
+}

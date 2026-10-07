@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "pgvector": "0.5.0",
+    "sentence-transformers": "5.7.0",
+    "torch": "2.14.0",
+    "transformers": "5.17.0"
+  },
+  "evaluation_databases": {
+    "bge": "tracerisk_eval_stage4_bge",
+    "fake": "tracerisk_eval_stage4_fake"
+  },
+  "fake_repeat_byte_identical": true,
+  "model_snapshot_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "reports": {
+    "bge": "0865a4fe30780cf2893da2d8cb24bd3666f6280b4373f2dde5ef1e4090114ee6",
+    "fake": "68942d7ce3c43c4745c6469eee0ce6b6e25559cc7ff4165b8d59536d17495137"
+  },
+  "same_dataset_source_and_pipeline": true
+}

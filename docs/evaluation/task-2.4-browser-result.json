@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-09-15T02:10:57.124Z",
+  "phase": "passed",
+  "browser": "152.0.7977.84",
+  "checks": [
+    {
+      "name": "wrong password rejected with visible feedback"
+    },
+    {
+      "name": "analyst creates real investigation; double click guarded and API replay returns same investigation"
+    },
+    {
+      "name": "real awaiting_review: score 35, one AI, two citations; analyst review control hidden and API 403"
+    },
+    {
+      "name": "logout clears session and all query/mutation cache"
+    },
+    {
+      "name": "reviewer create control hidden, real create API 403, stale finding API 409, blank reason API 422"
+    },
+    {
+      "name": "review eligibility hides submit for self (controlled read fixture)"
+    },
+    {
+      "name": "review eligibility hides submit for non-current-run (controlled read fixture)"
+    },
+    {
+      "name": "review eligibility hides submit for stale-version (controlled read fixture)"
+    },
+    {
+      "name": "visible 409 review feedback (controlled transport)"
+    },
+    {
+      "name": "visible 422 review feedback (controlled transport)"
+    },
+    {
+      "name": "visible network failure with retryable form (controlled transport)"
+    },
+    {
+      "name": "real reviewer approval and fresh worker checkpoint resume complete; terminal detail makes zero requests over 6.5s"
+    },
+    {
+      "name": "stored report preserves original AI, approval, final score 35 and two citations; report fits 390px viewport"
+    },
+    {
+      "name": "hostile dynamic report text is escaped; empty sandbox blocks script execution in archived HTML"
+    },
+    {
+      "name": "malformed 401 redirects to login and clears session, query and mutation caches, and sensitive DOM"
+    }
+  ],
+  "apiFailures": [],
+  "browserErrors": [],
+  "evidence": {
+    "investigationId": "519195b0-83ef-4823-a62d-8b46e68e86b0",
+    "runId": "106800e4-7503-4c49-ab27-c16ed9b742c0",
+    "findingId": "9f2c983b-3911-4a38-8fc2-fa9baa23a517",
+    "persistedSteps": [
+      {
+        "name": "apply_rules",
+        "attempt_count": 1
+      },
+      {
+        "name": "dispatch_probe",
+        "attempt_count": 1
+      },
+      {
+        "name": "generate_validate_findings",
+        "attempt_count": 1
+      },
+      {
+        "name": "retrieve_evidence",
+        "attempt_count": 1
+      }
+    ],
+    "freshWorkerGate": "Passing-run acceptance gate opened 2026-09-15.\nOld worker exec78891 stopped using Ctrl+C; exit1 confirmed.\nFresh worker exec70990 started after the real browser investigation reached awaiting_review and before reviewer approval.\nThe startup output reports the existing Windows signal-handling limitation; exec70990 is the authoritative live-process evidence.",
+    "reportId": "91e7d525-596c-408f-ab11-5b4462022489"
+  },
+  "finishedAt": "2026-09-15T02:12:15.783Z"
+}

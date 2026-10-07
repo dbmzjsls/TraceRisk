@@ -1,0 +1,335 @@
+{
+  "case_count": 16,
+  "cases": [
+    {
+      "case_id": "business-01-active",
+      "query_sha256": "74f4ea2be44ed2937efcc874a8c99d2d382d7f5b310397a2e9d9578418e87a07",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "5cab899c-3280-5902-a2ed-834ffae971f5"
+      ],
+      "retrieved_chunk_ids": [
+        "877a55c8-6b3a-564c-b7d7-2441cbb907ac"
+      ],
+      "retrieved_evidence_ids": [
+        "5cab899c-3280-5902-a2ed-834ffae971f5"
+      ],
+      "risk_type": "business"
+    },
+    {
+      "case_id": "business-02-before-resolution",
+      "query_sha256": "130f01f6d3f09729ae322ba7205f521e9cd7d3ea89973a736334f63d6e7f9653",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "654c8410-0baf-51fe-a70a-ed708da140b1",
+        "f9f9c70e-beff-5fc7-bafb-dff2d8685583"
+      ],
+      "retrieved_chunk_ids": [
+        "9b8d967f-82bf-5e1b-a4b7-516a764292aa",
+        "a7a3ac03-1854-5bdc-83ca-818101dc006d"
+      ],
+      "retrieved_evidence_ids": [
+        "654c8410-0baf-51fe-a70a-ed708da140b1",
+        "f9f9c70e-beff-5fc7-bafb-dff2d8685583"
+      ],
+      "risk_type": "business"
+    },
+    {
+      "case_id": "business-03-baseline-resolution",
+      "query_sha256": "da5dc7c5045b2ef5c1615bd90333fb282a3a5d4680c0f29a29e626161624031a",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "4843aab5-a232-59ee-8095-c9c53f21f584",
+        "f9f9c70e-beff-5fc7-bafb-dff2d8685583"
+      ],
+      "retrieved_chunk_ids": [
+        "4c0f8cca-f5fb-5267-b7a2-86fa72b131d5",
+        "9b8d967f-82bf-5e1b-a4b7-516a764292aa",
+        "a7a3ac03-1854-5bdc-83ca-818101dc006d"
+      ],
+      "retrieved_evidence_ids": [
+        "4843aab5-a232-59ee-8095-c9c53f21f584",
+        "654c8410-0baf-51fe-a70a-ed708da140b1",
+        "f9f9c70e-beff-5fc7-bafb-dff2d8685583"
+      ],
+      "risk_type": "business"
+    },
+    {
+      "case_id": "business-04-next-day",
+      "query_sha256": "ee5c0a65928e277c186000472caf019c02576c7a4af0b6291b5447b35c9214e2",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "654c8410-0baf-51fe-a70a-ed708da140b1",
+        "9b96105d-0350-51d5-affd-831e67deddb9"
+      ],
+      "retrieved_chunk_ids": [
+        "360be121-e912-55c8-8fa8-dbf608ead205",
+        "4c0f8cca-f5fb-5267-b7a2-86fa72b131d5",
+        "9b8d967f-82bf-5e1b-a4b7-516a764292aa",
+        "a7a3ac03-1854-5bdc-83ca-818101dc006d",
+        "f87fc785-5777-5bd4-895f-200aa7a9f871"
+      ],
+      "retrieved_evidence_ids": [
+        "9b96105d-0350-51d5-affd-831e67deddb9",
+        "4843aab5-a232-59ee-8095-c9c53f21f584",
+        "654c8410-0baf-51fe-a70a-ed708da140b1",
+        "f9f9c70e-beff-5fc7-bafb-dff2d8685583",
+        "8da1d486-8b5c-5f81-a23f-ca3d0b263ccb"
+      ],
+      "risk_type": "business"
+    },
+    {
+      "case_id": "ip-01-core",
+      "query_sha256": "5df360757b74d2013ed9895627a662b105085b95f32528a3c0e3fb228275a70b",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "7d793a5b-f6eb-562b-b3c4-634df3cfafe9"
+      ],
+      "retrieved_chunk_ids": [
+        "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "88999a6a-e74a-5012-8212-20f334e78a74"
+      ],
+      "retrieved_evidence_ids": [
+        "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+        "1f1b0c59-6c30-59f0-98a3-4c1cd9d638d1"
+      ],
+      "risk_type": "intellectual_property"
+    },
+    {
+      "case_id": "ip-02-noncore",
+      "query_sha256": "934a2e0af125f72ae4a0e11a648c62c3140e198c3f77da194e2c756ef1add0a5",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "67df7bfc-c356-56c7-817c-9de0a9b3ad1a"
+      ],
+      "retrieved_chunk_ids": [
+        "bc6b12f0-66ed-555c-9dd1-c2a49b229dc7"
+      ],
+      "retrieved_evidence_ids": [
+        "67df7bfc-c356-56c7-817c-9de0a9b3ad1a"
+      ],
+      "risk_type": "intellectual_property"
+    },
+    {
+      "case_id": "judicial-01-open",
+      "query_sha256": "1bf97fa198745be70f2a5b45dc535d5624fecd51e37976e3ae77c41a88746724",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "86892125-38bd-5fc5-89f4-07003ee5be18"
+      ],
+      "retrieved_chunk_ids": [
+        "25ae77f9-5a72-502a-bbea-a4fd3fa69b30"
+      ],
+      "retrieved_evidence_ids": [
+        "86892125-38bd-5fc5-89f4-07003ee5be18"
+      ],
+      "risk_type": "judicial"
+    },
+    {
+      "case_id": "judicial-02-alias",
+      "query_sha256": "53672f0a76d6ea8fa4514b890f72c57118acb5b5f567621094a66540f9c24305",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "d48a72ef-73f7-52a4-9025-aa0a9f180018"
+      ],
+      "retrieved_chunk_ids": [
+        "7a11fd93-92f5-5d0a-93f1-6bf2728534a3"
+      ],
+      "retrieved_evidence_ids": [
+        "d48a72ef-73f7-52a4-9025-aa0a9f180018"
+      ],
+      "risk_type": "judicial"
+    },
+    {
+      "case_id": "judicial-03-conflict",
+      "query_sha256": "f297a59065684f4dff14cf77c8a57d0a3f6b2f9be78a24fa2321bb52c76fbe7d",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "4c24bf5f-4f86-5aad-adec-adbeddac9539",
+        "f256d128-5465-50ac-ae5c-2d7adcb866a3"
+      ],
+      "retrieved_chunk_ids": [
+        "5f58ecd7-dc4a-5852-88af-d8e67d78c3a6",
+        "b6be467b-750f-5820-8f8b-aae0cb022e61"
+      ],
+      "retrieved_evidence_ids": [
+        "f256d128-5465-50ac-ae5c-2d7adcb866a3",
+        "4c24bf5f-4f86-5aad-adec-adbeddac9539"
+      ],
+      "risk_type": "judicial"
+    },
+    {
+      "case_id": "judicial-04-duplicate-notices",
+      "query_sha256": "003310ab557035e8c21b72fef7745a3ea86561da39c054604ab90e60659e409a",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "21000000-0000-0000-0000-000000000001",
+        "21000000-0000-0000-0000-000000000002"
+      ],
+      "retrieved_chunk_ids": [
+        "22b2f915-fa7e-57a7-9965-bbb581c2c2be",
+        "5fe94019-2f5f-5c2e-8f24-74dd21e8ad65",
+        "715b8e2c-c846-56a0-b1f1-711bfd72c43b"
+      ],
+      "retrieved_evidence_ids": [
+        "21000000-0000-0000-0000-000000000003",
+        "21000000-0000-0000-0000-000000000001",
+        "21000000-0000-0000-0000-000000000002"
+      ],
+      "risk_type": "judicial"
+    },
+    {
+      "case_id": "news-01-independent",
+      "query_sha256": "b70e7527767719d4da83aec5b6b15a758f1b239e7fdceced1c44aba1254c3786",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+        "6529afed-76c6-52bc-b0e1-a332d26de157"
+      ],
+      "retrieved_chunk_ids": [
+        "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e"
+      ],
+      "retrieved_evidence_ids": [
+        "6529afed-76c6-52bc-b0e1-a332d26de157",
+        "11e3304a-cabb-573e-a0e3-6f769ebd69cf"
+      ],
+      "risk_type": "news"
+    },
+    {
+      "case_id": "news-02-reprints",
+      "query_sha256": "93fc0e0118a487c5c5108b7da4e6ed22b37c743944fbf3612ead98d78472724f",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "0f80c7e3-0e1c-5290-91be-d4ea6b71777e",
+        "40f764b2-1ca7-5f29-84b9-8f2fe961e1e8"
+      ],
+      "retrieved_chunk_ids": [
+        "13e97605-8288-5fad-8a12-1c6fdefae898",
+        "43ccd0e4-88f4-5704-a5bd-cf1846f18206"
+      ],
+      "retrieved_evidence_ids": [
+        "40f764b2-1ca7-5f29-84b9-8f2fe961e1e8",
+        "0f80c7e3-0e1c-5290-91be-d4ea6b71777e"
+      ],
+      "risk_type": "news"
+    },
+    {
+      "case_id": "news-03-old-boundary",
+      "query_sha256": "30cb4ed5061b69114356beb9273aa6db50397d5770232776e7cb99bd96f5c52d",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "d785b3b7-99f4-5335-9f40-deb3eb711719"
+      ],
+      "retrieved_chunk_ids": [
+        "7b21186e-41c0-5dcb-812b-a88ccc5fd677"
+      ],
+      "retrieved_evidence_ids": [
+        "d785b3b7-99f4-5335-9f40-deb3eb711719"
+      ],
+      "risk_type": "news"
+    },
+    {
+      "case_id": "news-04-next-boundary",
+      "query_sha256": "83c469b708491553c616e5c3097515122159f20c750ed7beb7760579746577c3",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "700878f3-e3f7-54cd-89f4-281e162379dc"
+      ],
+      "retrieved_chunk_ids": [
+        "7b21186e-41c0-5dcb-812b-a88ccc5fd677",
+        "a6e5ad47-0044-5f48-8828-02e78ef0ef85"
+      ],
+      "retrieved_evidence_ids": [
+        "d785b3b7-99f4-5335-9f40-deb3eb711719",
+        "700878f3-e3f7-54cd-89f4-281e162379dc"
+      ],
+      "risk_type": "news"
+    },
+    {
+      "case_id": "news-05-baseline",
+      "query_sha256": "759cebae5676e25a1cae4f884b7b9531f8434580d7b79362d0bfc2401ec6fdb1",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "700878f3-e3f7-54cd-89f4-281e162379dc",
+        "98bd3ba2-a4ae-5c8b-8a88-60b62f4b48f3",
+        "d785b3b7-99f4-5335-9f40-deb3eb711719"
+      ],
+      "retrieved_chunk_ids": [
+        "93b92188-4008-59b4-9d44-1ade7731d6a2",
+        "7b21186e-41c0-5dcb-812b-a88ccc5fd677",
+        "a6e5ad47-0044-5f48-8828-02e78ef0ef85"
+      ],
+      "retrieved_evidence_ids": [
+        "98bd3ba2-a4ae-5c8b-8a88-60b62f4b48f3",
+        "d785b3b7-99f4-5335-9f40-deb3eb711719",
+        "700878f3-e3f7-54cd-89f4-281e162379dc"
+      ],
+      "risk_type": "news"
+    },
+    {
+      "case_id": "news-06-injection",
+      "query_sha256": "ffe2d115ffeeb484cfb15b287afb4122381f94f0468f2b1e9ba42db18e3247fa",
+      "recall_at_5": 1.0,
+      "relevant_evidence_ids": [
+        "1b3b7a4a-6123-53cf-8b1e-d71fce38db5b"
+      ],
+      "retrieved_chunk_ids": [
+        "b3d5f250-7c75-52ae-aee2-e1abe4a25fb1"
+      ],
+      "retrieved_evidence_ids": [
+        "1b3b7a4a-6123-53cf-8b1e-d71fce38db5b"
+      ],
+      "risk_type": "news"
+    }
+  ],
+  "chunk_schema_version": "v1",
+  "dataset_sha256": "216977e6ba49ccfb7595f786db28cc8bb794ec6f02a3d760097cf2e0617edd8f",
+  "device": "cpu",
+  "dimensions": 512,
+  "distance": "cosine",
+  "index_version": "bge:BAAI/bge-small-zh-v1.5:512:cosine:v1",
+  "limitations": [
+    "Synthetic catalog; scoped candidate counts do not exceed five.",
+    "Recall@5 is a ceiling smoke metric, not ranking-quality evidence.",
+    "Fake scores are a regression baseline, not BGE semantic quality."
+  ],
+  "mode": "bge",
+  "model": "BAAI/bge-small-zh-v1.5",
+  "overall_recall_at_5": 1.0,
+  "per_domain": {
+    "business": {
+      "case_count": 4,
+      "recall_at_5": 1.0
+    },
+    "intellectual_property": {
+      "case_count": 2,
+      "recall_at_5": 1.0
+    },
+    "judicial": {
+      "case_count": 4,
+      "recall_at_5": 1.0
+    },
+    "news": {
+      "case_count": 6,
+      "recall_at_5": 1.0
+    }
+  },
+  "query_embedding": "explicit-case-query-with-matching-provider",
+  "ranking_pipeline": "scoped-keyword-pgvector-cosine-rrf60-evidence-dedup-top5",
+  "schema_version": "stage4-retrieval-evaluation-v1",
+  "scope_probes": [
+    {
+      "case_id": "missing-source-empty-four-domains",
+      "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+      "excluded_from_recall": true,
+      "passed": true,
+      "retrieved_count": 0,
+      "tags": [
+        "missing_sources"
+      ]
+    }
+  ],
+  "source_snapshot_sha256": "245aa229bab915c9b423ff7c14c5c3cc9eec36f6e23ac00da4069bf9bf5f2f40",
+  "workflow_query_version": "stage4-risk-queries-v1"
+}
