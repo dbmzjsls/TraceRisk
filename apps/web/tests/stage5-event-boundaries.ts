@@ -632,7 +632,7 @@ export async function runStage5EventBoundaryTests() {
       assert.match(label, new RegExp(`<div[^>]*class="n-radio__label"[^>]*>${text}`))
     }
     const riskHtml = await renderComponent(RiskResultSections, { investigation: ready })
-    for (const label of ['最终结果', '确定性规则', '原始 AI', '人工决定', '支持状态', 'canonical_fact_match', '证据充分性']) assert.match(riskHtml, new RegExp(label))
+    for (const label of ['最终结果', '确定性规则', '原始 AI', '人工决定', '支持状态', 'canonical_fact_match', '证据充分性', '不能证明任意自然语言推论绝对正确', 'indeterminate', '评分只来自版本化规则']) assert.match(riskHtml, new RegExp(label))
     assert.match(riskHtml, new RegExp(`data-citation-target="${ids[6]}"`))
     assert.match(await renderComponent(RiskResultSections, { investigation: pending }), /最终结果尚未形成/)
     const modified = { ...ready, decisions: [{ id: ids[7]!, ai_finding_id: finding.finding_id, finding_version: 1, reviewer_id: ids[4]!, decision: 'modify' as const, reason: '人工修改', human_finding_version_id: ids[6]!, human_version: 1, replacement: { ...finding, title: '<script>human()</script>', summary: '人工摘要', reasoning: '人工推理' } }] }

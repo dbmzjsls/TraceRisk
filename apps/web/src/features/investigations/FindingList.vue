@@ -8,7 +8,9 @@ function citationsFor(finding: PendingFinding): CitationEntry[] { return finding
 </script>
 <template>
   <section class="panel">
-    <h2>原始 AI 发现</h2><p class="muted">AI 发现与人工决定分别保留，不增加规则分数。</p>
+    <h2>原始 AI 发现</h2>
+    <p class="muted">支持性校验核对引用合法性、结构化事实与声明代码，不能证明任意自然语言推论绝对正确；无法确定的文本标记为 indeterminate 并进入人工复核。</p>
+    <p class="muted">AI 发现与人工决定分别保留；评分只来自版本化规则，AI 不修改分值。</p>
     <article v-for="finding in findings" :key="finding.finding_id" class="finding">
       <h3>{{ finding.title }} <span class="muted">版本 {{ finding.finding_version }}</span></h3><p class="muted">{{ finding.risk_type }} · {{ finding.claim_code }} · 证据充分性 {{ finding.evidence_sufficiency }} · 置信度 {{ finding.confidence_level }} · 建议复核 {{ finding.review_recommended ? '是' : '否' }}</p>
       <p class="support-line">支持状态 {{ finding.support_status }} · {{ finding.support_reason }}</p>
