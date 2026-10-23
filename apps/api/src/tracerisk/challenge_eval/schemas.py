@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
 
 from tracerisk.ai.schemas import ContentHash, EvidenceContext, Key, Text
 
@@ -62,7 +62,7 @@ class AttemptRecord(StrictModel):
 
 
 class CaseResult(StrictModel):
-    case_id: str
+    case_id: Key
     expected_action: ExpectedAction
     actual_action: ExpectedAction | None
     first_attempt_usable: bool
@@ -109,7 +109,7 @@ class RunSummary(StrictModel):
     run_id: Key
     case_count: int = Field(ge=0)
     first_attempt_usable_count: int = Field(ge=0)
-    action_counts: dict[ExpectedAction, int]
-    attribution_counts: dict[Attribution, int]
+    action_counts: dict[ExpectedAction, NonNegativeInt]
+    attribution_counts: dict[Attribution, NonNegativeInt]
     total_human_modified_field_count: int | None = Field(default=None, ge=0)
     total_review_duration_ms: int | None = Field(default=None, ge=0)

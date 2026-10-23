@@ -122,6 +122,38 @@ def test_human_metrics_remain_unmeasured() -> None:
     assert result.review_duration_ms is None
 
 
+@pytest.mark.parametrize("case_id", ["", "   ", "x" * 257])
+def test_case_result_rejects_invalid_case_ids(case_id: str) -> None:
+    with pytest.raises(ValidationError, match="case_id"):
+        CaseResult(
+            case_id=case_id,
+            expected_action="accept",
+            actual_action=None,
+            first_attempt_usable=False,
+            attempts=[],
+            failure_localization_ms=None,
+            failure_localization_status="interrupted_before_finalize",
+            review_measurement_status="not_measured",
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "key"),
+    [("action_counts", "accept"), ("attribution_counts", "structure_error")],
+)
+def test_summary_rejects_negative_mapping_counts(field: str, key: str) -> None:
+    data: dict[str, object] = {
+        "run_id": "run-001",
+        "case_count": 0,
+        "first_attempt_usable_count": 0,
+        "action_counts": {},
+        "attribution_counts": {},
+    }
+    data[field] = {key: -1}
+    with pytest.raises(ValidationError, match=field):
+        RunSummary.model_validate(data)
+
+
 @pytest.mark.parametrize(
     "model",
     [
