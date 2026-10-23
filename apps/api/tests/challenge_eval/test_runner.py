@@ -628,6 +628,8 @@ def test_documented_run_commands_accept_explicit_inputs(tmp_path, monkeypatch, c
 
 
 def test_documented_offline_commands(tmp_path, monkeypatch):
+    from tracerisk.challenge_eval import reporting
+
     baseline = tmp_path / "baseline"
     completed_run(baseline)
     monkeypatch.setattr(
@@ -645,6 +647,9 @@ def test_documented_offline_commands(tmp_path, monkeypatch):
     manifest.phase = "improved"
     manifest.fingerprint = runner.manifest_fingerprint(manifest)
     runner.write_json(improved / "manifest.json", manifest.model_dump(mode="json"))
+    # This Task 6 fixture copies baseline bytes rather than applying a selected
+    # function patch. Task 7 verifies the real single-dimension guard elsewhere.
+    monkeypatch.setattr(reporting, "verify_improvement", lambda *args: None)
     assert (
         runner.main(
             [
@@ -661,9 +666,14 @@ def test_documented_offline_commands(tmp_path, monkeypatch):
         )
         == 0
     )
-    result = json.loads((tmp_path / "comparison-inputs.json").read_text())
-    assert len(result["baseline"]) == len(result["improved"]) == 40
-    assert result["analysis_hash"] == runner.digest(analysis.read_bytes())
+    result = json.loads(
+        (tmp_path / "comparison-summary.json").read_text(encoding="utf-8")
+    )
+    assert result["baseline"]["case_count"] == 40
+    assert result["improved"]["case_count"] == 40
+    assert result["provenance"]["analysis"]["analysis.json"] == runner.digest(
+        analysis.read_bytes()
+    )
 
 
 def test_permanent_failure_has_no_retry(tmp_path, valid_case):

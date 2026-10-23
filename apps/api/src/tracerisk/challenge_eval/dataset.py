@@ -6,7 +6,8 @@ from pathlib import Path
 from uuid import UUID
 
 from tracerisk.ai.claims import CLAIM_CATALOG
-from tracerisk.challenge_eval.schemas import ChallengeCase, ContentHash, StrictModel
+from tracerisk.ai.schemas import ContentHash
+from tracerisk.challenge_eval.schemas import ChallengeCase, StrictModel
 
 
 class LoadedDataset(StrictModel):

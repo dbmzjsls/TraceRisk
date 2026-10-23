@@ -699,35 +699,6 @@ def review_cases(
     return recompute_run(path)[1]
 
 
-def comparison_inputs(
-    baseline: Path, improved: Path, analysis_path: Path | None = None
-) -> dict[str, object]:
-    left, left_scores, left_raw = recompute_run(baseline)
-    right, right_scores, right_raw = recompute_run(improved)
-    if left.phase != "baseline" or right.phase != "improved":
-        raise ValueError("compare requires baseline and improved phases")
-    if left.dataset_hash != right.dataset_hash or left.config_hash != right.config_hash:
-        raise ValueError("comparison inputs differ")
-    result: dict[str, object] = {
-        "baseline": [x.model_dump(mode="json") for x in left_scores],
-        "improved": [x.model_dump(mode="json") for x in right_scores],
-        "input_hashes": {
-            phase: {name: digest(raw) for name, raw in values.items()}
-            for phase, values in (("baseline", left_raw), ("improved", right_raw))
-        },
-    }
-    if analysis_path is not None:
-        analysis_raw = analysis_path.read_bytes()
-        verify_analysis(
-            ImprovementAnalysis.model_validate_json(analysis_raw),
-            left_scores,
-            impact_weights=json.loads(left_raw["config.json"])["impact_weights"],
-            baseline_raw_inputs=left_raw,
-        )
-        result["analysis_hash"] = digest(analysis_raw)
-    return result
-
-
 async def check_connection(
     config: Mapping[str, Any], *, client: CompletionClient
 ) -> dict[str, object]:
@@ -794,7 +765,7 @@ def main(argv: Sequence[str] | None = None, *, root: Path | None = None) -> int:
             sub.add_argument("--analysis", required=True, type=Path)
         if command == "compare":
             sub.add_argument("--improved", required=True, type=Path)
-            sub.add_argument("--analysis", type=Path)
+            sub.add_argument("--analysis", required=True, type=Path)
     args = parser.parse_args(argv)
     root = root or Path(__file__).resolve().parents[5]
     try:
@@ -810,11 +781,15 @@ def main(argv: Sequence[str] | None = None, *, root: Path | None = None) -> int:
                     {"cases": [x.model_dump(mode="json") for x in reviewed]},
                 )
         elif args.command == "compare":
-            output = args.output
-            if output.is_dir() or not output.suffix:
-                output = output / "comparison-inputs.json"
-            exclusive_output(
-                output, comparison_inputs(args.baseline, args.improved, args.analysis)
+            if args.analysis is None:
+                raise ValueError("compare requires --analysis")
+            from tracerisk.challenge_eval.reporting import generate_reports
+
+            generate_reports(
+                args.baseline,
+                args.improved,
+                args.analysis,
+                args.output,
             )
         elif args.command == "check":
             if args.output.exists():
