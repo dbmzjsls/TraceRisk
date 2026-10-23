@@ -1,4 +1,5 @@
 from hashlib import sha256
+from itertools import permutations
 
 import pytest
 from test_scoring import CONFIG, attempt
@@ -11,7 +12,7 @@ from tracerisk.challenge_eval.attribution import (
     verify_analysis,
 )
 from tracerisk.challenge_eval.scoring import score_case
-from tracerisk.challenge_eval.validation import ValidationOutcome
+from tracerisk.challenge_eval.validation import ValidationOutcome, validate_response
 
 WEIGHTS = {
     "unsafe_accept_or_missed_review": 4,
@@ -96,6 +97,38 @@ def test_external_failures_and_recovered_transport_do_not_select_model_change(
         transport_retry_count=1,
     )
     assert attribute_case(recovered) is None
+
+
+def test_final_provider_failure_excludes_earlier_model_validation_error(valid_case):
+    records = [
+        attempt(valid_case, "invalid"),
+        attempt(
+            valid_case,
+            attempt_number=2,
+            request_kind="validation_repair",
+            status="failed",
+            response_content=None,
+            error_category="server",
+            retryable=True,
+        ),
+    ]
+    result = score_case(
+        valid_case,
+        records,
+        [validate_response(valid_case, "invalid"), None],
+        CONFIG,
+        failure_localization_ms=10,
+    )
+    assert result.validation_errors == ["structure_error"]
+    assert result.execution_status == "failed"
+    assert result.actual_action is None
+    assert result.attribution is None
+    assert attribute_case(result) is None
+    assert impact_for_case(result, WEIGHTS) == 0
+    analysis = analyze([result])
+    assert analysis.attributions == {valid_case.case_id: None}
+    assert analysis.candidates == []
+    assert analysis.selected_problem is None
 
 
 @pytest.mark.parametrize(
@@ -209,6 +242,48 @@ def test_any_null_within_candidate_skips_entire_time_tiebreaker(valid_case):
         scored(valid_case, "citation_error", case_id="d", failure_localization_ms=None),
     ]
     assert analyze(cases).selected_problem.problem == "structure_error"
+
+
+def test_null_timing_skips_the_entire_three_category_tied_group(valid_case):
+    cases = [
+        scored(valid_case, "structure_error", case_id="a", failure_localization_ms=10),
+        scored(valid_case, "citation_error", case_id="b", failure_localization_ms=None),
+        scored(valid_case, "support_error", case_id="c", failure_localization_ms=20),
+    ]
+    for ordering in permutations(cases):
+        assert analyze(ordering).selected_problem.problem == "structure_error"
+
+
+def test_incomplete_timing_outside_remaining_tie_does_not_disable_timing(valid_case):
+    cases = [
+        scored(valid_case, "structure_error", case_id="a", failure_localization_ms=10),
+        scored(valid_case, "citation_error", case_id="b", failure_localization_ms=None),
+        scored(valid_case, "support_error", case_id="c", failure_localization_ms=20),
+    ]
+    # The count/impact stage removes citation before checking timing completeness.
+    cases.extend(
+        [
+            scored(
+                valid_case, "structure_error", case_id="d", failure_localization_ms=0
+            ),
+            scored(valid_case, "support_error", case_id="e", failure_localization_ms=0),
+        ]
+    )
+    assert analyze(cases).selected_problem.problem == "support_error"
+
+
+def test_incomplete_human_edits_skip_the_entire_three_category_tied_group(valid_case):
+    cases = [
+        scored(
+            valid_case, "structure_error", case_id="a", human_modified_field_count=10
+        ),
+        scored(
+            valid_case, "citation_error", case_id="b", human_modified_field_count=None
+        ),
+        scored(valid_case, "support_error", case_id="c", human_modified_field_count=20),
+    ]
+    for ordering in permutations(cases):
+        assert analyze(ordering).selected_problem.problem == "structure_error"
 
 
 def test_saved_analysis_hashes_every_input_and_complete_recomputation(valid_case):

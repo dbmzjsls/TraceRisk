@@ -57,11 +57,11 @@ def attribute_case(result: ScoredCase) -> Attribution | None:
     External failures are not evidence for changing model behavior. A recovered
     transport retry is visible in execution/retry metrics but adds no attribution.
     """
+    if result.execution_status == "failed" or result.actual_action is None:
+        return None
     for category in ATTRIBUTION_ORDER[:-1]:
         if category in result.validation_errors:
             return category
-    if result.execution_status == "failed":
-        return None
     if result.actual_action != result.expected_action or (
         result.human_modified_field_count is not None
         and result.human_modified_field_count > 0
@@ -93,19 +93,29 @@ def _complete_sum(results: Sequence[ScoredCase], field: str) -> int | None:
     return None if any(value is None for value in values) else sum(values)
 
 
-def _beats(candidate: ProblemEvidence, incumbent: ProblemEvidence) -> bool:
+def _select_candidate(
+    candidates: Sequence[ProblemEvidence],
+) -> ProblemEvidence | None:
+    remaining = list(candidates)
+    if not remaining:
+        return None
     for field in (
         "weighted_impact",
         "affected_case_count",
         "human_modified_field_count",
         "failure_localization_ms",
     ):
-        left, right = getattr(candidate, field), getattr(incumbent, field)
-        # Never turn incomplete recovery or unmeasured human work into zero.
-        if left is not None and right is not None and left != right:
-            return cast(bool, left > right)
-    return ATTRIBUTION_ORDER.index(candidate.problem) < ATTRIBUTION_ORDER.index(
-        incumbent.problem
+        values = [getattr(candidate, field) for candidate in remaining]
+        # An optional metric can rank the tied group only when every remaining
+        # candidate is complete; otherwise no candidate is eliminated by it.
+        if any(value is None for value in values):
+            continue
+        highest = max(values)
+        remaining = [
+            candidate for candidate in remaining if getattr(candidate, field) == highest
+        ]
+    return min(
+        remaining, key=lambda candidate: ATTRIBUTION_ORDER.index(candidate.problem)
     )
 
 
@@ -156,10 +166,6 @@ def select_improvement(
                     ),
                 )
             )
-    winner = None
-    for candidate in candidates:
-        if winner is None or _beats(candidate, winner):
-            winner = candidate
     weights = dict(sorted(impact_weights.items()))
     return ImprovementAnalysis(
         baseline_input_hashes={
@@ -172,7 +178,7 @@ def select_improvement(
         ).hexdigest(),
         attributions=attributions,
         candidates=candidates,
-        selected_problem=winner,
+        selected_problem=_select_candidate(candidates),
     )
 
 
