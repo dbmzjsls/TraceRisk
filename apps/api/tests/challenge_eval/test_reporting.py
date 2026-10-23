@@ -30,7 +30,12 @@ SECRET = "PRIVATE_SAFE_RESPONSE_918273"
 ABSENT_SENTINEL = "8675309"
 
 
-def attempt(case_id: str, *, fingerprint: str = "fp-a") -> AttemptRecord:
+def attempt(
+    case_id: str,
+    *,
+    fingerprint: str | None = "fp-a",
+    returned_model: str | None = "deepseek-flash-20261017",
+) -> AttemptRecord:
     return AttemptRecord(
         case_id=case_id,
         attempt_number=1,
@@ -41,7 +46,7 @@ def attempt(case_id: str, *, fingerprint: str = "fp-a") -> AttemptRecord:
         status="succeeded",
         retryable=False,
         requested_model="deepseek-flash",
-        returned_model="deepseek-flash-20261017",
+        returned_model=returned_model,
         system_fingerprint=fingerprint,
         response_content=SECRET,
         input_tokens=10,
@@ -66,10 +71,44 @@ def scored(valid_case, case_id: str, expected: str, actual: str) -> ScoredCase:
     )
 
 
+def scored_after_repair(valid_case, case_id: str) -> ScoredCase:
+    case = valid_case.model_copy(
+        update={"case_id": case_id, "expected_action": "accept"}
+    )
+    first = attempt(case_id)
+    second = first.model_copy(
+        update={"attempt_number": 2, "request_kind": "validation_repair"}
+    )
+    return score_case(
+        case,
+        [first, second],
+        [
+            ValidationOutcome(actual_action="reject", error_type="structure_error"),
+            ValidationOutcome(actual_action="accept"),
+        ],
+        CONFIG,
+        failure_localization_ms=7,
+    )
+
+
 def raw_run(
-    results: list[ScoredCase], *, with_reviews: bool = False, fingerprint: str = "fp-a"
+    results: list[ScoredCase],
+    *,
+    review_case_ids: list[str] | None = None,
+    fingerprint: str | None = "fp-a",
+    returned_model: str | None = "deepseek-flash-20261017",
 ):
-    attempts = [attempt(item.case_id, fingerprint=fingerprint) for item in results]
+    attempts = [
+        stored.model_copy(
+            update={
+                "system_fingerprint": fingerprint,
+                "returned_model": returned_model,
+                "response_content": SECRET,
+            }
+        )
+        for item in results
+        for stored in item.attempts
+    ]
     raw = {
         "manifest.json": b'{"manifest":"validated"}\n',
         "dataset.jsonl": b'{"dataset":"synthetic"}\n',
@@ -84,11 +123,11 @@ def raw_run(
             runner.canonical(item.model_dump(mode="json")) + b"\n" for item in results
         ),
     }
-    if with_reviews:
-        raw["reviews.jsonl"] = (
+    if review_case_ids is not None:
+        raw["reviews.jsonl"] = b"".join(
             runner.canonical(
                 {
-                    "case_id": results[-1].case_id,
+                    "case_id": case_id,
                     "decision": "manual_review",
                     "changed_fields": ["title"],
                     "changed_field_count": 1,
@@ -97,6 +136,7 @@ def raw_run(
                 }
             )
             + b"\n"
+            for case_id in review_case_ids
         )
     return raw
 
@@ -121,13 +161,17 @@ def manifest(phase: str, *, fingerprint: str = "fp-a") -> RunManifest:
 
 
 def install_runs(monkeypatch, baseline, improved, left_raw, right_raw):
-    def fake(path: Path):
+    def selected(path: Path):
+        return left_raw if path.name == "baseline" else right_raw
+
+    def fake(path: Path, **kwargs):
         if path.name == "baseline":
             return manifest("baseline"), baseline, left_raw
         return manifest("improved"), improved, right_raw
 
+    monkeypatch.setattr(reporting, "snapshot_run_inputs", selected)
     monkeypatch.setattr(reporting, "recompute_run", fake)
-    monkeypatch.setattr(reporting, "verify_improvement", lambda *args: None)
+    monkeypatch.setattr(reporting, "verify_improvement", lambda *args, **kwargs: None)
 
 
 def test_reports_derive_metrics_and_render_unmeasured_human_work(
@@ -227,8 +271,8 @@ def test_completed_reviews_are_the_only_human_metric_source(
 ):
     baseline = [scored(valid_case, "review-001", "manual_review", "manual_review")]
     improved = [item.model_copy() for item in baseline]
-    left_raw = raw_run(baseline, with_reviews=True)
-    right_raw = raw_run(improved, with_reviews=True)
+    left_raw = raw_run(baseline, review_case_ids=["review-001"])
+    right_raw = raw_run(improved, review_case_ids=["review-001"])
     install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
     analysis = select_improvement(
         baseline,
@@ -248,7 +292,7 @@ def test_completed_reviews_are_the_only_human_metric_source(
 def test_asymmetric_review_provenance_is_rejected(tmp_path, monkeypatch, valid_case):
     baseline = [scored(valid_case, "review-001", "manual_review", "manual_review")]
     improved = [item.model_copy() for item in baseline]
-    left_raw = raw_run(baseline, with_reviews=True)
+    left_raw = raw_run(baseline, review_case_ids=["review-001"])
     right_raw = raw_run(improved)
     install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
     analysis = select_improvement(
@@ -348,3 +392,154 @@ def test_unknown_attempt_case_is_rejected(tmp_path, monkeypatch, valid_case):
         reporting.build_comparison(
             tmp_path / "baseline", tmp_path / "improved", analysis_path
         )
+
+
+def test_corrupt_review_tail_is_rejected_without_modifying_bytes(tmp_path):
+    from test_runner import completed_run
+
+    completed_run(tmp_path)
+    reviews = tmp_path / "reviews.jsonl"
+    reviews.write_bytes(b'{"case_id":')
+    before = reviews.read_bytes()
+    with pytest.raises(ValueError, match="newline|malformed|corrupt"):
+        reporting._load_run(tmp_path)
+    assert reviews.read_bytes() == before
+
+
+@pytest.mark.parametrize(
+    ("review_case_ids", "expected_status", "expected_count"),
+    [
+        ([], "not_measured", None),
+        (["review-001"], "partial", 1),
+        (["review-001", "review-002"], "measured", 2),
+    ],
+)
+def test_review_measurement_completeness_states(
+    tmp_path,
+    monkeypatch,
+    valid_case,
+    review_case_ids,
+    expected_status,
+    expected_count,
+):
+    baseline = [
+        scored(valid_case, "review-001", "manual_review", "manual_review"),
+        scored(valid_case, "review-002", "manual_review", "manual_review"),
+    ]
+    improved = [item.model_copy() for item in baseline]
+    left_raw = raw_run(baseline, review_case_ids=review_case_ids)
+    right_raw = raw_run(improved, review_case_ids=review_case_ids)
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    summary = reporting.build_comparison(
+        tmp_path / "baseline", tmp_path / "improved", analysis_path
+    )
+    assert summary.baseline.review_measurement_status == expected_status
+    assert summary.baseline.reviewed_case_count == expected_count
+    if expected_status == "not_measured":
+        assert summary.baseline.total_human_modified_field_count is None
+        assert summary.baseline.total_review_duration_ms is None
+    else:
+        assert summary.baseline.total_human_modified_field_count == expected_count
+        assert summary.baseline.total_review_duration_ms == expected_count * 1250
+
+
+def test_multiple_identifiers_within_run_contaminate_comparison(
+    tmp_path, monkeypatch, valid_case
+):
+    baseline = [
+        scored(valid_case, "failure-001", "accept", "reject"),
+        scored(valid_case, "success-001", "accept", "accept"),
+    ]
+    improved = [
+        scored(valid_case, "failure-001", "accept", "accept"),
+        scored(valid_case, "success-001", "accept", "accept"),
+    ]
+    left_raw, right_raw = raw_run(baseline), raw_run(improved)
+    left_attempts = [
+        json.loads(line) for line in left_raw["attempts.jsonl"].splitlines()
+    ]
+    left_attempts[-1]["returned_model"] = "different-model"
+    left_attempts[-1]["system_fingerprint"] = "different-fingerprint"
+    left_raw["attempts.jsonl"] = b"".join(
+        runner.canonical(item) + b"\n" for item in left_attempts
+    )
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    summary = reporting.generate_reports(
+        tmp_path / "baseline",
+        tmp_path / "improved",
+        analysis_path,
+        tmp_path / "reports",
+    )
+    assert summary.causal_status == "contaminated"
+    assert any(
+        "multiple returned models" in item
+        for item in summary.causal_contamination_reasons
+    )
+    resume = (tmp_path / "reports/resume-bullet.md").read_text(encoding="utf-8")
+    assert "完成定向改进" not in resume
+
+
+def test_missing_identifiers_make_causal_claim_unverifiable(
+    tmp_path, monkeypatch, valid_case
+):
+    baseline = [scored(valid_case, "failure-001", "accept", "reject")]
+    improved = [scored(valid_case, "failure-001", "accept", "accept")]
+    left_raw = raw_run(baseline, fingerprint=None, returned_model=None)
+    right_raw = raw_run(improved, fingerprint=None, returned_model=None)
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    summary = reporting.generate_reports(
+        tmp_path / "baseline",
+        tmp_path / "improved",
+        analysis_path,
+        tmp_path / "reports",
+    )
+    assert summary.causal_status == "unverifiable"
+    resume = (tmp_path / "reports/resume-bullet.md").read_text(encoding="utf-8")
+    assert "完成定向改进" not in resume
+    assert "不可验证" in resume
+
+
+def test_same_identifier_with_different_attempt_count_contaminates_distribution(
+    tmp_path, monkeypatch, valid_case
+):
+    baseline = [scored(valid_case, "case-001", "accept", "reject")]
+    improved = [scored_after_repair(valid_case, "case-001")]
+    left_raw, right_raw = raw_run(baseline), raw_run(improved)
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    summary = reporting.build_comparison(
+        tmp_path / "baseline", tmp_path / "improved", analysis_path
+    )
+    assert summary.baseline.returned_models == summary.improved.returned_models
+    assert summary.causal_status == "contaminated"
+    assert any(
+        "returned model count distribution" in item
+        for item in summary.causal_contamination_reasons
+    )

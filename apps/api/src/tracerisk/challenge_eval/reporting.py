@@ -20,6 +20,7 @@ from tracerisk.challenge_eval.runner import (
     canonical,
     digest,
     recompute_run,
+    snapshot_run_inputs,
     validate_review_record,
     verify_improvement,
     write_bytes,
@@ -87,10 +88,15 @@ class RunReportSummary(StrictModel):
     reviewed_case_count: int | None = Field(ge=0)
     total_human_modified_field_count: int | None = Field(ge=0)
     total_review_duration_ms: int | None = Field(ge=0)
-    review_measurement_status: Literal["measured", "not_measured"]
+    review_measurement_status: Literal["measured", "partial", "not_measured"]
     requested_models: list[str]
     returned_models: list[str]
     system_fingerprints: list[str]
+    requested_model_counts: dict[str, int]
+    returned_model_counts: dict[str, int]
+    system_fingerprint_counts: dict[str, int]
+    returned_model_missing_count: int = Field(ge=0)
+    system_fingerprint_missing_count: int = Field(ge=0)
     environment: dict[str, object]
     model_configuration: dict[str, object]
     dataset_hash: ContentHash
@@ -134,6 +140,7 @@ class ComparisonSummary(StrictModel):
     delta: ProcessDelta
     selected_problem: ProblemEvidence | None
     changed_dimension: str | None
+    causal_status: Literal["clean", "contaminated", "unverifiable"]
     causal_contamination: bool
     causal_contamination_reasons: list[str]
     typical_cases: TypicalCases
@@ -147,6 +154,7 @@ class _RunEvidence:
         manifest: RunManifest,
         recomputed: list[ScoredCase],
         raw: dict[str, bytes],
+        raw_hashes: dict[str, ContentHash],
         cases: list[ScoredCase],
         attempts: list[AttemptRecord],
         reviews: list[ReviewRecord],
@@ -154,12 +162,15 @@ class _RunEvidence:
         self.manifest = manifest
         self.recomputed = recomputed
         self.raw = raw
+        self.raw_hashes = raw_hashes
         self.cases = cases
         self.attempts = attempts
         self.reviews = reviews
 
 
 def _jsonl(raw: bytes, name: str) -> list[dict[str, object]]:
+    if raw and not raw.endswith(b"\n"):
+        raise ValueError(f"malformed {name}: nonempty journal must end with newline")
     records: list[dict[str, object]] = []
     for line_number, line in enumerate(raw.splitlines(), 1):
         try:
@@ -184,7 +195,13 @@ def _unique_by_case[TCaseRecord: (ScoredCase, ReviewRecord)](
 
 
 def _load_run(path: Path) -> _RunEvidence:
-    manifest, recomputed, raw = recompute_run(path)
+    raw = snapshot_run_inputs(path)
+    raw_hashes = {name: digest(value) for name, value in sorted(raw.items())}
+    manifest, recomputed, validated_raw = recompute_run(
+        path, raw_inputs=raw, strict_read_only=True
+    )
+    if validated_raw != raw:
+        raise ValueError("read-only validation changed raw input snapshot")
     required = {
         "manifest.json",
         "dataset.jsonl",
@@ -228,7 +245,7 @@ def _load_run(path: Path) -> _RunEvidence:
         if result is None or not isinstance(review, ReviewRecord):
             raise ValueError("review references unknown case")
         validate_review_record(review, result)
-    return _RunEvidence(manifest, recomputed, raw, cases, attempts, reviews)
+    return _RunEvidence(manifest, recomputed, raw, raw_hashes, cases, attempts, reviews)
 
 
 def _sum_optional(values: Sequence[int | None]) -> int | None:
@@ -278,9 +295,13 @@ def _run_summary(evidence: _RunEvidence) -> RunReportSummary:
     for case in cases:
         if attempts_by_case[case.case_id] != case.http_attempt_count:
             raise ValueError("case attempt count disagrees with attempt journal")
-    human_status: Literal["measured", "not_measured"]
-    if "reviews.jsonl" in evidence.raw:
-        human_status = "measured"
+    human_status: Literal["measured", "partial", "not_measured"]
+    manual_case_ids = {
+        item.case_id for item in cases if item.actual_action == "manual_review"
+    }
+    reviewed_case_ids = {item.case_id for item in evidence.reviews}
+    if evidence.reviews:
+        human_status = "measured" if reviewed_case_ids == manual_case_ids else "partial"
         reviewed_case_count: int | None = len(evidence.reviews)
         modified: int | None = sum(
             item.changed_field_count for item in evidence.reviews
@@ -361,6 +382,33 @@ def _run_summary(evidence: _RunEvidence) -> RunReportSummary:
         system_fingerprints=sorted(
             {item.system_fingerprint for item in attempts if item.system_fingerprint}
         ),
+        requested_model_counts=dict(
+            sorted(Counter(item.requested_model for item in attempts).items())
+        ),
+        returned_model_counts=dict(
+            sorted(
+                Counter(
+                    item.returned_model
+                    for item in attempts
+                    if item.returned_model is not None
+                ).items()
+            )
+        ),
+        system_fingerprint_counts=dict(
+            sorted(
+                Counter(
+                    item.system_fingerprint
+                    for item in attempts
+                    if item.system_fingerprint is not None
+                ).items()
+            )
+        ),
+        returned_model_missing_count=sum(
+            item.returned_model is None for item in attempts
+        ),
+        system_fingerprint_missing_count=sum(
+            item.system_fingerprint is None for item in attempts
+        ),
         environment=_environment(evidence.manifest),
         model_configuration=_model_configuration(config),
         dataset_hash=evidence.manifest.dataset_hash,
@@ -417,20 +465,44 @@ def _typical(cases: Sequence[ScoredCase], weights: Mapping[str, int]) -> Typical
     )
 
 
-def _contamination(baseline: RunReportSummary, improved: RunReportSummary) -> list[str]:
-    reasons = []
+def _causal_assessment(
+    baseline: RunReportSummary, improved: RunReportSummary
+) -> tuple[Literal["clean", "contaminated", "unverifiable"], list[str]]:
+    contaminated = []
+    unverifiable = []
+    for phase, summary in (("baseline", baseline), ("improved", improved)):
+        if len(summary.returned_model_counts) > 1:
+            contaminated.append(f"{phase} has multiple returned models")
+        if len(summary.system_fingerprint_counts) > 1:
+            contaminated.append(f"{phase} has multiple system fingerprints")
+        if summary.returned_model_missing_count:
+            unverifiable.append(f"{phase} has missing returned model identifiers")
+        if summary.system_fingerprint_missing_count:
+            unverifiable.append(f"{phase} has missing system fingerprints")
     for label, left, right in (
-        ("requested model", baseline.requested_models, improved.requested_models),
-        ("returned model", baseline.returned_models, improved.returned_models),
         (
-            "system fingerprint",
-            baseline.system_fingerprints,
-            improved.system_fingerprints,
+            "requested model count distribution",
+            baseline.requested_model_counts,
+            improved.requested_model_counts,
+        ),
+        (
+            "returned model count distribution",
+            baseline.returned_model_counts,
+            improved.returned_model_counts,
+        ),
+        (
+            "system fingerprint count distribution",
+            baseline.system_fingerprint_counts,
+            improved.system_fingerprint_counts,
         ),
     ):
         if left != right:
-            reasons.append(f"{label} differs between runs")
-    return reasons
+            contaminated.append(f"{label} differs between runs")
+    if contaminated:
+        return "contaminated", [*contaminated, *unverifiable]
+    if unverifiable:
+        return "unverifiable", unverifiable
+    return "clean", []
 
 
 def _problem_count(
@@ -456,10 +528,6 @@ def build_comparison(
         != improved_evidence.manifest.config_hash
     ):
         raise ValueError("comparison inputs differ")
-    if ("reviews.jsonl" in baseline_evidence.raw) != (
-        "reviews.jsonl" in improved_evidence.raw
-    ):
-        raise ValueError("review provenance must be symmetric")
     analysis_raw = analysis_path.read_bytes()
     analysis = ImprovementAnalysis.model_validate_json(analysis_raw)
     config = json.loads(baseline_evidence.raw["config.json"])
@@ -469,19 +537,29 @@ def build_comparison(
         impact_weights=config["impact_weights"],
         baseline_raw_inputs=baseline_evidence.raw,
     )
-    verify_improvement(baseline_path, analysis_path, improved_evidence.manifest)
+    verify_improvement(
+        baseline_path,
+        analysis_path,
+        improved_evidence.manifest,
+        baseline_raw_inputs=baseline_evidence.raw,
+        strict_read_only=True,
+    )
     baseline = _run_summary(baseline_evidence)
     improved = _run_summary(improved_evidence)
+    if (baseline.review_measurement_status == "not_measured") != (
+        improved.review_measurement_status == "not_measured"
+    ):
+        raise ValueError("review provenance must be symmetric")
     selected = analysis.selected_problem.problem if analysis.selected_problem else None
     before_selected = _problem_count(baseline, selected)
     after_selected = _problem_count(improved, selected)
-    reasons = _contamination(baseline, improved)
+    causal_status, reasons = _causal_assessment(baseline, improved)
     provenance = {
         "baseline": {
-            name: digest(raw) for name, raw in sorted(baseline_evidence.raw.items())
+            name: value for name, value in baseline_evidence.raw_hashes.items()
         },
         "improved": {
-            name: digest(raw) for name, raw in sorted(improved_evidence.raw.items())
+            name: value for name, value in improved_evidence.raw_hashes.items()
         },
         "analysis": {"analysis.json": digest(analysis_raw)},
     }
@@ -493,8 +571,14 @@ def build_comparison(
         "本地非生产环境的延迟、重试与成本不能外推至生产系统。",
         "评测隔离数据库与检索，不衡量端到端召回质量。",
     ]
-    if baseline.review_measurement_status == "not_measured":
+    review_statuses = {
+        baseline.review_measurement_status,
+        improved.review_measurement_status,
+    }
+    if review_statuses == {"not_measured"}:
         limitations.append("未完成真实人工复核，修改字段数与复核耗时为 not measured。")
+    elif "partial" in review_statuses:
+        limitations.append("人工复核记录仅覆盖部分需复核案例，人工指标为 partial。")
     return ComparisonSummary(
         baseline=baseline,
         improved=improved,
@@ -537,7 +621,8 @@ def build_comparison(
             if analysis.selected_problem
             else None
         ),
-        causal_contamination=bool(reasons),
+        causal_status=causal_status,
+        causal_contamination=causal_status != "clean",
         causal_contamination_reasons=reasons,
         typical_cases=_typical(baseline_evidence.cases, config["impact_weights"]),
         provenance=provenance,
@@ -562,6 +647,14 @@ def render_comparison(summary: ComparisonSummary) -> str:
     fingerprints = (
         f"{', '.join(left.system_fingerprints) or 'not returned'} → "
         f"{', '.join(right.system_fingerprints) or 'not returned'}"
+    )
+    returned_model_counts = (
+        f"{json.dumps(left.returned_model_counts, sort_keys=True)} → "
+        f"{json.dumps(right.returned_model_counts, sort_keys=True)}"
+    )
+    fingerprint_counts = (
+        f"{json.dumps(left.system_fingerprint_counts, sort_keys=True)} → "
+        f"{json.dumps(right.system_fingerprint_counts, sort_keys=True)}"
     )
     if summary.selected_problem is None:
         experiment = ["- 基线没有形成可授权的行为问题，未声明改进变量。"]
@@ -634,6 +727,11 @@ def render_comparison(summary: ComparisonSummary) -> str:
             left.total_review_duration_ms,
             right.total_review_duration_ms,
         ),
+        (
+            "人工测量状态",
+            left.review_measurement_status,
+            right.review_measurement_status,
+        ),
     ]
     lines = [
         "# TraceRisk 真实模型挑战评测前后对比",
@@ -682,7 +780,15 @@ def render_comparison(summary: ComparisonSummary) -> str:
         f"- 请求模型：{requested_models}",
         f"- 返回模型：{returned_models}",
         f"- system fingerprint：{fingerprints}",
-        f"- 因果比较污染：{'是' if summary.causal_contamination else '否'}",
+        f"- 返回模型计数分布：`{returned_model_counts}`",
+        f"- fingerprint 计数分布：`{fingerprint_counts}`",
+        "- 缺失返回模型："
+        f"{left.returned_model_missing_count} → "
+        f"{right.returned_model_missing_count}",
+        "- 缺失 fingerprint："
+        f"{left.system_fingerprint_missing_count} → "
+        f"{right.system_fingerprint_missing_count}",
+        f"- 因果比较状态：`{summary.causal_status}`",
         *(f"  - {reason}" for reason in summary.causal_contamination_reasons),
         "",
         "## 局限",
@@ -756,16 +862,13 @@ def render_resume_bullet(summary: ComparisonSummary) -> str:
         if summary.selected_problem
         else None
     )
-    improved = (
-        before is not None
-        and after is not None
-        and after < before
-        and not summary.causal_contamination
-    )
-    if improved:
+    metric_decreased = before is not None and after is not None and after < before
+    if metric_decreased and summary.causal_status == "clean":
         conclusion = "完成定向改进"
-    elif before is not None and after is not None and after < before:
-        conclusion = "指标下降，但模型标识变化使因果归因受污染"
+    elif summary.causal_status == "contaminated":
+        conclusion = "模型标识或频次分布使因果归因受污染"
+    elif summary.causal_status == "unverifiable":
+        conclusion = "模型标识缺失使因果关系不可验证"
     else:
         conclusion = "实验结论未显示该指标改善"
     returned = ", ".join(summary.baseline.returned_models) or "API 未返回模型标识"

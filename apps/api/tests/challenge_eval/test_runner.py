@@ -649,7 +649,7 @@ def test_documented_offline_commands(tmp_path, monkeypatch):
     runner.write_json(improved / "manifest.json", manifest.model_dump(mode="json"))
     # This Task 6 fixture copies baseline bytes rather than applying a selected
     # function patch. Task 7 verifies the real single-dimension guard elsewhere.
-    monkeypatch.setattr(reporting, "verify_improvement", lambda *args: None)
+    monkeypatch.setattr(reporting, "verify_improvement", lambda *args, **kwargs: None)
     assert (
         runner.main(
             [

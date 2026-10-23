@@ -142,6 +142,22 @@ def read_journal(path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def parse_journal_bytes(raw: bytes, name: str) -> list[dict[str, Any]]:
+    """Strictly parse a complete journal snapshot without touching its file."""
+    if raw and not raw.endswith(b"\n"):
+        raise ValueError(f"corrupt journal: {name} must end with newline")
+    records: list[dict[str, Any]] = []
+    for index, line in enumerate(raw.splitlines(), 1):
+        try:
+            record = json.loads(line)
+        except (ValueError, UnicodeError) as exc:
+            raise ValueError(f"corrupt journal: {name}, line {index}") from exc
+        if not isinstance(record, dict):
+            raise ValueError(f"corrupt journal: {name}, line {index}")
+        records.append(record)
+    return records
+
+
 def load_api_key(root: Path) -> SecretStr:
     if "MODEL_API_KEY" in os.environ:
         raise ValueError("ambient MODEL_API_KEY is forbidden; use repository-root .env")
@@ -290,11 +306,15 @@ def manifest_fingerprint(manifest: RunManifest) -> str:
     )
 
 
-def read_manifest(path: Path) -> RunManifest:
-    manifest = RunManifest.model_validate_json(path.read_bytes())
+def parse_manifest(raw: bytes) -> RunManifest:
+    manifest = RunManifest.model_validate_json(raw)
     if manifest.fingerprint != manifest_fingerprint(manifest):
         raise ValueError("manifest fingerprint does not match its content")
     return manifest
+
+
+def read_manifest(path: Path) -> RunManifest:
+    return parse_manifest(path.read_bytes())
 
 
 def prepare_run(output: Path, manifest: RunManifest) -> RunManifest:
@@ -453,25 +473,33 @@ def unique_cases(
     return indexed
 
 
-def recompute_run(path: Path) -> tuple[RunManifest, list[ScoredCase], dict[str, bytes]]:
-    manifest = read_manifest(path / "manifest.json")
+def snapshot_run_inputs(path: Path) -> dict[str, bytes]:
+    names = (
+        "manifest.json",
+        "dataset.jsonl",
+        "config.json",
+        "attempts.jsonl",
+        "case-events.jsonl",
+        "cases.jsonl",
+    )
+    raw = {name: (path / name).read_bytes() for name in names}
+    if (path / "reviews.jsonl").exists():
+        raw["reviews.jsonl"] = (path / "reviews.jsonl").read_bytes()
+    return raw
+
+
+def recompute_run(
+    path: Path,
+    *,
+    raw_inputs: Mapping[str, bytes] | None = None,
+    strict_read_only: bool = False,
+) -> tuple[RunManifest, list[ScoredCase], dict[str, bytes]]:
+    raw = dict(raw_inputs) if raw_inputs is not None else snapshot_run_inputs(path)
+    manifest = parse_manifest(raw["manifest.json"])
     if manifest.status != "completed":
         raise ValueError("analysis requires completed run")
     if manifest.environment.get("run_kind") == "check":
         raise ValueError("check artifacts are excluded from evaluation metrics")
-    raw = {
-        name: (path / name).read_bytes()
-        for name in (
-            "manifest.json",
-            "dataset.jsonl",
-            "config.json",
-            "attempts.jsonl",
-            "case-events.jsonl",
-            "cases.jsonl",
-        )
-    }
-    if (path / "reviews.jsonl").exists():
-        raw["reviews.jsonl"] = (path / "reviews.jsonl").read_bytes()
     if (
         digest(raw["dataset.jsonl"]) != manifest.dataset_hash
         or digest(raw["config.json"]) != manifest.config_hash
@@ -483,11 +511,17 @@ def recompute_run(path: Path) -> tuple[RunManifest, list[ScoredCase], dict[str, 
     if manifest.environment["config"] != config:
         raise ValueError("manifest configuration differs from snapshot")
     cases = {case.case_id: case for case in dataset.cases}
-    final = unique_cases(read_journal(path / "cases.jsonl"), cases)
-    events = unique_cases(read_journal(path / "case-events.jsonl"), cases)
-    reviews = unique_cases(read_journal(path / "reviews.jsonl"), cases)
+
+    def journal(name: str) -> list[dict[str, Any]]:
+        if strict_read_only:
+            return parse_journal_bytes(raw.get(name, b""), name)
+        return read_journal(path / name)
+
+    final = unique_cases(journal("cases.jsonl"), cases)
+    events = unique_cases(journal("case-events.jsonl"), cases)
+    reviews = unique_cases(journal("reviews.jsonl"), cases)
     grouped: dict[str, list[AttemptRecord]] = {key: [] for key in cases}
-    for item in read_journal(path / "attempts.jsonl"):
+    for item in journal("attempts.jsonl"):
         attempt = AttemptRecord.model_validate(item)
         if attempt.case_id not in cases:
             raise ValueError("unknown attempt case")
@@ -533,8 +567,9 @@ def recompute_run(path: Path) -> tuple[RunManifest, list[ScoredCase], dict[str, 
                 review_duration_ms=round(review.review_duration_seconds * 1000),
             )
         scores.append(result)
-    # Hash the exact bytes retained after any permitted final-line recovery.
-    raw = {name: (path / name).read_bytes() for name in raw}
+    # Recovery-mode callers hash the retained bytes after final-line repair.
+    if not strict_read_only:
+        raw = snapshot_run_inputs(path)
     return manifest, scores, raw
 
 
@@ -548,9 +583,18 @@ def analyze_run(path: Path) -> ImprovementAnalysis:
 
 
 def verify_improvement(
-    baseline_path: Path, analysis_path: Path, improved: RunManifest
+    baseline_path: Path,
+    analysis_path: Path,
+    improved: RunManifest,
+    *,
+    baseline_raw_inputs: Mapping[str, bytes] | None = None,
+    strict_read_only: bool = False,
 ) -> None:
-    baseline, scores, raw = recompute_run(baseline_path)
+    baseline, scores, raw = recompute_run(
+        baseline_path,
+        raw_inputs=baseline_raw_inputs,
+        strict_read_only=strict_read_only,
+    )
     saved = ImprovementAnalysis.model_validate_json(analysis_path.read_bytes())
     verify_analysis(
         saved,
