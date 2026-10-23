@@ -152,6 +152,8 @@ def validate_response(case: ChallengeCase, response_content: str) -> ValidationO
         except (UnsupportedClaimError, CitationValidationError) as exc:
             return reject("support_error", str(exc))
 
+    if not validated:
+        return ValidationOutcome(actual_action="reject", cited_chunk_ids=cited_ids)
     if route_review(case, validated):
         return ValidationOutcome(
             actual_action="manual_review",
@@ -159,8 +161,6 @@ def validate_response(case: ChallengeCase, response_content: str) -> ValidationO
             attribution_candidate="human_judgment",
             findings=validated,
         )
-    if not validated:
-        return ValidationOutcome(actual_action="reject", cited_chunk_ids=cited_ids)
     return ValidationOutcome(
         actual_action="accept", cited_chunk_ids=cited_ids, findings=validated
     )

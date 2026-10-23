@@ -12,6 +12,7 @@ from tracerisk.challenge_eval.prompts import build_messages, order_context_chunk
 from tracerisk.challenge_eval.schemas import ChallengeCase, ChallengeChunk
 from tracerisk.challenge_eval.validation import (
     build_validation_feedback,
+    route_review,
     validate_response,
 )
 
@@ -202,7 +203,9 @@ def test_visible_same_time_conflict_routes_review(
 ) -> None:
     case = conflict_case(valid_case)
     content = '{"findings": []}' if empty else response_for(case.chunks[0])
-    assert validate_response(case, content).actual_action == "manual_review"
+    assert validate_response(case, content).actual_action == (
+        "reject" if empty else "manual_review"
+    )
 
 
 def test_observation_dates_are_normalized_before_conflict_check(
@@ -211,9 +214,9 @@ def test_observation_dates_are_normalized_before_conflict_check(
     data = conflict_case(valid_case).model_dump(mode="json")
     data["chunks"][1]["observed_at"] = "2026-10-23T00:00:00"
     normalized = ChallengeCase.model_validate(data)
-    assert validate_response(normalized, '{"findings": []}').actual_action == (
-        "manual_review"
-    )
+    assert validate_response(
+        normalized, response_for(normalized.chunks[0])
+    ).actual_action == ("manual_review")
 
 
 @pytest.mark.parametrize(
@@ -348,7 +351,5 @@ def test_all_frozen_conflicts_route_review_without_gold() -> None:
             case.category = "explicit_evidence"
             case.expected_action = "accept"
             case.supporting_chunk_ids = []
-            assert (
-                validate_response(case, '{"findings": []}').actual_action
-                == "manual_review"
-            )
+            assert route_review(case, [])
+            assert validate_response(case, '{"findings": []}').actual_action == "reject"

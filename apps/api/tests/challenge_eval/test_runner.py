@@ -1,0 +1,497 @@
+import asyncio
+import json
+import shutil
+from datetime import UTC, datetime
+from pathlib import Path
+
+import pytest
+from test_validation import response_for
+
+from tracerisk.challenge_eval import runner
+from tracerisk.challenge_eval.client import CompletionAttempt
+from tracerisk.challenge_eval.dataset import load_cases
+
+ROOT = Path(__file__).resolve().parents[4]
+CONFIG = json.loads(
+    (ROOT / "datasets/evaluation/model_challenge_config.json").read_text()
+)
+
+
+class FakeClient:
+    def __init__(self, *responses):
+        self.responses = iter(responses)
+        self.messages = []
+
+    async def complete_once(self, messages):
+        self.messages.append(messages)
+        response = next(self.responses)
+        if isinstance(response, BaseException):
+            raise response
+        return response
+
+
+def completion(content='{"findings": []}', **updates):
+    return CompletionAttempt(
+        latency_ms=1,
+        status="succeeded",
+        retryable=False,
+        requested_model="deepseek-flash",
+        request_parameters={},
+        response_content=content,
+        **updates,
+    )
+
+
+def execute(path, case, client, **kwargs):
+    return asyncio.run(runner.run_cases(path, [case], CONFIG, client=client, **kwargs))
+
+
+def test_repair_budget_and_empty_findings(tmp_path, valid_case):
+    client = FakeClient(completion("bad"), completion())
+    results = execute(tmp_path, valid_case, client)
+    assert len(client.messages) == 2
+    assert client.messages[1][-1]["role"] == "user"
+    assert "structure_error" in client.messages[1][-1]["content"]
+    assert results[0].validation_repair_count == 1
+    assert results[0].actual_action == "reject"
+    assert len(runner.read_journal(tmp_path / "attempts.jsonl")) == 2
+    empty = FakeClient(completion())
+    assert execute(tmp_path / "empty", valid_case, empty)[0].first_attempt_usable
+    assert len(empty.messages) == 1
+
+
+def test_successful_attempt_replayed_after_crash(tmp_path, valid_case, monkeypatch):
+    real = runner.append_journal
+
+    def crash(path, payload):
+        real(path, payload)
+        if path.name == "attempts.jsonl":
+            raise RuntimeError("crash")
+
+    monkeypatch.setattr(runner, "append_journal", crash)
+    with pytest.raises(RuntimeError):
+        execute(tmp_path, valid_case, FakeClient(completion()))
+    monkeypatch.setattr(runner, "append_journal", real)
+    client = FakeClient()
+    assert execute(tmp_path, valid_case, client)[0].actual_action == "reject"
+    assert not client.messages
+    assert execute(tmp_path, valid_case, client)[0].actual_action == "reject"
+
+
+def test_crash_after_event_has_null_timing(tmp_path, valid_case, monkeypatch):
+    real = runner.append_journal
+
+    def crash(path, payload):
+        real(path, payload)
+        if path.name == "case-events.jsonl":
+            raise RuntimeError("crash")
+
+    monkeypatch.setattr(runner, "append_journal", crash)
+    with pytest.raises(RuntimeError):
+        execute(tmp_path, valid_case, FakeClient(completion()))
+    monkeypatch.setattr(runner, "append_journal", real)
+    result = execute(tmp_path, valid_case, FakeClient())[0]
+    assert result.failure_localization_ms is None
+    assert result.failure_localization_status == "interrupted_before_finalize"
+
+
+def test_durable_event_is_inside_timing(tmp_path, valid_case, monkeypatch):
+    state = {"clock": 0.0}
+    real = runner.append_journal
+
+    def append(path, payload):
+        real(path, payload)
+        if path.name == "case-events.jsonl":
+            assert "failure_localization_ms" not in payload
+            state["clock"] = 0.25
+
+    monkeypatch.setattr(runner, "append_journal", append)
+    result = execute(
+        tmp_path, valid_case, FakeClient(completion()), monotonic=lambda: state["clock"]
+    )[0]
+    assert result.failure_localization_ms == 250
+
+
+def test_journal_recovers_only_unterminated_tail(tmp_path):
+    path = tmp_path / "journal.jsonl"
+    path.write_bytes(b'{"a":1}\n{"a":')
+    assert runner.read_journal(path) == [{"a": 1}]
+    runner.append_journal(path, {"b": 2})
+    assert runner.read_journal(path) == [{"a": 1}, {"b": 2}]
+    path.write_bytes(b'broken\n{"a":1}\n')
+    with pytest.raises(ValueError, match="corrupt"):
+        runner.read_journal(path)
+    path.write_bytes(b'{"a":1}\n[]')
+    with pytest.raises(ValueError, match="corrupt"):
+        runner.read_journal(path)
+    path.write_bytes(b'{"a":1}\nbroken\n')
+    with pytest.raises(ValueError, match="corrupt"):
+        runner.read_journal(path)
+
+
+def test_append_fsync(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(runner.os, "fsync", lambda fd: calls.append(fd))
+    runner.append_journal(tmp_path / "j", {"x": "中"})
+    assert len(calls) == 1
+    assert (tmp_path / "j").read_bytes() == b'{"x":"\xe4\xb8\xad"}\n'
+
+
+def test_key_provenance(tmp_path, monkeypatch):
+    monkeypatch.delenv("MODEL_API_KEY", raising=False)
+    with pytest.raises(ValueError):
+        runner.load_api_key(tmp_path)
+    (tmp_path / ".env").write_text('MODEL_API_KEY="secret-sentinel"\n')
+    assert runner.load_api_key(tmp_path).get_secret_value() == "secret-sentinel"
+    monkeypatch.setenv("MODEL_API_KEY", "ambient")
+    with pytest.raises(ValueError, match="ambient"):
+        runner.load_api_key(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "hour,expected",
+    [(0, "off_peak"), (1, "peak"), (4, "off_peak"), (6, "peak"), (10, "off_peak")],
+)
+def test_peak_interval_boundaries(hour, expected):
+    assert (
+        runner.pricing_tier(datetime(2026, 10, 23, hour, tzinfo=UTC), CONFIG)
+        == expected
+    )
+
+
+def test_manifest_rejects_mismatch_and_completed(tmp_path):
+    manifest = runner.build_manifest(ROOT, phase="baseline", run_id="test")
+    runner.prepare_run(tmp_path, manifest)
+    runner.prepare_run(tmp_path, manifest)
+    changed = manifest.model_copy(update={"fingerprint": "0" * 64})
+    with pytest.raises(ValueError, match="fingerprint"):
+        runner.prepare_run(tmp_path, changed)
+    manifest.status = "completed"
+    runner.write_json(tmp_path / "manifest.json", manifest.model_dump(mode="json"))
+    with pytest.raises(ValueError, match="completed"):
+        runner.prepare_run(tmp_path, manifest)
+
+
+def test_manifest_includes_cli_and_production_graph():
+    manifest = runner.build_manifest(ROOT, phase="baseline", run_id="test")
+    assert "scripts/run_model_challenge.py" in manifest.source_inventory
+    assert "apps/api/src/tracerisk/ai/claims.py" in manifest.source_inventory
+    assert "apps/api/src/tracerisk/ai/validation.py" in manifest.source_inventory
+    assert manifest.environment["dependencies"]
+
+
+def completed_run(path, *, first_review=False):
+    manifest = runner.build_manifest(ROOT, phase="baseline", run_id="baseline")
+    runner.prepare_run(path, manifest)
+    shutil.copyfile(ROOT / runner.DATASET, path / "dataset.jsonl")
+    shutil.copyfile(ROOT / runner.CONFIG, path / "config.json")
+    cases = load_cases(path / "dataset.jsonl").cases
+    responses = [completion() for case in cases]
+    if first_review:
+        responses[0] = completion(
+            response_for(cases[0].chunks[0], review_recommended=True)
+        )
+    asyncio.run(runner.run_cases(path, cases, CONFIG, client=FakeClient(*responses)))
+    manifest.status = "completed"
+    runner.write_json(path / "manifest.json", manifest.model_dump(mode="json"))
+    return manifest
+
+
+def test_empty_findings_in_conflict_remains_usable_reject(tmp_path):
+    case = next(
+        c
+        for c in load_cases(ROOT / runner.DATASET).cases
+        if c.category == "source_conflict"
+    )
+    client = FakeClient(completion())
+    result = execute(tmp_path, case, client)[0]
+    assert result.actual_action == "reject"
+    assert result.first_attempt_usable
+    assert len(client.messages) == 1
+
+
+def test_retry_after_crash_uses_original_and_stamps_request(
+    tmp_path, valid_case, monkeypatch
+):
+    failed = CompletionAttempt(
+        latency_ms=1,
+        status="failed",
+        retryable=True,
+        requested_model="deepseek-flash",
+        request_parameters={},
+        error_category="timeout",
+    )
+    append = runner.append_journal
+
+    def crash(path, value):
+        append(path, value)
+        raise RuntimeError("crash")
+
+    monkeypatch.setattr(runner, "append_journal", crash)
+    with pytest.raises(RuntimeError):
+        execute(tmp_path, valid_case, FakeClient(failed))
+    monkeypatch.setattr(runner, "append_journal", append)
+    client = FakeClient(completion("bad"))
+    stamp = datetime(2026, 10, 23, 6, tzinfo=UTC)
+    result = execute(tmp_path, valid_case, client, utcnow=lambda: stamp)[0]
+    assert result.http_attempt_count == 2
+    assert result.transport_retry_count == 1
+    assert client.messages == [runner.build_messages(valid_case)]
+    assert result.attempts[-1].requested_at == stamp
+    assert result.attempts[-1].pricing_tier == "peak"
+    assert execute(tmp_path, valid_case, FakeClient())[0] == result
+
+
+@pytest.mark.parametrize(
+    "category", ["malformed_response", "null_content", "non_stop_finish"]
+)
+def test_client_output_errors_consume_second_attempt_as_repair(
+    tmp_path, valid_case, category
+):
+    failed = CompletionAttempt(
+        latency_ms=1,
+        status="failed",
+        retryable=False,
+        requested_model="deepseek-flash",
+        request_parameters={},
+        error_category=category,
+    )
+    client = FakeClient(failed, failed)
+    result = execute(tmp_path, valid_case, client)[0]
+    assert result.validation_repair_count == 1
+    assert result.http_attempt_count == 2
+    assert "structure_error" in client.messages[-1][-1]["content"]
+
+
+def test_analysis_recomputes_scores_and_rejects_tampering(tmp_path):
+    completed_run(tmp_path)
+    analysis = runner.analyze_run(tmp_path)
+    assert set(analysis.baseline_input_hashes) == {
+        "manifest.json",
+        "dataset.jsonl",
+        "config.json",
+        "attempts.jsonl",
+        "case-events.jsonl",
+        "cases.jsonl",
+    }
+    cases = runner.read_journal(tmp_path / "cases.jsonl")
+    cases[0]["first_attempt_usable"] = False
+    (tmp_path / "cases.jsonl").write_bytes(
+        b"".join(runner.canonical(c) + b"\n" for c in cases)
+    )
+    with pytest.raises(ValueError, match="recomputed"):
+        runner.analyze_run(tmp_path)
+
+
+def test_changed_routing_does_not_rewrite_baseline_analysis(tmp_path, monkeypatch):
+    completed_run(tmp_path)
+    before = runner.analyze_run(tmp_path)
+    assert before.selected_problem.changed_dimension == "review_routing"
+    monkeypatch.setattr(
+        runner,
+        "validate_response",
+        lambda *args: pytest.fail("baseline must use its durable outcomes"),
+    )
+    assert runner.analyze_run(tmp_path) == before
+
+
+def test_review_validates_without_persisting_submitted_secret(tmp_path):
+    completed_run(tmp_path, first_review=True)
+    before = {
+        name: (tmp_path / name).read_bytes()
+        for name in ("attempts.jsonl", "cases.jsonl")
+    }
+    state = {"clock": 0.0}
+    secret = "SECRET_SENTINEL_REVIEW_4281"
+    pending = iter(
+        [
+            {"decision": "accept", "changes": {"finding-1": {"risk_type": secret}}},
+            {"decision": "accept", "changes": {"finding-1": {"claim_code": secret}}},
+            {
+                "decision": "accept",
+                "changes": {"finding-1": {"title": secret}},
+                "rationale": secret,
+            },
+        ]
+    )
+    displays = []
+
+    def display(value):
+        displays.append(value)
+        if '"draft"' in value:
+            state["clock"] = 10.0
+
+    def reply(prompt):
+        state["clock"] += 1.0
+        return json.dumps(next(pending))
+
+    results = runner.review_cases(
+        tmp_path, input_fn=reply, display=display, monotonic=lambda: state["clock"]
+    )
+    reviews = runner.read_journal(tmp_path / "reviews.jsonl")
+    assert len(reviews) == 1
+    assert reviews[0]["changed_fields"] == ["title"]
+    assert reviews[0]["duration_ms"] == 3000
+    assert secret not in (tmp_path / "reviews.jsonl").read_text()
+    assert secret not in json.dumps([r.model_dump(mode="json") for r in results])
+    assert secret not in json.dumps(displays)
+    assert all(
+        (tmp_path / name).read_bytes() == value for name, value in before.items()
+    )
+    reviewed = next(r for r in results if r.case_id == reviews[0]["case_id"])
+    assert reviewed.human_modified_field_count == 1
+    assert reviewed.review_measurement_status == "measured"
+    runner.review_cases(
+        tmp_path, input_fn=lambda _: pytest.fail("must skip reviewed case")
+    )
+
+
+def test_single_function_guard_and_recomputed_analysis(tmp_path):
+    baseline = tmp_path / "baseline"
+    original = completed_run(baseline)
+    analysis = runner.analyze_run(baseline)
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    source = tmp_path / "source"
+    for name in {
+        *original.source_inventory,
+        runner.CONFIG,
+        runner.DATASET,
+        runner.LOCK,
+    }:
+        destination = source / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+    filename, function = runner.SELECTABLE[analysis.selected_problem.changed_dimension]
+    target = source / filename
+    target.write_bytes(
+        target.read_bytes().replace(b"return conflict or any(", b"return True or any(")
+    )
+    improved = runner.build_manifest(
+        source, phase="improved", run_id="improved", changed_dimension="review_routing"
+    )
+    runner.verify_improvement(baseline, analysis_path, improved)
+    cli = source / runner.CLI
+    cli.write_text(cli.read_text() + "\n# shared wrapper change\n")
+    changed = runner.build_manifest(
+        source, phase="improved", run_id="improved", changed_dimension="review_routing"
+    )
+    with pytest.raises(ValueError, match="source file"):
+        runner.verify_improvement(baseline, analysis_path, changed)
+    shutil.copyfile(ROOT / runner.CLI, cli)
+    patched = target.read_bytes()
+    for extra in (
+        b"\nSHARED_CONSTANT = 1\n",
+        b"\ndef helper():\n    return 1\n",
+        b"\nimport math\n",
+    ):
+        target.write_bytes(patched + extra)
+        changed = runner.build_manifest(
+            source,
+            phase="improved",
+            run_id="improved",
+            changed_dimension="review_routing",
+        )
+        with pytest.raises(ValueError, match="top-level function"):
+            runner.verify_improvement(baseline, analysis_path, changed)
+    target.write_bytes(patched)
+    analysis.impact_weights["wrong_reject"] = 99
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+    with pytest.raises(ValueError, match="recomputed baseline"):
+        runner.verify_improvement(baseline, analysis_path, improved)
+
+
+@pytest.mark.parametrize("command", ["analyze", "review", "compare"])
+def test_offline_commands_do_not_load_key(tmp_path, monkeypatch, command):
+    monkeypatch.setattr(
+        runner, "load_api_key", lambda *_: pytest.fail("offline loaded key")
+    )
+    args = [command, "--output", str(tmp_path / "output.json")]
+    args += (
+        ["--baseline", str(tmp_path), "--improved", str(tmp_path)]
+        if command == "compare"
+        else ["--run", str(tmp_path)]
+    )
+    with pytest.raises(SystemExit) as exc:
+        runner.main(args)
+    assert exc.value.code == 2
+
+
+def test_help_never_loads_key(monkeypatch, capsys):
+    monkeypatch.setattr(
+        runner, "load_api_key", lambda *_: pytest.fail("help loaded key")
+    )
+    with pytest.raises(SystemExit) as exc:
+        runner.main(["--help"])
+    assert exc.value.code == 0
+    help_text = capsys.readouterr().out
+    assert all(
+        command in help_text
+        for command in ("check", "baseline", "analyze", "improved", "compare", "review")
+    )
+
+
+def test_check_separate_and_excluded(tmp_path, monkeypatch):
+    from pydantic import SecretStr
+
+    monkeypatch.setattr(runner, "load_api_key", lambda *_: SecretStr("test-only"))
+    client = FakeClient(completion())
+    monkeypatch.setattr(runner, "DeepSeekClient", lambda **kwargs: client)
+    runner.main(["check", "--output", str(tmp_path / "check")], root=ROOT)
+    assert len(client.messages) == 1
+    with pytest.raises(ValueError, match="excluded"):
+        runner.analyze_run(tmp_path / "check")
+
+
+def test_permanent_failure_has_no_retry(tmp_path, valid_case):
+    failed = CompletionAttempt(
+        latency_ms=1,
+        status="failed",
+        retryable=False,
+        requested_model="deepseek-flash",
+        request_parameters={},
+        error_category="authentication",
+        http_status=401,
+    )
+    client = FakeClient(failed)
+    result = execute(tmp_path, valid_case, client)[0]
+    assert result.http_attempt_count == 1
+    assert result.execution_status == "failed"
+
+
+def test_interrupted_final_case_append_recovers_from_event(
+    tmp_path, valid_case, monkeypatch
+):
+    append = runner.append_journal
+
+    def interrupt(path, value):
+        if path.name == "cases.jsonl":
+            path.write_bytes(b'{"case_id":')
+            raise RuntimeError("interrupted final append")
+        append(path, value)
+
+    monkeypatch.setattr(runner, "append_journal", interrupt)
+    with pytest.raises(RuntimeError):
+        execute(tmp_path, valid_case, FakeClient(completion()))
+    monkeypatch.setattr(runner, "append_journal", append)
+    result = execute(tmp_path, valid_case, FakeClient())[0]
+    assert result.failure_localization_ms is None
+    assert result.failure_localization_status == "interrupted_before_finalize"
+
+
+def test_import_graph_recurses_through_added_local_module(tmp_path):
+    source = tmp_path / "repo"
+    manifest = runner.build_manifest(ROOT, phase="baseline", run_id="test")
+    for name in manifest.source_inventory:
+        target = source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, target)
+    module = source / "apps/api/src/tracerisk/ai/helper_probe.py"
+    nested = source / "apps/api/src/tracerisk/ai/nested_probe.py"
+    module.write_text("from . import nested_probe\n")
+    nested.write_text("VALUE = 1\n")
+    entry = source / runner.SURFACE / "validation.py"
+    entry.write_bytes(entry.read_bytes() + b"\nimport tracerisk.ai.helper_probe\n")
+    files, _ = runner.source_inventory(source)
+    assert module.relative_to(source).as_posix() in files
+    assert nested.relative_to(source).as_posix() in files
