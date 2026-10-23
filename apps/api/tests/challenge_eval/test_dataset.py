@@ -1,12 +1,15 @@
 import json
+import re
 from collections import Counter
 from hashlib import sha256
+from itertools import combinations
 from pathlib import Path
-from uuid import UUID
+from uuid import NAMESPACE_URL, UUID, uuid5
 
 import pytest
 from pydantic import ValidationError
 
+from tracerisk.ai.claims import CLAIM_CATALOG, ClaimFact, decide_claim_support
 from tracerisk.challenge_eval.dataset import load_cases, validate_frozen_shape
 from tracerisk.challenge_eval.schemas import (
     AttemptRecord,
@@ -21,6 +24,43 @@ from tracerisk.challenge_eval.schemas import (
 DATASET = Path(__file__).resolve().parents[4] / (
     "datasets/evaluation/model_challenge_cases.jsonl"
 )
+CONFIG = DATASET.with_name("model_challenge_config.json")
+
+
+def same_observation_conflicts(
+    case: ChallengeCase,
+) -> list[tuple[ChallengeChunk, ChallengeChunk]]:
+    """Different dates describe status changes, not this dataset's conflict gold."""
+    exclusive_values = {
+        "judicial_case_status": {"open", "closed"},
+        "business_abnormal_status": {"active", "resolved"},
+        "negative_news_story": {"negative", "positive"},
+        "core_ip_status": {"valid", "invalid", "ownership_dispute"},
+    }
+    return [
+        (left, right)
+        for left, right in combinations(case.chunks, 2)
+        if left.company_id == right.company_id == case.company_id
+        and left.risk_type == right.risk_type
+        and left.fact_type == right.fact_type
+        and left.fact_key == right.fact_key
+        and left.observed_at == right.observed_at
+        and left.source_type != right.source_type
+        and left.fact_value != right.fact_value
+        and {left.fact_value, right.fact_value}
+        <= exclusive_values.get(left.fact_type, set())
+    ]
+
+
+def claim_fact(chunk: ChallengeChunk) -> ClaimFact:
+    return ClaimFact(
+        risk_type=chunk.risk_type,
+        source_type=chunk.source_type,
+        fact_type=chunk.fact_type,
+        fact_key=chunk.fact_key,
+        fact_value=chunk.fact_value,
+        polarity=chunk.polarity,
+    )
 
 
 def write_cases(path: Path, cases: list[ChallengeCase]) -> Path:
@@ -195,7 +235,6 @@ def test_same_count_with_wrong_categories_is_rejected(
         validate_frozen_shape(loaded)
 
 
-@pytest.mark.xfail(not DATASET.exists(), reason="Task 2 supplies the frozen dataset")
 def test_frozen_dataset_is_balanced_and_valid() -> None:
     loaded = load_cases(DATASET)
     validate_frozen_shape(loaded)
@@ -207,3 +246,171 @@ def test_frozen_dataset_is_balanced_and_valid() -> None:
         "insufficient_evidence": 10,
     }
     assert loaded.sha256 == sha256(DATASET.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize(
+    "category",
+    [
+        "explicit_evidence",
+        "similar_entity_or_number",
+        "source_conflict",
+        "insufficient_evidence",
+    ],
+)
+def test_each_category_covers_every_risk_type_twice(category: str) -> None:
+    counts = Counter(
+        risk
+        for case in load_cases(DATASET).cases
+        if case.category == category
+        for risk in {CLAIM_CATALOG[code].risk_type for code in case.allowed_claim_codes}
+    )
+    assert set(counts) == {
+        definition.risk_type for definition in CLAIM_CATALOG.values()
+    }
+    assert all(count >= 2 for count in counts.values())
+
+
+def test_frozen_case_semantics() -> None:
+    for case in load_cases(DATASET).cases:
+        assert re.search(r"[\u4e00-\u9fff]", case.rationale), case.case_id
+        chunks = {chunk.chunk_id: chunk for chunk in case.chunks}
+        for code in case.allowed_claim_codes:
+            assert any(
+                chunk.risk_type == CLAIM_CATALOG[code].risk_type
+                for chunk in case.chunks
+            )
+        if case.category == "explicit_evidence":
+            assert case.expected_action == "accept"
+            assert len(case.supporting_chunk_ids) == 1
+            support = chunks[case.supporting_chunk_ids[0]]
+            assert support.company_id == case.company_id
+            facts = [claim_fact(support)]
+            assert all(
+                decide_claim_support(code, support.risk_type, facts).status
+                == "supported"
+                for code in case.allowed_claim_codes
+            )
+        elif case.category == "similar_entity_or_number":
+            assert case.distractor_chunk_ids, case.case_id
+            assert case.expected_action in {"accept", "reject", "manual_review"}
+        elif case.category == "source_conflict":
+            assert case.expected_action == "manual_review"
+            conflicts = same_observation_conflicts(case)
+            assert conflicts, case.case_id
+            assert any(
+                {left.chunk_id, right.chunk_id} <= set(case.supporting_chunk_ids)
+                for left, right in conflicts
+            ), case.case_id
+        else:
+            assert case.expected_action in {"reject", "manual_review"}
+
+
+def test_gold_accepts_and_rejects_follow_visible_target_facts() -> None:
+    for case in load_cases(DATASET).cases:
+        if case.expected_action == "manual_review":
+            continue
+        supported = {
+            chunk.chunk_id
+            for chunk in case.chunks
+            if chunk.company_id == case.company_id
+            and any(
+                decide_claim_support(code, chunk.risk_type, [claim_fact(chunk)]).status
+                == "supported"
+                for code in case.allowed_claim_codes
+            )
+        }
+        assert set(case.supporting_chunk_ids) == supported, case.case_id
+        assert bool(supported) == (case.expected_action == "accept"), case.case_id
+
+
+def test_frozen_ids_and_hashes_use_deterministic_content() -> None:
+    for case in load_cases(DATASET).cases:
+        for ordinal, chunk in enumerate(case.chunks, start=1):
+            for field, kind in (("chunk_id", "chunk"), ("evidence_id", "evidence")):
+                assert getattr(chunk, field) == uuid5(
+                    NAMESPACE_URL,
+                    f"tracerisk-challenge/{case.case_id}/{kind}/{ordinal}",
+                )
+            assert chunk.evidence_content_hash == chunk.content_hash
+
+
+@pytest.fixture
+def status_change_case(valid_case: ChallengeCase) -> ChallengeCase:
+    earlier = valid_case.chunks[0].model_copy(
+        update={"observed_at": valid_case.chunks[0].observed_at.replace(day=22)}
+    )
+    content = "The previously open case is now closed."
+    digest = sha256(content.encode("utf-8")).hexdigest()
+    later = valid_case.chunks[0].model_copy(
+        update={
+            "source_type": "news",
+            "fact_value": "closed",
+            "chunk_id": UUID(int=4),
+            "evidence_id": UUID(int=5),
+            "polarity": "positive",
+            "content": content,
+            "content_hash": digest,
+            "evidence_content_hash": digest,
+        }
+    )
+    return valid_case.model_copy(update={"chunks": [earlier, later]})
+
+
+def test_different_observation_dates_are_not_a_conflict(
+    status_change_case: ChallengeCase,
+) -> None:
+    assert not same_observation_conflicts(status_change_case)
+    status_change_case.chunks[0].observed_at = status_change_case.chunks[1].observed_at
+    assert same_observation_conflicts(status_change_case)
+
+
+def test_frozen_model_and_pricing_configuration() -> None:
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    assert {
+        key: config[key]
+        for key in (
+            "provider",
+            "base_url",
+            "model",
+            "thinking",
+            "temperature",
+            "max_tokens",
+            "response_format",
+            "max_attempts",
+            "pricing_snapshot_date",
+            "pricing_currency",
+            "price_per_million_tokens",
+        )
+    } == {
+        "provider": "deepseek",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "thinking": {"type": "disabled"},
+        "temperature": 0,
+        "max_tokens": 2000,
+        "response_format": {"type": "json_object"},
+        "max_attempts": 2,
+        "pricing_snapshot_date": "2026-10-23",
+        "pricing_currency": "USD",
+        "price_per_million_tokens": {
+            "peak_cache_hit_input": 0.006,
+            "peak_cache_miss_input": 0.3,
+            "peak_output": 1.2,
+            "off_peak_cache_hit_input": 0.003,
+            "off_peak_cache_miss_input": 0.15,
+            "off_peak_output": 0.6,
+        },
+    }
+    assert config["pricing_url"] == "https://api-docs.deepseek.com/quick_start/pricing/"
+    assert config["pricing_policy"] == {
+        "timezone": "UTC",
+        "peak_weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "peak_intervals": [["01:00", "04:00"], ["06:00", "10:00"]],
+        "interval_bounds": "start_inclusive_end_exclusive",
+        "exclude_chinese_public_holidays": True,
+        "holiday_calendar": "checked_in_calendar_required",
+        "unknown_holiday_pricing_tier": "peak",
+        "cost_field": "conservative_estimated_cost_usd",
+        "tier_timestamp": "actual_request_timestamp",
+        "manifest_tier_field": "pricing_tier",
+    }
