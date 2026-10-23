@@ -7,6 +7,12 @@
   "max_tokens": 2000,
   "response_format": {"type": "json_object"},
   "max_attempts": 2,
+  "impact_weights": {
+    "unsafe_accept_or_missed_review": 4,
+    "wrong_reject": 3,
+    "unnecessary_review": 2,
+    "format_retry_only": 1
+  },
   "pricing_snapshot_date": "2026-10-23",
   "pricing_currency": "USD",
   "price_per_million_tokens": {

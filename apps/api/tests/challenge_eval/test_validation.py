@@ -75,8 +75,9 @@ def test_exact_supported_finding_accepts(valid_case: ChallengeCase) -> None:
 def test_empty_findings_reject(valid_case: ChallengeCase) -> None:
     outcome = validate_response(valid_case, '{"findings": []}')
     assert outcome.actual_action == "reject"
-    assert outcome.error_type == "support_error"
-    assert outcome.attribution_candidate == "support_error"
+    assert outcome.error_type is None
+    assert outcome.attribution_candidate is None
+    assert outcome.feedback is None
 
 
 @pytest.mark.parametrize(

@@ -215,6 +215,8 @@ def test_missing_api_metrics_remain_null() -> None:
         case_id="explicit-001",
         attempt_number=1,
         request_kind="original",
+        requested_at="2026-10-23T01:00:00Z",
+        pricing_tier="peak",
         latency_ms=1,
         status="succeeded",
         retryable=False,

@@ -29,7 +29,7 @@ class ValidationOutcome(StrictModel):
     actual_action: ExpectedAction
     error_type: ErrorType | None = None
     cited_chunk_ids: list[UUID] = Field(default_factory=list)
-    feedback: str = ""
+    feedback: str | None = None
     attribution_candidate: Attribution | None = None
     findings: list[ValidatedRiskFinding] = Field(default_factory=list)
 
@@ -160,7 +160,7 @@ def validate_response(case: ChallengeCase, response_content: str) -> ValidationO
             findings=validated,
         )
     if not validated:
-        return reject("support_error", "No supported findings")
+        return ValidationOutcome(actual_action="reject", cited_chunk_ids=cited_ids)
     return ValidationOutcome(
         actual_action="accept", cited_chunk_ids=cited_ids, findings=validated
     )

@@ -1,10 +1,17 @@
 """Strict contracts for frozen cases and measured evaluation artifacts."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    NonNegativeInt,
+    field_validator,
+)
 
 from tracerisk.ai.schemas import ContentHash, EvidenceContext, Key, Text
 
@@ -45,6 +52,8 @@ class AttemptRecord(StrictModel):
     case_id: Key
     attempt_number: int = Field(ge=1, le=2)
     request_kind: Literal["original", "transport_retry", "validation_repair"]
+    requested_at: AwareDatetime
+    pricing_tier: Literal["peak", "off_peak"]
     latency_ms: int = Field(ge=0)
     status: Literal["succeeded", "failed"]
     retryable: bool
@@ -61,6 +70,13 @@ class AttemptRecord(StrictModel):
     cache_miss_tokens: int | None = Field(default=None, ge=0)
     total_tokens: int | None = Field(default=None, ge=0)
     request_parameters: dict[str, object] = Field(default_factory=dict)
+
+    @field_validator("requested_at")
+    @classmethod
+    def request_time_is_utc(cls, value: datetime) -> datetime:
+        if value.utcoffset() != timedelta(0):
+            raise ValueError("requested_at must use UTC")
+        return value
 
 
 class CaseResult(StrictModel):

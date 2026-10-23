@@ -89,6 +89,8 @@ def test_success_records_usage_and_exact_request() -> None:
         case_id="case-1",
         attempt_number=1,
         request_kind="original",
+        requested_at="2026-10-23T01:00:00Z",
+        pricing_tier="peak",
         **result.model_dump(),
     )
     assert SECRET not in attempt.model_dump_json()
