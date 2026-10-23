@@ -59,6 +59,8 @@ class AttemptRecord(StrictModel):
     output_tokens: int | None = Field(default=None, ge=0)
     cache_hit_tokens: int | None = Field(default=None, ge=0)
     cache_miss_tokens: int | None = Field(default=None, ge=0)
+    total_tokens: int | None = Field(default=None, ge=0)
+    request_parameters: dict[str, object] = Field(default_factory=dict)
 
 
 class CaseResult(StrictModel):
