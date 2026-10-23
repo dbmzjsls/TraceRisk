@@ -331,7 +331,15 @@ def test_review_validates_without_persisting_submitted_secret(tmp_path):
     reviews = runner.read_journal(tmp_path / "reviews.jsonl")
     assert len(reviews) == 1
     assert reviews[0]["changed_fields"] == ["title"]
-    assert reviews[0]["duration_ms"] == 3000
+    assert reviews[0]["review_duration_seconds"] == 3
+    assert set(reviews[0]) == {
+        "case_id",
+        "decision",
+        "changed_fields",
+        "changed_field_count",
+        "review_duration_seconds",
+        "validation_status",
+    }
     assert secret not in (tmp_path / "reviews.jsonl").read_text()
     assert secret not in json.dumps([r.model_dump(mode="json") for r in results])
     assert secret not in json.dumps(displays)
@@ -431,16 +439,137 @@ def test_help_never_loads_key(monkeypatch, capsys):
     )
 
 
-def test_check_separate_and_excluded(tmp_path, monkeypatch):
+@pytest.mark.parametrize("malformed", [False, True])
+def test_check_separate_and_excluded(tmp_path, monkeypatch, capsys, malformed):
     from pydantic import SecretStr
 
     monkeypatch.setattr(runner, "load_api_key", lambda *_: SecretStr("test-only"))
-    client = FakeClient(completion())
+    monkeypatch.setattr(
+        runner, "load_cases", lambda *_: pytest.fail("check must not load cases")
+    )
+    response = completion().model_copy(
+        update={
+            "status": "failed" if malformed else "succeeded",
+            "error_category": "malformed_response" if malformed else None,
+            "response_content": "PRIVATE_RESPONSE_SENTINEL",
+            "returned_model": "returned-model",
+            "system_fingerprint": "fingerprint-1",
+            "input_tokens": 2,
+            "output_tokens": 1,
+            "total_tokens": 3,
+            "cache_hit_tokens": 0,
+            "cache_miss_tokens": 2,
+        }
+    )
+    client = FakeClient(response)
     monkeypatch.setattr(runner, "DeepSeekClient", lambda **kwargs: client)
-    runner.main(["check", "--output", str(tmp_path / "check")], root=ROOT)
+    output = tmp_path / "connectivity-check.json"
+    runner.main(
+        ["check", "--config", str(ROOT / runner.CONFIG), "--output", str(output)],
+        root=ROOT,
+    )
     assert len(client.messages) == 1
-    with pytest.raises(ValueError, match="excluded"):
-        runner.analyze_run(tmp_path / "check")
+    assert list(tmp_path.iterdir()) == [output]
+    stored = json.loads(output.read_text())
+    shown = json.loads(capsys.readouterr().out)
+    assert stored == shown
+    assert stored["status"] == response.status
+    assert stored["system_fingerprint"] == "fingerprint-1"
+    assert stored["returned_model"] == "returned-model"
+    assert stored["usage"]["input_tokens"] == 2
+    assert stored["latency_ms"] == 1
+    assert stored["conservative_estimated_cost_usd"] is not None
+    assert "PRIVATE_RESPONSE_SENTINEL" not in output.read_text()
+    assert "test-only" not in output.read_text()
+
+
+@pytest.mark.parametrize("command", ["baseline", "improved"])
+def test_documented_run_commands_accept_explicit_inputs(tmp_path, monkeypatch, command):
+    from pydantic import SecretStr
+
+    calls = []
+    monkeypatch.setattr(runner, "load_api_key", lambda *_: SecretStr("test-only"))
+    monkeypatch.setattr(runner, "verify_improvement", lambda *args: calls.append(args))
+    monkeypatch.setattr(
+        runner,
+        "DeepSeekClient",
+        lambda **kwargs: FakeClient(*(completion() for _ in range(40))),
+    )
+    analysis = tmp_path / "analysis.json"
+    runner.write_json(
+        analysis,
+        {
+            "baseline_input_hashes": {},
+            "impact_weights": {},
+            "impact_weights_hash": "0" * 64,
+            "attributions": {},
+            "candidates": [],
+            "selected_problem": None,
+        },
+    )
+    dataset = tmp_path / "selected-data.jsonl"
+    config = tmp_path / "selected-config.json"
+    shutil.copyfile(ROOT / runner.DATASET, dataset)
+    shutil.copyfile(ROOT / runner.CONFIG, config)
+    # Different raw bytes prove the selected input paths reach the manifest.
+    dataset.write_bytes(dataset.read_bytes() + b"\n")
+    config.write_bytes(config.read_bytes() + b"\n")
+    args = [
+        command,
+        "--dataset",
+        str(dataset),
+        "--config",
+        str(config),
+        "--output",
+        str(tmp_path / "run"),
+    ]
+    if command == "improved":
+        args += ["--baseline", str(tmp_path / "baseline"), "--analysis", str(analysis)]
+    assert runner.main(args, root=ROOT) == 0
+    manifest = runner.read_manifest(tmp_path / "run/manifest.json")
+    assert manifest.dataset_hash == runner.digest(dataset.read_bytes())
+    assert manifest.config_hash == runner.digest(config.read_bytes())
+    assert len(runner.read_journal(tmp_path / "run/attempts.jsonl")) == 40
+    assert bool(calls) == (command == "improved")
+
+
+def test_documented_offline_commands(tmp_path, monkeypatch):
+    baseline = tmp_path / "baseline"
+    completed_run(baseline)
+    monkeypatch.setattr(
+        runner, "load_api_key", lambda *_: pytest.fail("offline loaded key")
+    )
+    analysis = tmp_path / "analysis.json"
+    assert (
+        runner.main(["analyze", "--baseline", str(baseline), "--output", str(analysis)])
+        == 0
+    )
+    assert runner.main(["review", "--run", str(baseline)]) == 0
+    improved = tmp_path / "improved"
+    shutil.copytree(baseline, improved)
+    manifest = runner.read_manifest(improved / "manifest.json")
+    manifest.phase = "improved"
+    manifest.fingerprint = runner.manifest_fingerprint(manifest)
+    runner.write_json(improved / "manifest.json", manifest.model_dump(mode="json"))
+    assert (
+        runner.main(
+            [
+                "compare",
+                "--baseline",
+                str(baseline),
+                "--improved",
+                str(improved),
+                "--analysis",
+                str(analysis),
+                "--output",
+                str(tmp_path),
+            ]
+        )
+        == 0
+    )
+    result = json.loads((tmp_path / "comparison-inputs.json").read_text())
+    assert len(result["baseline"]) == len(result["improved"]) == 40
+    assert result["analysis_hash"] == runner.digest(analysis.read_bytes())
 
 
 def test_permanent_failure_has_no_retry(tmp_path, valid_case):

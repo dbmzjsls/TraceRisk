@@ -38,6 +38,7 @@ from tracerisk.challenge_eval.schemas import (
     RunManifest,
 )
 from tracerisk.challenge_eval.scoring import ScoredCase, score_case
+from tracerisk.challenge_eval.scoring import _cost as estimate_cost
 from tracerisk.challenge_eval.validation import (
     ValidationOutcome,
     build_validation_feedback,
@@ -231,8 +232,12 @@ def build_manifest(
     phase: Literal["baseline", "improved"],
     run_id: str,
     changed_dimension: Any = None,
+    dataset_path: Path | None = None,
+    config_path: Path | None = None,
 ) -> RunManifest:
-    config = json.loads((root / CONFIG).read_bytes())
+    dataset_path = dataset_path or root / DATASET
+    config_path = config_path or root / CONFIG
+    config = json.loads(config_path.read_bytes())
     files, behaviors = source_inventory(root)
     environment = {
         "python": sys.version,
@@ -250,8 +255,8 @@ def build_manifest(
     }
     fields = dict(
         phase=phase,
-        dataset_hash=digest((root / DATASET).read_bytes()),
-        config_hash=digest((root / CONFIG).read_bytes()),
+        dataset_hash=digest(dataset_path.read_bytes()),
+        config_hash=digest(config_path.read_bytes()),
         lock_hash=digest((root / LOCK).read_bytes()),
         prompt_hash=files[f"{SURFACE}/prompts.py"],
         requested_model=config["model"],
@@ -525,7 +530,7 @@ def recompute_run(path: Path) -> tuple[RunManifest, list[ScoredCase], dict[str, 
                 config,
                 failure_localization_ms=saved.failure_localization_ms,
                 human_modified_field_count=review.changed_field_count,
-                review_duration_ms=review.duration_ms,
+                review_duration_ms=round(review.review_duration_seconds * 1000),
             )
         scores.append(result)
     # Hash the exact bytes retained after any permitted final-line recovery.
@@ -675,15 +680,14 @@ def review_cases(
                 outcome = validate_response(case, json.dumps(revised))
                 if outcome.error_type is not None:
                     raise ValueError("replacement failed support validation")
-                elapsed = max(0, int((monotonic() - started) * 1000))
+                elapsed = max(0.0, monotonic() - started)
                 review = ReviewRecord(
                     case_id=case.case_id,
                     decision=decision,
                     changed_fields=sorted(changed),
                     changed_field_count=len(changed),
-                    duration_ms=elapsed,
+                    review_duration_seconds=elapsed,
                     validation_status="valid",
-                    reviewed_at=datetime.now(UTC),
                 )
                 append_journal(path / "reviews.jsonl", review.model_dump(mode="json"))
                 break
@@ -692,20 +696,74 @@ def review_cases(
     return recompute_run(path)[1]
 
 
-def comparison_inputs(baseline: Path, improved: Path) -> dict[str, object]:
+def comparison_inputs(
+    baseline: Path, improved: Path, analysis_path: Path | None = None
+) -> dict[str, object]:
     left, left_scores, left_raw = recompute_run(baseline)
     right, right_scores, right_raw = recompute_run(improved)
     if left.phase != "baseline" or right.phase != "improved":
         raise ValueError("compare requires baseline and improved phases")
     if left.dataset_hash != right.dataset_hash or left.config_hash != right.config_hash:
         raise ValueError("comparison inputs differ")
-    return {
+    result: dict[str, object] = {
         "baseline": [x.model_dump(mode="json") for x in left_scores],
         "improved": [x.model_dump(mode="json") for x in right_scores],
         "input_hashes": {
             phase: {name: digest(raw) for name, raw in values.items()}
             for phase, values in (("baseline", left_raw), ("improved", right_raw))
         },
+    }
+    if analysis_path is not None:
+        analysis_raw = analysis_path.read_bytes()
+        verify_analysis(
+            ImprovementAnalysis.model_validate_json(analysis_raw),
+            left_scores,
+            impact_weights=json.loads(left_raw["config.json"])["impact_weights"],
+            baseline_raw_inputs=left_raw,
+        )
+        result["analysis_hash"] = digest(analysis_raw)
+    return result
+
+
+async def check_connection(
+    config: Mapping[str, Any], *, client: CompletionClient
+) -> dict[str, object]:
+    """One isolated connectivity request; no evaluation case or repair loop."""
+    requested_at = datetime.now(UTC)
+    response = await client.complete_once(
+        [{"role": "user", "content": 'Return only this JSON object: {"findings": []}'}]
+    )
+    attempt = AttemptRecord(
+        case_id="connectivity-check",
+        attempt_number=1,
+        request_kind="original",
+        requested_at=requested_at,
+        pricing_tier=pricing_tier(requested_at, config),
+        **response.model_dump(),
+    )
+    cost = estimate_cost([attempt], config)
+    return {
+        "status": attempt.status,
+        "base_url": config["base_url"],
+        "requested_model": attempt.requested_model,
+        "returned_model": attempt.returned_model,
+        "system_fingerprint": attempt.system_fingerprint,
+        "http_status": attempt.http_status,
+        "error_category": attempt.error_category,
+        "requested_at": requested_at.isoformat(),
+        "pricing_tier": attempt.pricing_tier,
+        "usage": {
+            name: getattr(attempt, name)
+            for name in (
+                "input_tokens",
+                "output_tokens",
+                "cache_hit_tokens",
+                "cache_miss_tokens",
+                "total_tokens",
+            )
+        },
+        "latency_ms": attempt.latency_ms,
+        "conservative_estimated_cost_usd": str(cost) if cost is not None else None,
     }
 
 
@@ -716,34 +774,61 @@ def main(argv: Sequence[str] | None = None, *, root: Path | None = None) -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     for command in ("check", "baseline", "analyze", "improved", "compare", "review"):
         sub = subparsers.add_parser(command)
-        sub.add_argument("--output", required=True, type=Path)
-        if command in {"analyze", "review"}:
+        sub.add_argument("--output", required=command != "review", type=Path)
+        if command == "analyze":
+            sub.add_argument(
+                "--baseline", "--run", dest="run", required=True, type=Path
+            )
+        if command == "review":
             sub.add_argument("--run", required=True, type=Path)
+        if command in {"check", "baseline", "improved"}:
+            sub.add_argument("--config", type=Path, default=Path(CONFIG))
+        if command in {"baseline", "improved"}:
+            sub.add_argument("--dataset", type=Path, default=Path(DATASET))
         if command in {"improved", "compare"}:
             sub.add_argument("--baseline", required=True, type=Path)
         if command == "improved":
             sub.add_argument("--analysis", required=True, type=Path)
         if command == "compare":
             sub.add_argument("--improved", required=True, type=Path)
+            sub.add_argument("--analysis", type=Path)
     args = parser.parse_args(argv)
     root = root or Path(__file__).resolve().parents[5]
     try:
         if args.command == "analyze":
             exclusive_output(args.output, analyze_run(args.run).model_dump(mode="json"))
         elif args.command == "review":
+            if args.output is not None and args.output.exists():
+                raise ValueError("output already exists")
+            reviewed = review_cases(args.run)
+            if args.output is not None:
+                exclusive_output(
+                    args.output,
+                    {"cases": [x.model_dump(mode="json") for x in reviewed]},
+                )
+        elif args.command == "compare":
+            output = args.output
+            if output.is_dir() or not output.suffix:
+                output = output / "comparison-inputs.json"
+            exclusive_output(
+                output, comparison_inputs(args.baseline, args.improved, args.analysis)
+            )
+        elif args.command == "check":
             if args.output.exists():
                 raise ValueError("output already exists")
-            exclusive_output(
-                args.output,
-                {"cases": [x.model_dump(mode="json") for x in review_cases(args.run)]},
+            config = json.loads((root / args.config).read_bytes())
+            settings = DeepSeekRequestSettings.model_validate(
+                {key: config[key] for key in DeepSeekRequestSettings.model_fields}
             )
-        elif args.command == "compare":
-            exclusive_output(
-                args.output, comparison_inputs(args.baseline, args.improved)
-            )
+            client = DeepSeekClient(settings=settings, api_key=load_api_key(root))
+            result = asyncio.run(check_connection(config, client=client))
+            exclusive_output(args.output, result)
+            print(canonical(result).decode("utf-8"))
         else:
-            config = json.loads((root / CONFIG).read_bytes())
-            dataset = load_cases(root / DATASET)
+            config_path = root / args.config
+            dataset_path = root / args.dataset
+            config = json.loads(config_path.read_bytes())
+            dataset = load_cases(dataset_path)
             validate_frozen_shape(dataset)
             dimension = None
             if args.command == "improved":
@@ -760,18 +845,17 @@ def main(argv: Sequence[str] | None = None, *, root: Path | None = None) -> int:
                 phase="improved" if args.command == "improved" else "baseline",
                 run_id=args.output.name,
                 changed_dimension=dimension,
+                dataset_path=dataset_path,
+                config_path=config_path,
             )
-            if args.command == "check":
-                manifest.environment["run_kind"] = "check"
-                manifest.fingerprint = manifest_fingerprint(manifest)
             if args.command == "improved":
                 verify_improvement(args.baseline, args.analysis, manifest)
             key = load_api_key(root)
             manifest = prepare_run(args.output, manifest)
-            snapshots = [(DATASET, "dataset.jsonl"), (CONFIG, "config.json")]
+            snapshots = [(dataset_path, "dataset.jsonl"), (config_path, "config.json")]
             for source, target in snapshots:
                 destination = args.output / target
-                raw = (root / source).read_bytes()
+                raw = source.read_bytes()
                 if destination.exists() and destination.read_bytes() != raw:
                     raise ValueError("run snapshot differs")
                 if not destination.exists():
@@ -783,7 +867,7 @@ def main(argv: Sequence[str] | None = None, *, root: Path | None = None) -> int:
             asyncio.run(
                 run_cases(
                     args.output,
-                    dataset.cases[:1] if args.command == "check" else dataset.cases,
+                    dataset.cases,
                     config,
                     client=client,
                 )

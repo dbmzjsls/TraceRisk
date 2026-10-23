@@ -98,9 +98,8 @@ class ReviewRecord(StrictModel):
     decision: ExpectedAction
     changed_fields: list[Key]
     changed_field_count: int = Field(ge=0)
-    duration_ms: int = Field(ge=0)
+    review_duration_seconds: float = Field(ge=0, allow_inf_nan=False)
     validation_status: Literal["valid", "invalid"]
-    reviewed_at: datetime
 
 
 class RunManifest(StrictModel):
