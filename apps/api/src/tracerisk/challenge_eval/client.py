@@ -13,16 +13,26 @@ from tracerisk.challenge_eval.schemas import StrictModel
 TIMEOUT = httpx.Timeout(connect=5.0, read=30.0, write=10.0, pool=5.0)
 
 
+class DisabledThinking(StrictModel):
+    model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
+    type: Literal["disabled"]
+
+
+class JsonObjectResponseFormat(StrictModel):
+    model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
+    type: Literal["json_object"]
+
+
 class DeepSeekRequestSettings(StrictModel):
     """The request settings selected from the checked-in evaluation config."""
 
     model_config = ConfigDict(extra="forbid", strict=True, frozen=True)
     base_url: str
     model: Literal["deepseek-flash"]
-    thinking: dict[Literal["type"], Literal["disabled"]] = Field(min_length=1)
+    thinking: DisabledThinking
     temperature: Literal[0]
     max_tokens: Literal[2000]
-    response_format: dict[Literal["type"], Literal["json_object"]] = Field(min_length=1)
+    response_format: JsonObjectResponseFormat
 
 
 class CompletionAttempt(StrictModel):
@@ -158,14 +168,16 @@ class DeepSeekClient:
         if not isinstance(choices, list) or len(choices) != 1:
             return
         choice = choices[0]
-        if not isinstance(choice, dict) or not isinstance(choice.get("message"), dict):
+        if not isinstance(choice, dict):
             return
         reason = choice.get("finish_reason")
         if isinstance(reason, str) and 0 < len(reason) <= 256 and reason.strip():
             attempt.finish_reason = self._safe_text(reason)
         else:
             malformed = True
-        message = choice["message"]
+        message = choice.get("message")
+        if not isinstance(message, dict):
+            return
         content = message.get("content")
         if isinstance(content, str):
             attempt.response_content = self._safe_text(content)

@@ -231,6 +231,62 @@ def test_settings_reject_missing_required_frozen_parameter(field) -> None:
         DeepSeekRequestSettings.model_validate(values)
 
 
+@pytest.mark.parametrize(
+    ("field", "invalid_value"),
+    [("thinking", "enabled"), ("response_format", "text")],
+)
+def test_nested_request_settings_reject_mutation(field, invalid_value) -> None:
+    config = settings()
+    nested = getattr(config, field)
+    with pytest.raises(TypeError):
+        nested["type"] = invalid_value
+    with pytest.raises(ValidationError, match="frozen_instance"):
+        nested.type = invalid_value
+
+
+def test_thinking_stays_disabled_after_config_load_and_mutation_attempts() -> None:
+    config = settings()
+    with pytest.raises(ValidationError, match="frozen_instance"):
+        config.thinking.type = "enabled"
+    copied_payload = config.model_dump()
+    copied_payload["thinking"]["type"] = "enabled"
+
+    async def run():
+        def handle(request):
+            assert json.loads(request.content)["thinking"] == {"type": "disabled"}
+            return httpx.Response(200, json=completion())
+
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle)) as http:
+            return await DeepSeekClient(
+                settings=config, api_key=SecretStr(SECRET), client=http
+            ).complete_once(MESSAGES)
+
+    result = asyncio.run(run())
+    assert result.request_parameters["thinking"] == {"type": "disabled"}
+
+
+@pytest.mark.parametrize("message", [None, "invalid", [], 1])
+def test_malformed_message_preserves_finish_reason(message) -> None:
+    result = invoke(
+        lambda _: httpx.Response(
+            200,
+            json=completion(choices=[{"finish_reason": "length", "message": message}]),
+        )
+    )
+    assert result.status == "failed" and result.error_category == "malformed_response"
+    assert result.finish_reason == "length"
+
+
+def test_absent_message_preserves_finish_reason() -> None:
+    result = invoke(
+        lambda _: httpx.Response(
+            200, json=completion(choices=[{"finish_reason": "length"}])
+        )
+    )
+    assert result.status == "failed" and result.error_category == "malformed_response"
+    assert result.finish_reason == "length"
+
+
 def test_monotonic_latency_is_recorded(monkeypatch) -> None:
     ticks = iter([10.0, 10.125])
     monkeypatch.setattr(
