@@ -180,7 +180,7 @@ def test_manifest_includes_cli_and_production_graph():
     assert manifest.environment["dependencies"]
 
 
-def completed_run(path, *, first_review=False):
+def completed_run(path, *, first_review=False, review_finding_count=1):
     manifest = runner.build_manifest(ROOT, phase="baseline", run_id="baseline")
     runner.prepare_run(path, manifest)
     shutil.copyfile(ROOT / runner.DATASET, path / "dataset.jsonl")
@@ -188,9 +188,12 @@ def completed_run(path, *, first_review=False):
     cases = load_cases(path / "dataset.jsonl").cases
     responses = [completion() for case in cases]
     if first_review:
-        responses[0] = completion(
-            response_for(cases[0].chunks[0], review_recommended=True)
-        )
+        draft = json.loads(response_for(cases[0].chunks[0], review_recommended=True))
+        draft["findings"] = [
+            {**draft["findings"][0], "finding_key": f"finding-{index + 1}"}
+            for index in range(review_finding_count)
+        ]
+        responses[0] = completion(json.dumps(draft))
     asyncio.run(runner.run_cases(path, cases, CONFIG, client=FakeClient(*responses)))
     manifest.status = "completed"
     runner.write_json(path / "manifest.json", manifest.model_dump(mode="json"))
@@ -352,6 +355,97 @@ def test_review_validates_without_persisting_submitted_secret(tmp_path):
     runner.review_cases(
         tmp_path, input_fn=lambda _: pytest.fail("must skip reviewed case")
     )
+
+
+def test_review_counts_changed_instances_across_findings(tmp_path):
+    completed_run(tmp_path, first_review=True, review_finding_count=2)
+    submission = json.dumps(
+        {
+            "decision": "manual_review",
+            "changes": {
+                "finding-1": {"title": "Revised title one"},
+                "finding-2": {"title": "Revised title two"},
+            },
+        }
+    )
+    results = runner.review_cases(
+        tmp_path, input_fn=lambda _: submission, display=lambda _: None
+    )
+    review = runner.read_journal(tmp_path / "reviews.jsonl")[0]
+    assert review["changed_fields"] == ["title"]
+    assert review["changed_field_count"] == 2
+    result = next(item for item in results if item.case_id == review["case_id"])
+    assert result.human_modified_field_count == 2
+
+
+@pytest.mark.parametrize(
+    "fields,count", [([], 1), (["title"], 0), (["title", "summary"], 1)]
+)
+def test_review_field_metadata_rejects_inconsistent_counts(tmp_path, fields, count):
+    completed_run(tmp_path, first_review=True)
+    result = next(
+        item
+        for item in runner.recompute_run(tmp_path)[1]
+        if item.actual_action == "manual_review"
+    )
+    review = runner.ReviewRecord(
+        case_id=result.case_id,
+        decision="accept",
+        changed_fields=fields,
+        changed_field_count=count,
+        review_duration_seconds=1,
+        validation_status="valid",
+    )
+    with pytest.raises(ValueError, match="field metadata"):
+        runner.validate_review_record(review, result)
+
+
+def test_selected_function_decorator_add_change_remove_are_frozen(tmp_path):
+    baseline = tmp_path / "baseline"
+    original = completed_run(baseline)
+    source = tmp_path / "source"
+    for name in {
+        *original.source_inventory,
+        runner.CONFIG,
+        runner.DATASET,
+        runner.LOCK,
+    }:
+        destination = source / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+    filename, _ = runner.SELECTABLE["review_routing"]
+    target = source / filename
+    original_source = target.read_bytes()
+    analysis_path = tmp_path / "analysis.json"
+    for before, after in (
+        (b"", b"@staticmethod\n"),
+        (b"@staticmethod\n", b"@classmethod\n"),
+        (b"@staticmethod\n", b""),
+    ):
+        target.write_bytes(
+            original_source.replace(b"def route_review(", before + b"def route_review(")
+        )
+        baseline_manifest = runner.build_manifest(
+            source, phase="baseline", run_id="baseline"
+        )
+        baseline_manifest.status = "completed"
+        runner.write_json(
+            baseline / "manifest.json", baseline_manifest.model_dump(mode="json")
+        )
+        runner.write_json(
+            analysis_path, runner.analyze_run(baseline).model_dump(mode="json")
+        )
+        target.write_bytes(
+            original_source.replace(b"def route_review(", after + b"def route_review(")
+        )
+        improved = runner.build_manifest(
+            source,
+            phase="improved",
+            run_id="improved",
+            changed_dimension="review_routing",
+        )
+        with pytest.raises(ValueError, match="top-level function"):
+            runner.verify_improvement(baseline, analysis_path, improved)
 
 
 def test_single_function_guard_and_recomputed_analysis(tmp_path):

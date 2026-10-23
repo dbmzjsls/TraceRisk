@@ -195,8 +195,8 @@ def source_inventory(root: Path) -> tuple[dict[str, str], dict[str, dict[str, st
                 isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
                 and (relative, node.name) in SELECTABLE.values()
             ):
-                start = min([node.lineno, *(d.lineno for d in node.decorator_list)])
-                lines[start - 1 : node.end_lineno] = [f"<selected:{node.name}>\n"]
+                # Decorators execute outside the selected function body and stay frozen.
+                lines[node.lineno - 1 : node.end_lineno] = [f"<selected:{node.name}>\n"]
         nodes["__frozen_source__"] = digest("".join(lines).encode())
         behaviors[relative] = nodes
         package = (
@@ -609,7 +609,8 @@ def validate_review_record(review: ReviewRecord, result: ScoredCase) -> None:
     if (
         not set(review.changed_fields) <= REVIEW_FIELDS
         or len(review.changed_fields) != len(set(review.changed_fields))
-        or review.changed_field_count != len(review.changed_fields)
+        or review.changed_field_count < len(review.changed_fields)
+        or bool(review.changed_field_count) != bool(review.changed_fields)
     ):
         raise ValueError("invalid review field metadata")
 
@@ -666,6 +667,7 @@ def review_cases(
                 revised = json.loads(json.dumps(draft))
                 by_key = {item["finding_key"]: item for item in revised["findings"]}
                 changed = set()
+                changed_count = 0
                 for finding_key, fields in changes.items():
                     if (
                         finding_key not in by_key
@@ -676,6 +678,7 @@ def review_cases(
                     for name, value in fields.items():
                         if by_key[finding_key][name] != value:
                             changed.add(name)
+                            changed_count += 1
                             by_key[finding_key][name] = value
                 outcome = validate_response(case, json.dumps(revised))
                 if outcome.error_type is not None:
@@ -685,7 +688,7 @@ def review_cases(
                     case_id=case.case_id,
                     decision=decision,
                     changed_fields=sorted(changed),
-                    changed_field_count=len(changed),
+                    changed_field_count=changed_count,
                     review_duration_seconds=elapsed,
                     validation_status="valid",
                 )
