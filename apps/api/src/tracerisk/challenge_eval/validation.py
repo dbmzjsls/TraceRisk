@@ -79,12 +79,33 @@ def route_review(case: ChallengeCase, findings: Sequence[ValidatedRiskFinding]) 
             anchor in f"{finding.finding_key}\n{finding.reasoning}"
             for anchor in cited_anchors
         )
+        text = f"{finding.title}\n{finding.summary}\n{finding.reasoning}".lower()
+        explicit_review_or_extension = any(
+            marker in text
+            for marker in (
+                "review",
+                "manual",
+                "复核",
+                "核验",
+                "建议核",
+                "bankruptcy",
+                "insolvency",
+                "fraud",
+                "破产",
+                "资不抵债",
+                "欺诈",
+                "失信",
+                "违约",
+            )
+        )
         inherited_uncertainty = finding.support_status == "indeterminate"
         explicit_review = not inherited_uncertainty and (
             finding.evidence_sufficiency == "insufficient" or finding.review_recommended
         )
         review_required.append(
-            explicit_review or (inherited_uncertainty and not evidence_anchored)
+            explicit_review
+            or (inherited_uncertainty and not evidence_anchored)
+            or explicit_review_or_extension
         )
     return conflict or any(review_required)
 

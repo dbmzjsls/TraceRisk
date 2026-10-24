@@ -212,6 +212,24 @@ def test_evidence_anchored_paraphrase_does_not_force_review(
     assert outcome.actual_action == "accept"
     assert outcome.findings[0].support_status == "indeterminate"
 
+    unsafe = validate_response(
+        valid_case,
+        response_for(
+            valid_case.chunks[0],
+            finding_key="judicial_open_case:case-001",
+            title="Open judicial case case-001",
+            summary="The visible judicial case case-001 remains open.",
+            reasoning=(
+                "The cited case-001 is open, so bankruptcy is imminent; "
+                "manual review is required."
+            ),
+            evidence_sufficiency="insufficient",
+            review_recommended=True,
+        ),
+    )
+    assert unsafe.actual_action == "manual_review"
+    assert unsafe.findings[0].support_status == "indeterminate"
+
 
 @pytest.mark.parametrize("empty", [False, True])
 def test_visible_same_time_conflict_routes_review(
