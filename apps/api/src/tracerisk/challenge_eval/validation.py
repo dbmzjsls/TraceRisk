@@ -61,12 +61,32 @@ def route_review(case: ChallengeCase, findings: Sequence[ValidatedRiskFinding]) 
         <= exclusive_values.get(left.fact_type, set())
         for left, right in combinations(case.chunks, 2)
     )
-    return conflict or any(
-        finding.support_status == "indeterminate"
-        or finding.evidence_sufficiency == "insufficient"
-        or finding.review_recommended
-        for finding in findings
-    )
+    review_required = []
+    for finding in findings:
+        cited_chunk_ids = {citation.chunk_id for citation in finding.evidence_citations}
+        cited_anchors = {
+            str(value)
+            for chunk in case.chunks
+            if chunk.chunk_id in cited_chunk_ids
+            for value in (
+                chunk.fact_key,
+                chunk.fact_value,
+                chunk.fact_type,
+                chunk.observed_at,
+            )
+        }
+        evidence_anchored = any(
+            anchor in f"{finding.finding_key}\n{finding.reasoning}"
+            for anchor in cited_anchors
+        )
+        inherited_uncertainty = finding.support_status == "indeterminate"
+        explicit_review = not inherited_uncertainty and (
+            finding.evidence_sufficiency == "insufficient" or finding.review_recommended
+        )
+        review_required.append(
+            explicit_review or (inherited_uncertainty and not evidence_anchored)
+        )
+    return conflict or any(review_required)
 
 
 def validate_response(case: ChallengeCase, response_content: str) -> ValidationOutcome:

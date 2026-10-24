@@ -196,6 +196,23 @@ def test_free_text_extension_requires_review(valid_case: ChallengeCase) -> None:
     assert outcome.findings[0].support_reason == "unverified_free_text_extension"
 
 
+def test_evidence_anchored_paraphrase_does_not_force_review(
+    valid_case: ChallengeCase,
+) -> None:
+    outcome = validate_response(
+        valid_case,
+        response_for(
+            valid_case.chunks[0],
+            finding_key="judicial_open_case:case-001",
+            title="Open judicial case case-001",
+            summary="The visible judicial case case-001 remains open.",
+            reasoning="The cited case-001 is open in the supplied evidence.",
+        ),
+    )
+    assert outcome.actual_action == "accept"
+    assert outcome.findings[0].support_status == "indeterminate"
+
+
 @pytest.mark.parametrize("empty", [False, True])
 def test_visible_same_time_conflict_routes_review(
     valid_case: ChallengeCase,
