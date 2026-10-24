@@ -492,9 +492,7 @@ def _causal_assessment(
             improved.requested_models,
         )
     ]
-    if not (
-        baseline.returned_model_missing_count or improved.returned_model_missing_count
-    ):
+    if baseline.returned_models and improved.returned_models:
         identity_pairs.append(
             (
                 "returned model identities",
@@ -502,10 +500,7 @@ def _causal_assessment(
                 improved.returned_models,
             )
         )
-    if not (
-        baseline.system_fingerprint_missing_count
-        or improved.system_fingerprint_missing_count
-    ):
+    if baseline.system_fingerprints and improved.system_fingerprints:
         identity_pairs.append(
             (
                 "system fingerprint identities",

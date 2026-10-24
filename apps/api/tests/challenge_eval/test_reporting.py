@@ -576,6 +576,63 @@ def test_missing_identifiers_make_causal_claim_unverifiable(
     assert "不可验证" in resume
 
 
+@pytest.mark.parametrize(
+    ("field", "baseline_identity", "improved_identity", "expected_reason"),
+    [
+        (
+            "returned_model",
+            "model-before",
+            "model-after",
+            "returned model identities differs between runs",
+        ),
+        (
+            "system_fingerprint",
+            "fingerprint-before",
+            "fingerprint-after",
+            "system fingerprint identities differs between runs",
+        ),
+    ],
+)
+def test_observed_identity_drift_overrides_partial_missing_identifiers(
+    tmp_path,
+    monkeypatch,
+    valid_case,
+    field,
+    baseline_identity,
+    improved_identity,
+    expected_reason,
+):
+    baseline = [scored_after_repair(valid_case, "case-001")]
+    improved = [scored_after_repair(valid_case, "case-001")]
+    left_raw, right_raw = raw_run(baseline), raw_run(improved)
+    for raw, observed in (
+        (left_raw, baseline_identity),
+        (right_raw, improved_identity),
+    ):
+        attempts = [json.loads(line) for line in raw["attempts.jsonl"].splitlines()]
+        attempts[0][field] = observed
+        attempts[1][field] = None
+        raw["attempts.jsonl"] = b"".join(
+            runner.canonical(item) + b"\n" for item in attempts
+        )
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+
+    summary = reporting.build_comparison(
+        tmp_path / "baseline", tmp_path / "improved", analysis_path
+    )
+
+    assert summary.causal_status == "contaminated"
+    assert expected_reason in summary.causal_contamination_reasons
+    assert any("missing" in item for item in summary.causal_contamination_reasons)
+
+
 def test_same_identifier_with_different_attempt_count_remains_clean(
     tmp_path, monkeypatch, valid_case
 ):
