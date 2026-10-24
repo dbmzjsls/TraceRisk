@@ -29,7 +29,11 @@ from tracerisk.challenge_eval.client import (
     DeepSeekClient,
     DeepSeekRequestSettings,
 )
-from tracerisk.challenge_eval.dataset import load_cases, validate_frozen_shape
+from tracerisk.challenge_eval.dataset import (
+    load_cases,
+    parse_cases,
+    validate_frozen_shape,
+)
 from tracerisk.challenge_eval.prompts import build_messages
 from tracerisk.challenge_eval.schemas import (
     AttemptRecord,
@@ -505,7 +509,7 @@ def recompute_run(
         or digest(raw["config.json"]) != manifest.config_hash
     ):
         raise ValueError("snapshot hash mismatch")
-    dataset = load_cases(path / "dataset.jsonl")
+    dataset = parse_cases(raw["dataset.jsonl"])
     validate_frozen_shape(dataset)
     config = json.loads(raw["config.json"])
     if manifest.environment["config"] != config:
@@ -589,13 +593,20 @@ def verify_improvement(
     *,
     baseline_raw_inputs: Mapping[str, bytes] | None = None,
     strict_read_only: bool = False,
+    analysis: ImprovementAnalysis | None = None,
 ) -> None:
     baseline, scores, raw = recompute_run(
         baseline_path,
         raw_inputs=baseline_raw_inputs,
         strict_read_only=strict_read_only,
     )
-    saved = ImprovementAnalysis.model_validate_json(analysis_path.read_bytes())
+    if strict_read_only and analysis is None:
+        raise ValueError("strict verification requires snapshotted analysis")
+    saved = (
+        analysis
+        if analysis is not None
+        else ImprovementAnalysis.model_validate_json(analysis_path.read_bytes())
+    )
     verify_analysis(
         saved,
         scores,

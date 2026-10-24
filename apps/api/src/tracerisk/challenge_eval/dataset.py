@@ -15,8 +15,7 @@ class LoadedDataset(StrictModel):
     sha256: ContentHash
 
 
-def load_cases(path: Path) -> LoadedDataset:
-    raw = path.read_bytes()
+def parse_cases(raw: bytes) -> LoadedDataset:
     cases = [
         ChallengeCase.model_validate_json(line)
         for line in raw.decode("utf-8").splitlines()
@@ -44,6 +43,10 @@ def load_cases(path: Path) -> LoadedDataset:
         if not set(case.allowed_claim_codes) <= CLAIM_CATALOG.keys():
             raise ValueError(f"{case.case_id}: unknown claim code")
     return LoadedDataset(cases=cases, sha256=sha256(raw).hexdigest())
+
+
+def load_cases(path: Path) -> LoadedDataset:
+    return parse_cases(path.read_bytes())
 
 
 def validate_frozen_shape(dataset: LoadedDataset) -> None:

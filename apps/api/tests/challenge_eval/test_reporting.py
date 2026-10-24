@@ -215,6 +215,7 @@ def test_reports_derive_metrics_and_render_unmeasured_human_work(
     assert summary.delta.selected_problem_case_count == -1
     comparison = (tmp_path / "reports/comparison.md").read_text(encoding="utf-8")
     assert "not measured" in comparison
+    assert "| 总 Token | 45 | 45 |" in comparison
     assert "| 通过率 |" not in comparison
     assert "本地非生产环境" in comparison
     assert (tmp_path / "baseline/summary.json").is_file()
@@ -406,6 +407,61 @@ def test_corrupt_review_tail_is_rejected_without_modifying_bytes(tmp_path):
     assert reviews.read_bytes() == before
 
 
+def test_dataset_replacement_after_snapshot_is_rejected_without_report_write(
+    tmp_path, monkeypatch
+):
+    from test_runner import completed_run
+
+    run_path = tmp_path / "baseline"
+    completed_run(run_path)
+    original_snapshot = reporting.snapshot_run_inputs
+
+    def replace_after_snapshot(path: Path):
+        raw = original_snapshot(path)
+        dataset = path / "dataset.jsonl"
+        dataset.write_bytes(raw["dataset.jsonl"] + b"\n")
+        return raw
+
+    monkeypatch.setattr(reporting, "snapshot_run_inputs", replace_after_snapshot)
+    with pytest.raises(ValueError, match="changed after snapshot"):
+        reporting._load_run(run_path)
+    assert not (run_path / "summary.json").exists()
+
+
+def test_analysis_replacement_after_snapshot_is_rejected_without_report_write(
+    tmp_path, monkeypatch, valid_case
+):
+    baseline = [scored(valid_case, "failure-001", "accept", "reject")]
+    improved = [scored(valid_case, "failure-001", "accept", "accept")]
+    left_raw, right_raw = raw_run(baseline), raw_run(improved)
+    install_runs(monkeypatch, baseline, improved, left_raw, right_raw)
+    analysis = select_improvement(
+        baseline,
+        impact_weights=CONFIG["impact_weights"],
+        baseline_raw_inputs=left_raw,
+    )
+    analysis_path = tmp_path / "analysis.json"
+    runner.write_json(analysis_path, analysis.model_dump(mode="json"))
+
+    def replace_after_snapshot(*args, **kwargs):
+        parsed = json.loads(analysis_path.read_bytes())
+        analysis_path.write_text(json.dumps(parsed, indent=2), encoding="utf-8")
+        assert kwargs["analysis"].model_dump() == analysis.model_dump()
+
+    monkeypatch.setattr(reporting, "verify_improvement", replace_after_snapshot)
+    output = tmp_path / "reports"
+    with pytest.raises(ValueError, match="changed after snapshot"):
+        reporting.generate_reports(
+            tmp_path / "baseline",
+            tmp_path / "improved",
+            analysis_path,
+            output,
+        )
+    assert not output.exists()
+    assert not (tmp_path / "baseline/summary.json").exists()
+    assert not (tmp_path / "improved/summary.json").exists()
+
+
 @pytest.mark.parametrize(
     ("review_case_ids", "expected_status", "expected_count"),
     [
@@ -520,7 +576,7 @@ def test_missing_identifiers_make_causal_claim_unverifiable(
     assert "不可验证" in resume
 
 
-def test_same_identifier_with_different_attempt_count_contaminates_distribution(
+def test_same_identifier_with_different_attempt_count_remains_clean(
     tmp_path, monkeypatch, valid_case
 ):
     baseline = [scored(valid_case, "case-001", "accept", "reject")]
@@ -538,8 +594,7 @@ def test_same_identifier_with_different_attempt_count_contaminates_distribution(
         tmp_path / "baseline", tmp_path / "improved", analysis_path
     )
     assert summary.baseline.returned_models == summary.improved.returned_models
-    assert summary.causal_status == "contaminated"
-    assert any(
-        "returned model count distribution" in item
-        for item in summary.causal_contamination_reasons
-    )
+    assert summary.baseline.http_attempt_count == 1
+    assert summary.improved.http_attempt_count == 2
+    assert summary.causal_status == "clean"
+    assert summary.causal_contamination_reasons == []

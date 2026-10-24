@@ -245,7 +245,13 @@ def _load_run(path: Path) -> _RunEvidence:
         if result is None or not isinstance(review, ReviewRecord):
             raise ValueError("review references unknown case")
         validate_review_record(review, result)
+    _assert_run_snapshot_unchanged(path, raw)
     return _RunEvidence(manifest, recomputed, raw, raw_hashes, cases, attempts, reviews)
+
+
+def _assert_run_snapshot_unchanged(path: Path, expected: Mapping[str, bytes]) -> None:
+    if snapshot_run_inputs(path) != expected:
+        raise ValueError(f"run inputs changed after snapshot: {path}")
 
 
 def _sum_optional(values: Sequence[int | None]) -> int | None:
@@ -479,23 +485,35 @@ def _causal_assessment(
             unverifiable.append(f"{phase} has missing returned model identifiers")
         if summary.system_fingerprint_missing_count:
             unverifiable.append(f"{phase} has missing system fingerprints")
-    for label, left, right in (
+    identity_pairs = [
         (
-            "requested model count distribution",
-            baseline.requested_model_counts,
-            improved.requested_model_counts,
-        ),
-        (
-            "returned model count distribution",
-            baseline.returned_model_counts,
-            improved.returned_model_counts,
-        ),
-        (
-            "system fingerprint count distribution",
-            baseline.system_fingerprint_counts,
-            improved.system_fingerprint_counts,
-        ),
+            "requested model identities",
+            baseline.requested_models,
+            improved.requested_models,
+        )
+    ]
+    if not (
+        baseline.returned_model_missing_count or improved.returned_model_missing_count
     ):
+        identity_pairs.append(
+            (
+                "returned model identities",
+                baseline.returned_models,
+                improved.returned_models,
+            )
+        )
+    if not (
+        baseline.system_fingerprint_missing_count
+        or improved.system_fingerprint_missing_count
+    ):
+        identity_pairs.append(
+            (
+                "system fingerprint identities",
+                baseline.system_fingerprints,
+                improved.system_fingerprints,
+            )
+        )
+    for label, left, right in identity_pairs:
         if left != right:
             contaminated.append(f"{label} differs between runs")
     if contaminated:
@@ -529,6 +547,7 @@ def build_comparison(
     ):
         raise ValueError("comparison inputs differ")
     analysis_raw = analysis_path.read_bytes()
+    analysis_hash = digest(analysis_raw)
     analysis = ImprovementAnalysis.model_validate_json(analysis_raw)
     config = json.loads(baseline_evidence.raw["config.json"])
     verify_analysis(
@@ -543,6 +562,7 @@ def build_comparison(
         improved_evidence.manifest,
         baseline_raw_inputs=baseline_evidence.raw,
         strict_read_only=True,
+        analysis=analysis,
     )
     baseline = _run_summary(baseline_evidence)
     improved = _run_summary(improved_evidence)
@@ -561,7 +581,7 @@ def build_comparison(
         "improved": {
             name: value for name, value in improved_evidence.raw_hashes.items()
         },
-        "analysis": {"analysis.json": digest(analysis_raw)},
+        "analysis": {"analysis.json": analysis_hash},
     }
     limitations = [
         "逐条手工策划的合成小样本挑战集"
@@ -579,6 +599,10 @@ def build_comparison(
         limitations.append("未完成真实人工复核，修改字段数与复核耗时为 not measured。")
     elif "partial" in review_statuses:
         limitations.append("人工复核记录仅覆盖部分需复核案例，人工指标为 partial。")
+    _assert_run_snapshot_unchanged(baseline_path, baseline_evidence.raw)
+    _assert_run_snapshot_unchanged(improved_path, improved_evidence.raw)
+    if analysis_path.read_bytes() != analysis_raw:
+        raise ValueError("analysis changed after snapshot")
     return ComparisonSummary(
         baseline=baseline,
         improved=improved,
@@ -703,6 +727,7 @@ def render_comparison(summary: ComparisonSummary) -> str:
         ("实际引用 Chunk", left.cited_chunk_count, right.cited_chunk_count),
         ("输入 Token", left.input_tokens, right.input_tokens),
         ("输出 Token", left.output_tokens, right.output_tokens),
+        ("总 Token", left.total_tokens, right.total_tokens),
         ("缓存命中 Token", left.cache_hit_tokens, right.cache_hit_tokens),
         ("缓存未命中 Token", left.cache_miss_tokens, right.cache_miss_tokens),
         (
@@ -866,7 +891,7 @@ def render_resume_bullet(summary: ComparisonSummary) -> str:
     if metric_decreased and summary.causal_status == "clean":
         conclusion = "完成定向改进"
     elif summary.causal_status == "contaminated":
-        conclusion = "模型标识或频次分布使因果归因受污染"
+        conclusion = "模型标识变化使因果归因受污染"
     elif summary.causal_status == "unverifiable":
         conclusion = "模型标识缺失使因果关系不可验证"
     else:
@@ -892,6 +917,17 @@ def generate_reports(
     output: Path,
 ) -> ComparisonSummary:
     summary = build_comparison(baseline_path, improved_path, analysis_path)
+    for phase, path in (("baseline", baseline_path), ("improved", improved_path)):
+        current = {
+            name: digest(raw) for name, raw in sorted(snapshot_run_inputs(path).items())
+        }
+        if current != summary.provenance[phase]:
+            raise ValueError(f"{phase} inputs changed after snapshot")
+    if (
+        digest(analysis_path.read_bytes())
+        != summary.provenance["analysis"]["analysis.json"]
+    ):
+        raise ValueError("analysis changed after snapshot")
     output.mkdir(parents=True, exist_ok=True)
     write_json(output / "comparison-summary.json", summary.model_dump(mode="json"))
     write_json(baseline_path / "summary.json", summary.baseline.model_dump(mode="json"))
