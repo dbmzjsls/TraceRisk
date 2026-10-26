@@ -7,3 +7,4 @@
 - 实现复核幂等性、独立人工替换版本和不可变报告，保留原 AI、决定与引用来源，验证重复复核不重复恢复或生成报告及报告字节稳定性。[证据：人工修改与重放](evaluation/e2e-results.json)
 - 完成 Vue 3 调查、复核与报告界面，以持久 SSE 高水位和 Last-Event-ID 实现恢复、去重与失败轮询，支持引用定位和人工替换稿编辑。[证据：Stage 5](evaluation/stage-5-validation.json)、[当前 E2E](evaluation/e2e-results.json)
 - 编写锁定 Mock/Fake 的 CI 配置与有所有权约束的清理工具；hosted CI 的 backend / frontend 均通过，后端覆盖 410 项测试，并在独立 fresh-clone Docker 栈完成四服务健康与五分钟全流程演练。[证据：当前验收入口](acceptance.md)
+- 发现问题—完成改进—过程指标变化：在 TraceRisk 的 40 条逐条手工合成挑战样本上，使用真实 DeepSeek 调用（返回模型 deepseek-flash，system fingerprint e72d3c7f663d3e1383b00b3884cb4501）定位 `human_judgment`，仅调整 `review_routing`；完成定向改进，相关归因案例由 20 变为 7。结果来自一组本地非生产环境前后实验，不代表生产分布或普遍提升。[证据：真实模型挑战评测](evaluation/model-challenge/comparison.md)

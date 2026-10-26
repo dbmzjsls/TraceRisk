@@ -13,7 +13,7 @@
 | 人工修改复核 | 不可变风险报告 |
 | ![人工替换稿复核](docs/images/review-detail.png) | ![完成的合成风险报告](docs/images/risk-report.png) |
 
-[当前验收状态](docs/acceptance.md) · [五分钟演示](docs/demo-script.md) · [架构与时序](docs/design/system-architecture.md) · [面试讲解](docs/interview-notes.md) · [简历证据](docs/resume-bullets.md)
+[当前验收状态](docs/acceptance.md) · [五分钟演示](docs/demo-script.md) · [架构与时序](docs/design/system-architecture.md) · [面试讲解](docs/interview-notes.md) · [简历证据](docs/resume-bullets.md) · [真实模型挑战评测](docs/evaluation/model-challenge/README.md)
 
 ## 本地启动（PowerShell，仓库根目录）
 
@@ -103,6 +103,8 @@ apps/api/.venv/Scripts/python.exe scripts/run_evaluation.py
 | 结构化输出成功 | 2 / 2 |
 
 [机器结果及公式](docs/evaluation/results.json) / [人读结果](docs/evaluation/results.md)。Fake Recall@5 是小型合成候选池的管线回归，真实模型 `not_run`。质量门禁由 [CI 配置](.github/workflows/ci.yml) 使用 Mock/Fake；hosted 执行状态与提交链接只在[当前验收状态](docs/acceptance.md)更新。
+
+真实模型挑战评测采用独立的 40 条手工合成样本与真实 DeepSeek 调用，保存逐次调用 journal、单变量前后实验和限制说明；其过程指标与复现命令见[真实模型挑战评测](docs/evaluation/model-challenge/README.md)。既有引用和规则测试在其中仍只作为 CI 回归门禁，不作为真实模型质量结论。
 
 ## 支持性校验的能力边界
 
