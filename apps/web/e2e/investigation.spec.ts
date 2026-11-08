@@ -200,6 +200,8 @@ test('path 1: low risk completes without review', async ({ page, request }) => {
   await pageState(page, done, 'completed')
   await page.getByRole('link', { name: '查看不可变风险报告' }).click()
   await expect(page.locator('.page-heading h1')).toContainText(done.company_name)
+  await expect(page.getByRole('region', { name: '企业风险画像与评分说明' })).toContainText('0 / 95')
+  await expect(page.locator('main')).toContainText('Mock 模拟模型')
   await expect(page.locator('section.dossier-section').first()).toContainText('最终结果 · 规则评分 0')
   await expect(page.locator('section.dossier-section').first()).toContainText('无发现记录。')
   const saved = evidence(done.current_run.id)
@@ -380,6 +382,8 @@ test('path 6: unavailable source with zero score requires run-level review', asy
   await pageState(page, waiting, 'awaiting_review')
   await expect(page.locator('.coverage-stamp[data-status="unavailable"]')).toBeVisible()
   await expect(page.locator('.evidence-sufficiency')).toContainText('insufficient')
+  await expect(page.getByRole('region', { name: '企业风险画像与评分说明' })).toContainText('零分不代表企业安全')
+  await expect(page.locator('.dossier-main')).toContainText('来源覆盖不足或冲突尚未解决')
   await expect(page.locator('.provenance-wrapper')).toContainText('本次运行暂无 AI 发现。')
   const reviewerContext = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   try {

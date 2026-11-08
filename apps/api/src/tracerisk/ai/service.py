@@ -1,6 +1,6 @@
 """Read frozen inputs, release locks for generation, then validate and persist."""
 
-from uuid import UUID
+from uuid import UUID, uuid5
 
 import httpx
 from pydantic import ValidationError
@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tracerisk.ai.invocations import DatabaseInvocationRecorder
 from tracerisk.ai.mock_adapter import MockModelAdapter
-from tracerisk.ai.models import AIFinding
+from tracerisk.ai.models import AIFinding, ModelInvocation
 from tracerisk.ai.openai_compatible import OpenAICompatibleAdapter
 from tracerisk.ai.protocol import ModelAdapter, ModelAdapterError
 from tracerisk.ai.schemas import ValidatedRiskFindings
@@ -57,11 +57,13 @@ async def generate_validate_findings(
             context = await build_risk_context(session, run_id=run_id)
             fingerprint = await _fingerprint(session, run_id)
         # No business transaction or row lock spans either model IO or its recorder.
+        used_mock = False
         if adapter is not None:
             drafts = await adapter.analyze_risk(context)
         else:
             configuration = settings or Settings()
             if configuration.model_adapter == "mock":
+                used_mock = True
                 drafts = await MockModelAdapter().analyze_risk(context)
             else:
                 assert configuration.model_base_url is not None
@@ -95,13 +97,41 @@ async def generate_validate_findings(
                 findings=drafts,
             )
             await _persist_findings(session, run_id=run_id, validated=validated)
-    except (
-        ModelAdapterError,
-        CitationValidationError,
-        RetrievalIntegrityError,
-        ValidationError,
-    ):
-        raise PermanentWorkflowError("Model generation or validation failed") from None
+            if used_mock:
+                await session.execute(
+                    insert(ModelInvocation)
+                    .values(
+                        run_id=run_id,
+                        logical_call_id=uuid5(run_id, "mock-generation"),
+                        attempt_number=1,
+                        model="mock",
+                        prompt_version="mock-v1",
+                        input_tokens=None,
+                        output_tokens=None,
+                        latency_ms=0,
+                        status="succeeded",
+                        error_category=None,
+                    )
+                    .on_conflict_do_nothing(
+                        index_elements=["logical_call_id", "attempt_number"]
+                    )
+                )
+    except ModelAdapterError:
+        raise PermanentWorkflowError(
+            "Model generation failed", code="model_generation_failed"
+        ) from None
+    except CitationValidationError:
+        raise PermanentWorkflowError(
+            "Citation or support validation failed", code="citation_validation_failed"
+        ) from None
+    except RetrievalIntegrityError:
+        raise PermanentWorkflowError(
+            "Frozen retrieval integrity failed", code="retrieval_integrity_failed"
+        ) from None
+    except ValidationError:
+        raise PermanentWorkflowError(
+            "Structured output failed", code="structured_output_failed"
+        ) from None
 
 
 async def _persist_findings(

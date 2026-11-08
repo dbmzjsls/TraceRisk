@@ -2,9 +2,10 @@ from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from sqlalchemy import func, select
+from sqlalchemy import func, select, true
 
 from tracerisk.ai.models import AIFinding
+from tracerisk.ai.provenance import load_model_execution
 from tracerisk.auth.models import Role, User
 from tracerisk.auth.router import Session, require_roles
 from tracerisk.companies.models import Company
@@ -16,7 +17,12 @@ from tracerisk.evidence.service import (
     RetrievalIntegrityError,
     load_frozen_retrieval,
 )
-from tracerisk.investigations.models import Investigation, WorkflowRun, WorkflowStep
+from tracerisk.investigations.models import (
+    Investigation,
+    WorkflowEvent,
+    WorkflowRun,
+    WorkflowStep,
+)
 from tracerisk.investigations.schemas import (
     ConflictResponse,
     ConflictSideResponse,
@@ -48,6 +54,7 @@ from tracerisk.reviews.router import IdempotencyKey
 from tracerisk.reviews.schemas import PendingFindingResponse
 from tracerisk.rules.models import RuleFinding, RuleFindingEvidence
 from tracerisk.rules.references import resolve_rule_evidence_targets
+from tracerisk.workflows.routing import review_reasons
 
 router = APIRouter(prefix="/investigations", tags=["investigations"])
 InvestigationReader = Annotated[
@@ -132,12 +139,14 @@ async def list_investigations(
     _user: InvestigationReader,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
+    company_id: UUID | None = None,
 ) -> InvestigationListResponse:
     investigations = await session.scalars(
         select(Investigation)
         .join(Company, Company.id == Investigation.company_id)
         .join(WorkflowRun, WorkflowRun.id == Investigation.current_run_id)
-        .order_by(Investigation.id)
+        .where(Company.id == company_id if company_id is not None else true())
+        .order_by(Investigation.as_of_date.desc(), Investigation.id.desc())
         .limit(limit)
         .offset(offset)
     )
@@ -265,11 +274,13 @@ async def detail(
             RetrievedEvidence.chunk_id,
         )
     )
-    findings = await session.scalars(
-        select(AIFinding)
-        .where(AIFinding.run_id == run_id)
-        .order_by(AIFinding.finding_key)
-    )
+    findings = (
+        await session.scalars(
+            select(AIFinding)
+            .where(AIFinding.run_id == run_id)
+            .order_by(AIFinding.finding_key)
+        )
+    ).all()
     decisions = await session.scalars(
         select(ReviewDecision)
         .where(ReviewDecision.run_id == run_id)
@@ -306,8 +317,32 @@ async def detail(
             else "insufficient"
         )
     )
+    failure_event = await session.scalar(
+        select(WorkflowEvent)
+        .where(WorkflowEvent.run_id == run_id, WorkflowEvent.event_type == "run.failed")
+        .order_by(WorkflowEvent.sequence.desc())
+        .limit(1)
+    )
     return InvestigationDetailResponse(
+        failure_code=(
+            str(failure_event.metadata_json.get("failure_code", "workflow_error"))
+            if failure_event
+            else None
+        ),
         **base.model_dump(),
+        model_execution=await load_model_execution(session, run_id),
+        review_reasons=review_reasons(
+            rule_score=sum(rule.score for rule in rules),
+            evidence_sufficient=evidence_sufficiency == "sufficient",
+            conflict=bool(conflict_evaluation and conflict_evaluation.requires_review),
+            model_evidence_insufficient=any(
+                f.evidence_sufficiency == "insufficient" for f in findings
+            ),
+            model_recommended=any(f.review_recommended for f in findings),
+            support_reasons=(f.support_reason for f in findings),
+        )
+        if retrieval_state == "ready"
+        else [],
         retrieval_state=retrieval_state,
         steps=[StepResponse.model_validate(step) for step in steps],
         rule_score=sum(rule.score for rule in rules),

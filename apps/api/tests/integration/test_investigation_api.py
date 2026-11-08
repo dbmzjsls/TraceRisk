@@ -881,3 +881,36 @@ async def test_run_review_guards_bounds_and_exact_replay(
     _, admin = await identity("admin")
     _, admin_run = await awaiting_run()
     assert (await review(client, admin_run, admin)).status_code == 200
+
+
+async def test_company_filter_and_pending_provenance(client: httpx.AsyncClient) -> None:
+    _, headers = await identity("analyst")
+    target = await company()
+    other = await company()
+    first = await create(client, target, headers, key="filter-target")
+    second = await create(client, other, headers, key="filter-other")
+    assert first.status_code == second.status_code == 200
+    response = await client.get(f"/investigations?company_id={target}", headers=headers)
+    assert response.status_code == 200
+    assert [item["id"] for item in response.json()["items"]] == [first.json()["id"]]
+    detail = await client.get(f"/investigations/{first.json()['id']}", headers=headers)
+    assert detail.json()["model_execution"]["mode"] == "unknown"
+    assert detail.json()["review_reasons"] == []
+
+
+async def test_failed_run_exposes_safe_failure_category(
+    client: httpx.AsyncClient,
+) -> None:
+    from tracerisk.workflows.worker import mark_run_failed
+
+    _, headers = await identity("analyst")
+    created = await create(client, await company(), headers, key="failed-category")
+    run_id = UUID(created.json()["current_run"]["id"])
+    assert await mark_run_failed(
+        app.state.session_factory, run_id, failure_code="citation_validation_failed"
+    )
+    response = await client.get(
+        f"/investigations/{created.json()['id']}", headers=headers
+    )
+    assert response.json()["failure_code"] == "citation_validation_failed"
+    assert response.json()["current_run"]["report_id"] is None

@@ -54,6 +54,7 @@ class ValidatedRiskFindings(StrictSchema):
 
 
 class EvidenceContext(StrictSchema):
+    source_type: str | None = None
     evidence_id: UUID
     chunk_id: UUID
     company_id: UUID

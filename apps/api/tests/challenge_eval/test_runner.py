@@ -3,6 +3,7 @@ import json
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 from test_validation import response_for
@@ -194,13 +195,25 @@ def completed_run(path, *, first_review=False, review_finding_count=1):
             for index in range(review_finding_count)
         ]
         responses[0] = completion(json.dumps(draft))
-    asyncio.run(runner.run_cases(path, cases, CONFIG, client=FakeClient(*responses)))
+    # This fixture represents a historical baseline, including its old empty
+    # conflict rejection. Current routing must not rewrite that stored baseline.
+    current_validate = runner.validate_response
+
+    def historical_validate(case, content):
+        if case.category == "source_conflict" and content == '{"findings": []}':
+            return runner.ValidationOutcome(actual_action="reject")
+        return current_validate(case, content)
+
+    with patch.object(runner, "validate_response", historical_validate):
+        asyncio.run(
+            runner.run_cases(path, cases, CONFIG, client=FakeClient(*responses))
+        )
     manifest.status = "completed"
     runner.write_json(path / "manifest.json", manifest.model_dump(mode="json"))
     return manifest
 
 
-def test_empty_findings_in_conflict_remains_usable_reject(tmp_path):
+def test_empty_findings_in_conflict_routes_run_level_review(tmp_path):
     case = next(
         c
         for c in load_cases(ROOT / runner.DATASET).cases
@@ -208,7 +221,7 @@ def test_empty_findings_in_conflict_remains_usable_reject(tmp_path):
     )
     client = FakeClient(completion())
     result = execute(tmp_path, case, client)[0]
-    assert result.actual_action == "reject"
+    assert result.actual_action == "manual_review"
     assert result.first_attempt_usable
     assert len(client.messages) == 1
 
@@ -467,7 +480,9 @@ def test_single_function_guard_and_recomputed_analysis(tmp_path):
     filename, function = runner.SELECTABLE[analysis.selected_problem.changed_dimension]
     target = source / filename
     target.write_bytes(
-        target.read_bytes().replace(b"return conflict or any(", b"return True or any(")
+        target.read_bytes().replace(
+            b"return requires_review(", b"return True or requires_review("
+        )
     )
     improved = runner.build_manifest(
         source, phase="improved", run_id="improved", changed_dimension="review_routing"

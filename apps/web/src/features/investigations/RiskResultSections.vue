@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import type { InvestigationDetail } from '../../api/schemas'
 import CitationList, { type CitationEntry } from './CitationList.vue'
 import FindingList from './FindingList.vue'
+import RiskScoreSummary from './RiskScoreSummary.vue'
+import { failureLabels, modelExecutionLabel, reviewReasonLabels } from './analysisLabels'
 import HumanReplacementList from '../reviews/HumanReplacementList.vue'
 
 const props = defineProps<{ investigation: InvestigationDetail; reviewLinks?: boolean }>()
@@ -14,6 +16,17 @@ function ruleCitations(rule: InvestigationDetail['rule_findings'][number]): Cita
 </script>
 
 <template>
+  <RiskScoreSummary :score="investigation.rule_score" :rules="investigation.rule_findings" :coverage="investigation.coverage" :ready="investigation.steps.some(step => step.name === 'apply_rules')" />
+  <section class="panel dossier-section">
+<h2>分析方式与复核原因</h2>
+    <p>{{ modelExecutionLabel(investigation.model_execution) }}</p>
+    <ul v-if="investigation.review_reasons.length"><li v-for="reason in investigation.review_reasons" :key="reason">{{ reviewReasonLabels[reason] ?? reason }}</li></ul>
+    <p v-else class="muted">{{ investigation.retrieval_state === 'ready' ? '当前未记录复核触发原因。' : '分析尚未完成，复核原因待确认。' }}</p>
+    <p v-if="investigation.current_run.status === 'failed'" class="state-note">本次调查失败，不能通过人工复核绕过校验。请检查模型配置、调用状态及引用是否属于本次冻结证据，再重新发起调查。</p>
+    <p v-if="investigation.current_run.status === 'failed'">{{ failureLabels[investigation.failure_code ?? 'workflow_error'] ?? investigation.failure_code }}</p>
+    <p v-if="investigation.model_execution.error_categories.length">调用失败类别：{{ investigation.model_execution.error_categories.join('、') }}</p>
+    <RouterLink v-if="investigation.current_run.status === 'failed'" :to="`/companies/${investigation.company_id}`">返回企业重新发起调查</RouterLink>
+  </section>
   <section class="panel dossier-section final-result" aria-labelledby="final-result-heading">
     <div class="section-kicker">FINAL / DERIVED RESULT</div>
     <h2 id="final-result-heading">最终结果</h2>

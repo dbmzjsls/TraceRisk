@@ -61,53 +61,18 @@ def route_review(case: ChallengeCase, findings: Sequence[ValidatedRiskFinding]) 
         <= exclusive_values.get(left.fact_type, set())
         for left, right in combinations(case.chunks, 2)
     )
-    review_required = []
-    for finding in findings:
-        cited_chunk_ids = {citation.chunk_id for citation in finding.evidence_citations}
-        cited_anchors = {
-            str(value)
-            for chunk in case.chunks
-            if chunk.chunk_id in cited_chunk_ids
-            for value in (
-                chunk.fact_key,
-                chunk.fact_value,
-                chunk.fact_type,
-                chunk.observed_at,
-            )
-        }
-        evidence_anchored = any(
-            anchor in f"{finding.finding_key}\n{finding.reasoning}"
-            for anchor in cited_anchors
-        )
-        text = f"{finding.title}\n{finding.summary}\n{finding.reasoning}".lower()
-        explicit_review_or_extension = any(
-            marker in text
-            for marker in (
-                "review",
-                "manual",
-                "复核",
-                "核验",
-                "建议核",
-                "bankruptcy",
-                "insolvency",
-                "fraud",
-                "破产",
-                "资不抵债",
-                "欺诈",
-                "失信",
-                "违约",
-            )
-        )
-        inherited_uncertainty = finding.support_status == "indeterminate"
-        explicit_review = not inherited_uncertainty and (
-            finding.evidence_sufficiency == "insufficient" or finding.review_recommended
-        )
-        review_required.append(
-            explicit_review
-            or (inherited_uncertainty and not evidence_anchored)
-            or explicit_review_or_extension
-        )
-    return conflict or any(review_required)
+    from tracerisk.workflows.routing import requires_review
+
+    return requires_review(
+        rule_score=0,
+        evidence_sufficient=True,
+        conflict=conflict,
+        model_evidence_insufficient=any(
+            finding.evidence_sufficiency == "insufficient" for finding in findings
+        ),
+        model_recommended=any(finding.review_recommended for finding in findings),
+        support_reasons=(finding.support_reason for finding in findings),
+    )
 
 
 def validate_response(case: ChallengeCase, response_content: str) -> ValidationOutcome:
@@ -193,8 +158,6 @@ def validate_response(case: ChallengeCase, response_content: str) -> ValidationO
         except (UnsupportedClaimError, CitationValidationError) as exc:
             return reject("support_error", str(exc))
 
-    if not validated:
-        return ValidationOutcome(actual_action="reject", cited_chunk_ids=cited_ids)
     if route_review(case, validated):
         return ValidationOutcome(
             actual_action="manual_review",
@@ -203,5 +166,7 @@ def validate_response(case: ChallengeCase, response_content: str) -> ValidationO
             findings=validated,
         )
     return ValidationOutcome(
-        actual_action="accept", cited_chunk_ids=cited_ids, findings=validated
+        actual_action="accept" if validated else "reject",
+        cited_chunk_ids=cited_ids,
+        findings=validated,
     )

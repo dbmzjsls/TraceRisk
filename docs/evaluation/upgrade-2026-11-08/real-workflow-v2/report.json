@@ -1,0 +1,587 @@
+{
+  "id": "b632c02a-ec21-4596-b5c1-931280334975",
+  "run_id": "b79a5c82-98b4-43b0-a2dd-d0f1c40be084",
+  "snapshot": {
+    "rules": [
+      {
+        "id": "cac4cc4f-418a-42d3-a15f-975b7795c417",
+        "score": 25,
+        "rule_code": "BUSINESS_ABNORMAL_V1",
+        "parameters": {
+          "dedup_key": "abnormal_record_id",
+          "as_of_date": "2026-09-11",
+          "minimum_records": 1,
+          "required_status": "active",
+          "state_selection": "latest_on_or_before_as_of_date"
+        },
+        "rule_version": "1"
+      },
+      {
+        "id": "82c39037-c0b8-463e-96df-b447768eddb6",
+        "score": 15,
+        "rule_code": "CORE_IP_ANOMALY_V1",
+        "parameters": {
+          "dedup_key": "ip_record_id",
+          "fact_type": "core_ip_status",
+          "as_of_date": "2026-09-11",
+          "minimum_records": 1,
+          "state_selection": "latest_on_or_before_as_of_date",
+          "anomalous_statuses": [
+            "invalid",
+            "ownership_dispute"
+          ]
+        },
+        "rule_version": "1"
+      },
+      {
+        "id": "fb6cff29-fafe-456d-adc3-e469dfa7a12d",
+        "score": 35,
+        "rule_code": "JUDICIAL_OPEN_CASE_V1",
+        "parameters": {
+          "dedup_key": "case_number",
+          "as_of_date": "2026-09-11",
+          "minimum_cases": 1,
+          "required_status": "open",
+          "state_selection": "latest_on_or_before_as_of_date"
+        },
+        "rule_version": "1"
+      },
+      {
+        "id": "8c1b6557-0d8e-442b-8c28-ea149c8ab667",
+        "score": 20,
+        "rule_code": "NEGATIVE_NEWS_V1",
+        "parameters": {
+          "dedup_key": "canonical_story_id",
+          "as_of_date": "2026-09-11",
+          "window_days": 365,
+          "window_start": "2025-09-12",
+          "minimum_stories": 2,
+          "required_polarity": "negative"
+        },
+        "rule_version": "1"
+      }
+    ],
+    "notice": "合成数据，仅供演示",
+    "run_id": "b79a5c82-98b4-43b0-a2dd-d0f1c40be084",
+    "company": {
+      "id": "b2902304-8515-50fc-81d4-20c548e6861a",
+      "name": "远景精工（合成）有限公司",
+      "unified_credit_code": "SYNTHETIC-COMPANY-003"
+    },
+    "coverage": {
+      "scope": [
+        "business",
+        "judicial",
+        "news",
+        "intellectual_property"
+      ],
+      "entries": [
+        {
+          "status": "available",
+          "checked_at": "2026-09-11T00:00:00+00:00",
+          "coverage_id": "04b47c12-9be0-53cd-8b7d-f4b9413dcf9b",
+          "source_type": "business"
+        },
+        {
+          "status": "available",
+          "checked_at": "2026-09-11T00:00:00+00:00",
+          "coverage_id": "9451fafb-7d0e-51c8-9cc4-edd283f2b09b",
+          "source_type": "judicial"
+        },
+        {
+          "status": "available",
+          "checked_at": "2026-09-11T00:00:00+00:00",
+          "coverage_id": "6bd9084c-ee4b-5cfe-a3cb-83fe92284e10",
+          "source_type": "news"
+        },
+        {
+          "status": "available",
+          "checked_at": "2026-09-11T00:00:00+00:00",
+          "coverage_id": "4d6baf79-ff67-52e6-9b38-a8b62aa22439",
+          "source_type": "intellectual_property"
+        }
+      ],
+      "evidence_sufficiency": "sufficient",
+      "insufficiency_details": []
+    },
+    "conflicts": [],
+    "as_of_date": "2026-09-11",
+    "rule_score": 95,
+    "ai_findings": [
+      {
+        "id": "2e32b39a-52ff-4e08-ac06-208a6163f311",
+        "title": "经营异常状态仍为有效",
+        "summary": "证据显示该公司在基准日的经营异常状态仍为有效，符合经营异常活跃的风险事实。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+            "evidence_id": "5cab899c-3280-5902-a2ed-834ffae971f5",
+            "content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8",
+            "quoted_excerpt": "经营异常在基准日仍有效。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 business、risk_type 为 business、fact_type 为 business_abnormal_status、fact_value 为 active，且极性为 negative，满足 BUSINESS_ABNORMAL 的匹配条件。",
+        "risk_type": "business",
+        "claim_code": "BUSINESS_ABNORMAL",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-ABN-001:BUSINESS_ABNORMAL",
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient"
+      },
+      {
+        "id": "9638cd5a-95fb-4f74-9394-c2d111fd0099",
+        "title": "司法案件在基准日仍未结案",
+        "summary": "证据显示该公司司法案件在基准日仍未结案，属于未结司法案件风险。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+            "evidence_id": "86892125-38bd-5fc5-89f4-07003ee5be18",
+            "content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9",
+            "quoted_excerpt": "司法案件在基准日仍未结案。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 judicial、risk_type 为 judicial、fact_type 为 judicial_case_status、fact_value 为 open，且极性为 negative，满足 JUDICIAL_OPEN_CASE 的匹配条件。",
+        "risk_type": "judicial",
+        "claim_code": "JUDICIAL_OPEN_CASE",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-CASE-001:JUDICIAL_OPEN_CASE",
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient"
+      },
+      {
+        "id": "60b21b79-3fe7-48e0-bc2f-f76181c83c97",
+        "title": "核心专利状态无效",
+        "summary": "证据显示该公司核心专利状态为无效，构成核心知识产权异常。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "54dbd835-14fd-50c2-be2e-112835e0c405",
+            "evidence_id": "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+            "content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd",
+            "quoted_excerpt": "核心专利状态无效。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 intellectual_property、risk_type 为 intellectual_property、fact_type 为 core_ip_status、fact_value 为 invalid，且极性为 negative，满足 CORE_IP_ANOMALY 的匹配条件。",
+        "risk_type": "intellectual_property",
+        "claim_code": "CORE_IP_ANOMALY",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-IP-CORE-001:CORE_IP_ANOMALY",
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient"
+      },
+      {
+        "id": "cfbf31f0-e44f-4921-b056-f208437a90b2",
+        "title": "独立负面新闻故事一",
+        "summary": "证据显示存在一则独立负面新闻故事。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+            "evidence_id": "6529afed-76c6-52bc-b0e1-a332d26de157",
+            "content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9",
+            "quoted_excerpt": "独立负面新闻故事一。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。",
+        "risk_type": "news",
+        "claim_code": "NEGATIVE_NEWS",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-001:NEGATIVE_NEWS",
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient"
+      },
+      {
+        "id": "2cd72630-cb8b-467f-9f98-55e2c429deb5",
+        "title": "独立负面新闻故事二",
+        "summary": "证据显示存在另一则独立负面新闻故事。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e",
+            "evidence_id": "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+            "content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9",
+            "quoted_excerpt": "独立负面新闻故事二。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。",
+        "risk_type": "news",
+        "claim_code": "NEGATIVE_NEWS",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-002:NEGATIVE_NEWS",
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient"
+      }
+    ],
+    "final_findings": [
+      {
+        "id": "2e32b39a-52ff-4e08-ac06-208a6163f311",
+        "title": "经营异常状态仍为有效",
+        "source": "ai",
+        "summary": "证据显示该公司在基准日的经营异常状态仍为有效，符合经营异常活跃的风险事实。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+            "evidence_id": "5cab899c-3280-5902-a2ed-834ffae971f5",
+            "content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8",
+            "quoted_excerpt": "经营异常在基准日仍有效。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 business、risk_type 为 business、fact_type 为 business_abnormal_status、fact_value 为 active，且极性为 negative，满足 BUSINESS_ABNORMAL 的匹配条件。",
+        "risk_type": "business",
+        "claim_code": "BUSINESS_ABNORMAL",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-ABN-001:BUSINESS_ABNORMAL",
+        "human_version": null,
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient",
+        "original_ai_finding_id": "2e32b39a-52ff-4e08-ac06-208a6163f311"
+      },
+      {
+        "id": "9638cd5a-95fb-4f74-9394-c2d111fd0099",
+        "title": "司法案件在基准日仍未结案",
+        "source": "ai",
+        "summary": "证据显示该公司司法案件在基准日仍未结案，属于未结司法案件风险。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+            "evidence_id": "86892125-38bd-5fc5-89f4-07003ee5be18",
+            "content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9",
+            "quoted_excerpt": "司法案件在基准日仍未结案。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 judicial、risk_type 为 judicial、fact_type 为 judicial_case_status、fact_value 为 open，且极性为 negative，满足 JUDICIAL_OPEN_CASE 的匹配条件。",
+        "risk_type": "judicial",
+        "claim_code": "JUDICIAL_OPEN_CASE",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-CASE-001:JUDICIAL_OPEN_CASE",
+        "human_version": null,
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient",
+        "original_ai_finding_id": "9638cd5a-95fb-4f74-9394-c2d111fd0099"
+      },
+      {
+        "id": "60b21b79-3fe7-48e0-bc2f-f76181c83c97",
+        "title": "核心专利状态无效",
+        "source": "ai",
+        "summary": "证据显示该公司核心专利状态为无效，构成核心知识产权异常。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "54dbd835-14fd-50c2-be2e-112835e0c405",
+            "evidence_id": "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+            "content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd",
+            "quoted_excerpt": "核心专利状态无效。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 intellectual_property、risk_type 为 intellectual_property、fact_type 为 core_ip_status、fact_value 为 invalid，且极性为 negative，满足 CORE_IP_ANOMALY 的匹配条件。",
+        "risk_type": "intellectual_property",
+        "claim_code": "CORE_IP_ANOMALY",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-IP-CORE-001:CORE_IP_ANOMALY",
+        "human_version": null,
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient",
+        "original_ai_finding_id": "60b21b79-3fe7-48e0-bc2f-f76181c83c97"
+      },
+      {
+        "id": "cfbf31f0-e44f-4921-b056-f208437a90b2",
+        "title": "独立负面新闻故事一",
+        "source": "ai",
+        "summary": "证据显示存在一则独立负面新闻故事。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+            "evidence_id": "6529afed-76c6-52bc-b0e1-a332d26de157",
+            "content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9",
+            "quoted_excerpt": "独立负面新闻故事一。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。",
+        "risk_type": "news",
+        "claim_code": "NEGATIVE_NEWS",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-001:NEGATIVE_NEWS",
+        "human_version": null,
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient",
+        "original_ai_finding_id": "cfbf31f0-e44f-4921-b056-f208437a90b2"
+      },
+      {
+        "id": "2cd72630-cb8b-467f-9f98-55e2c429deb5",
+        "title": "独立负面新闻故事二",
+        "source": "ai",
+        "summary": "证据显示存在另一则独立负面新闻故事。",
+        "version": 1,
+        "citations": [
+          {
+            "chunk_id": "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e",
+            "evidence_id": "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+            "content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9",
+            "quoted_excerpt": "独立负面新闻故事二。"
+          }
+        ],
+        "reasoning": "所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。",
+        "risk_type": "news",
+        "claim_code": "NEGATIVE_NEWS",
+        "finding_key": "b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-002:NEGATIVE_NEWS",
+        "human_version": null,
+        "support_reason": "unverified_free_text_extension",
+        "support_status": "indeterminate",
+        "confidence_level": "high",
+        "review_recommended": true,
+        "evidence_sufficiency": "insufficient",
+        "original_ai_finding_id": "2cd72630-cb8b-467f-9f98-55e2c429deb5"
+      }
+    ],
+    "review_reasons": [
+      "high_risk",
+      "model_evidence_insufficient",
+      "model_recommended",
+      "unverified_free_text_extension"
+    ],
+    "human_decisions": [
+      {
+        "id": "1e7ce27f-9e69-4c40-bb00-c367b5c33ac3",
+        "reason": "自动化合成链路验证；不是业务人工核验",
+        "decision": "approve",
+        "replacement": null,
+        "reviewer_id": "ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7",
+        "ai_finding_id": "2cd72630-cb8b-467f-9f98-55e2c429deb5",
+        "human_version": null,
+        "finding_version": 1,
+        "human_finding_version_id": null
+      },
+      {
+        "id": "89e96d4a-f911-49c5-8eed-ac6f7601b8d9",
+        "reason": "自动化合成链路验证；不是业务人工核验",
+        "decision": "approve",
+        "replacement": null,
+        "reviewer_id": "ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7",
+        "ai_finding_id": "60b21b79-3fe7-48e0-bc2f-f76181c83c97",
+        "human_version": null,
+        "finding_version": 1,
+        "human_finding_version_id": null
+      },
+      {
+        "id": "94be676f-1dd0-4819-aab0-149816a84b2c",
+        "reason": "自动化合成链路验证；不是业务人工核验",
+        "decision": "approve",
+        "replacement": null,
+        "reviewer_id": "ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7",
+        "ai_finding_id": "cfbf31f0-e44f-4921-b056-f208437a90b2",
+        "human_version": null,
+        "finding_version": 1,
+        "human_finding_version_id": null
+      },
+      {
+        "id": "aed7a3b6-65b1-481e-ab3d-42817c65787d",
+        "reason": "自动化合成链路验证；不是业务人工核验",
+        "decision": "approve",
+        "replacement": null,
+        "reviewer_id": "ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7",
+        "ai_finding_id": "2e32b39a-52ff-4e08-ac06-208a6163f311",
+        "human_version": null,
+        "finding_version": 1,
+        "human_finding_version_id": null
+      },
+      {
+        "id": "dc9768f4-23bc-419d-b6fc-383231487ea7",
+        "reason": "自动化合成链路验证；不是业务人工核验",
+        "decision": "approve",
+        "replacement": null,
+        "reviewer_id": "ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7",
+        "ai_finding_id": "9638cd5a-95fb-4f74-9394-c2d111fd0099",
+        "human_version": null,
+        "finding_version": 1,
+        "human_finding_version_id": null
+      }
+    ],
+    "model_execution": {
+      "mode": "real",
+      "models": [
+        "deepseek-flash"
+      ],
+      "statuses": [
+        "succeeded"
+      ],
+      "error_categories": []
+    },
+    "snapshot_version": "stage6-v1",
+    "retrieved_evidence": [
+      {
+        "rank": 1,
+        "title": "经营异常（合成披露）",
+        "content": "经营异常在基准日仍有效。",
+        "chunk_id": "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+        "fact_key": "FULL-ABN-001",
+        "polarity": "negative",
+        "fact_type": "business_abnormal_status",
+        "risk_type": "business",
+        "fact_value": "active",
+        "source_uri": "synthetic://stage3/all-rules-95/abnormal-active",
+        "evidence_id": "5cab899c-3280-5902-a2ed-834ffae971f5",
+        "observed_at": "2026-09-11",
+        "source_type": "business",
+        "content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8",
+        "evidence_content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8"
+      },
+      {
+        "rank": 1,
+        "title": "核心专利状态（合成公告）",
+        "content": "核心专利状态无效。",
+        "chunk_id": "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "fact_key": "FULL-IP-CORE-001",
+        "polarity": "negative",
+        "fact_type": "core_ip_status",
+        "risk_type": "intellectual_property",
+        "fact_value": "invalid",
+        "source_uri": "synthetic://stage3/all-rules-95/core-invalid",
+        "evidence_id": "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+        "observed_at": "2026-09-11",
+        "source_type": "intellectual_property",
+        "content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd",
+        "evidence_content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd"
+      },
+      {
+        "rank": 2,
+        "title": "非核心专利状态（合成公告）",
+        "content": "非核心专利状态有效。",
+        "chunk_id": "88999a6a-e74a-5012-8212-20f334e78a74",
+        "fact_key": "FULL-IP-NONCORE-001",
+        "polarity": "neutral",
+        "fact_type": "noncore_ip_status",
+        "risk_type": "intellectual_property",
+        "fact_value": "valid",
+        "source_uri": "synthetic://stage3/all-rules-95/noncore-valid",
+        "evidence_id": "1f1b0c59-6c30-59f0-98a3-4c1cd9d638d1",
+        "observed_at": "2026-09-11",
+        "source_type": "intellectual_property",
+        "content_hash": "c32c98e8f740b45c538c62729ee513231193641412af41df1fc7c355ef6737ba",
+        "evidence_content_hash": "c32c98e8f740b45c538c62729ee513231193641412af41df1fc7c355ef6737ba"
+      },
+      {
+        "rank": 1,
+        "title": "司法案件（合成披露）",
+        "content": "司法案件在基准日仍未结案。",
+        "chunk_id": "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+        "fact_key": "FULL-CASE-001",
+        "polarity": "negative",
+        "fact_type": "judicial_case_status",
+        "risk_type": "judicial",
+        "fact_value": "open",
+        "source_uri": "synthetic://stage3/all-rules-95/case-open",
+        "evidence_id": "86892125-38bd-5fc5-89f4-07003ee5be18",
+        "observed_at": "2026-09-11",
+        "source_type": "judicial",
+        "content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9",
+        "evidence_content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9"
+      },
+      {
+        "rank": 1,
+        "title": "负面新闻（合成公告）",
+        "content": "独立负面新闻故事一。",
+        "chunk_id": "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "fact_key": "FULL-STORY-001",
+        "polarity": "negative",
+        "fact_type": "negative_news_story",
+        "risk_type": "news",
+        "fact_value": "negative",
+        "source_uri": "synthetic://stage3/all-rules-95/story-one",
+        "evidence_id": "6529afed-76c6-52bc-b0e1-a332d26de157",
+        "observed_at": "2026-09-11",
+        "source_type": "news",
+        "content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9",
+        "evidence_content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9"
+      },
+      {
+        "rank": 2,
+        "title": "负面新闻（合成披露）",
+        "content": "独立负面新闻故事二。",
+        "chunk_id": "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e",
+        "fact_key": "FULL-STORY-002",
+        "polarity": "negative",
+        "fact_type": "negative_news_story",
+        "risk_type": "news",
+        "fact_value": "negative",
+        "source_uri": "synthetic://stage3/all-rules-95/story-two",
+        "evidence_id": "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+        "observed_at": "2026-09-11",
+        "source_type": "news",
+        "content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9",
+        "evidence_content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9"
+      }
+    ],
+    "evidence_references": [
+      {
+        "title": "FULL-ABN-001",
+        "content": "经营异常在基准日仍有效。",
+        "chunk_id": "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+        "evidence_id": "5cab899c-3280-5902-a2ed-834ffae971f5",
+        "content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8",
+        "rule_finding_id": "cac4cc4f-418a-42d3-a15f-975b7795c417",
+        "chunk_content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8"
+      },
+      {
+        "title": "FULL-IP-CORE-001",
+        "content": "核心专利状态无效。",
+        "chunk_id": "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "evidence_id": "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+        "content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd",
+        "rule_finding_id": "82c39037-c0b8-463e-96df-b447768eddb6",
+        "chunk_content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd"
+      },
+      {
+        "title": "FULL-CASE-001",
+        "content": "司法案件在基准日仍未结案。",
+        "chunk_id": "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+        "evidence_id": "86892125-38bd-5fc5-89f4-07003ee5be18",
+        "content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9",
+        "rule_finding_id": "fb6cff29-fafe-456d-adc3-e469dfa7a12d",
+        "chunk_content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9"
+      },
+      {
+        "title": "FULL-STORY-002",
+        "content": "独立负面新闻故事二。",
+        "chunk_id": "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e",
+        "evidence_id": "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+        "content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9",
+        "rule_finding_id": "8c1b6557-0d8e-442b-8c28-ea149c8ab667",
+        "chunk_content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9"
+      },
+      {
+        "title": "FULL-STORY-001",
+        "content": "独立负面新闻故事一。",
+        "chunk_id": "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "evidence_id": "6529afed-76c6-52bc-b0e1-a332d26de157",
+        "content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9",
+        "rule_finding_id": "8c1b6557-0d8e-442b-8c28-ea149c8ab667",
+        "chunk_content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9"
+      }
+    ],
+    "evidence_sufficiency": "sufficient"
+  },
+  "html_content": "<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><title>风险报告</title></head><body><h1>风险报告</h1><p>合成数据，仅供演示</p><p>真实模型调用</p><section><h2>评分说明</h2><p>司法：存在未结案件 +35；经营：基准日有效异常 +25；新闻：基准日前含当日365天内至少两条独立负面报道 +20；知识产权：核心专利失效或权属争议 +15。</p><p>每条最多计分一次，最高95；重复案件和转载不重复计分。0～29为低、30～59为中、60～95为高。权重仅为演示配置，不是信用标准或违约概率；AI 与人工不能修改规则分。</p></section><section id=\"company\"><h2>企业</h2><pre>{\n  &quot;id&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a&quot;,\n  &quot;name&quot;: &quot;远景精工（合成）有限公司&quot;,\n  &quot;unified_credit_code&quot;: &quot;SYNTHETIC-COMPANY-003&quot;\n}</pre></section><section id=\"as-of-date\"><h2>调查基准日（历史未记录时为空）</h2><pre>&quot;2026-09-11&quot;</pre></section><section id=\"rule-score\"><h2>规则总分</h2><pre>95</pre></section><section id=\"model-execution\"><h2>模型调用记录（未记录时无法确认模式）</h2><pre>{\n  &quot;mode&quot;: &quot;real&quot;,\n  &quot;models&quot;: [\n    &quot;deepseek-flash&quot;\n  ],\n  &quot;statuses&quot;: [\n    &quot;succeeded&quot;\n  ],\n  &quot;error_categories&quot;: []\n}</pre></section><section id=\"review-reasons\"><h2>复核原因</h2><pre>[\n  &quot;high_risk&quot;,\n  &quot;model_evidence_insufficient&quot;,\n  &quot;model_recommended&quot;,\n  &quot;unverified_free_text_extension&quot;\n]</pre></section><section id=\"conflicts\"><h2>事实冲突</h2><pre>[]</pre></section><section id=\"rules\"><h2>确定性规则</h2><pre>[\n  {\n    &quot;id&quot;: &quot;cac4cc4f-418a-42d3-a15f-975b7795c417&quot;,\n    &quot;rule_code&quot;: &quot;BUSINESS_ABNORMAL_V1&quot;,\n    &quot;rule_version&quot;: &quot;1&quot;,\n    &quot;score&quot;: 25,\n    &quot;parameters&quot;: {\n      &quot;dedup_key&quot;: &quot;abnormal_record_id&quot;,\n      &quot;as_of_date&quot;: &quot;2026-09-11&quot;,\n      &quot;minimum_records&quot;: 1,\n      &quot;required_status&quot;: &quot;active&quot;,\n      &quot;state_selection&quot;: &quot;latest_on_or_before_as_of_date&quot;\n    }\n  },\n  {\n    &quot;id&quot;: &quot;82c39037-c0b8-463e-96df-b447768eddb6&quot;,\n    &quot;rule_code&quot;: &quot;CORE_IP_ANOMALY_V1&quot;,\n    &quot;rule_version&quot;: &quot;1&quot;,\n    &quot;score&quot;: 15,\n    &quot;parameters&quot;: {\n      &quot;dedup_key&quot;: &quot;ip_record_id&quot;,\n      &quot;fact_type&quot;: &quot;core_ip_status&quot;,\n      &quot;as_of_date&quot;: &quot;2026-09-11&quot;,\n      &quot;minimum_records&quot;: 1,\n      &quot;state_selection&quot;: &quot;latest_on_or_before_as_of_date&quot;,\n      &quot;anomalous_statuses&quot;: [\n        &quot;invalid&quot;,\n        &quot;ownership_dispute&quot;\n      ]\n    }\n  },\n  {\n    &quot;id&quot;: &quot;fb6cff29-fafe-456d-adc3-e469dfa7a12d&quot;,\n    &quot;rule_code&quot;: &quot;JUDICIAL_OPEN_CASE_V1&quot;,\n    &quot;rule_version&quot;: &quot;1&quot;,\n    &quot;score&quot;: 35,\n    &quot;parameters&quot;: {\n      &quot;dedup_key&quot;: &quot;case_number&quot;,\n      &quot;as_of_date&quot;: &quot;2026-09-11&quot;,\n      &quot;minimum_cases&quot;: 1,\n      &quot;required_status&quot;: &quot;open&quot;,\n      &quot;state_selection&quot;: &quot;latest_on_or_before_as_of_date&quot;\n    }\n  },\n  {\n    &quot;id&quot;: &quot;8c1b6557-0d8e-442b-8c28-ea149c8ab667&quot;,\n    &quot;rule_code&quot;: &quot;NEGATIVE_NEWS_V1&quot;,\n    &quot;rule_version&quot;: &quot;1&quot;,\n    &quot;score&quot;: 20,\n    &quot;parameters&quot;: {\n      &quot;dedup_key&quot;: &quot;canonical_story_id&quot;,\n      &quot;as_of_date&quot;: &quot;2026-09-11&quot;,\n      &quot;window_days&quot;: 365,\n      &quot;window_start&quot;: &quot;2025-09-12&quot;,\n      &quot;minimum_stories&quot;: 2,\n      &quot;required_polarity&quot;: &quot;negative&quot;\n    }\n  }\n]</pre></section><section id=\"ai-findings\"><h2>AI 原始结论</h2><pre>[\n  {\n    &quot;id&quot;: &quot;2e32b39a-52ff-4e08-ac06-208a6163f311&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-ABN-001:BUSINESS_ABNORMAL&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;business&quot;,\n    &quot;claim_code&quot;: &quot;BUSINESS_ABNORMAL&quot;,\n    &quot;title&quot;: &quot;经营异常状态仍为有效&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司在基准日的经营异常状态仍为有效，符合经营异常活跃的风险事实。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 business、risk_type 为 business、fact_type 为 business_abnormal_status、fact_value 为 active，且极性为 negative，满足 BUSINESS_ABNORMAL 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;877a55c8-6b3a-564c-b7d7-2441cbb907ac&quot;,\n        &quot;evidence_id&quot;: &quot;5cab899c-3280-5902-a2ed-834ffae971f5&quot;,\n        &quot;content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n        &quot;quoted_excerpt&quot;: &quot;经营异常在基准日仍有效。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;\n  },\n  {\n    &quot;id&quot;: &quot;9638cd5a-95fb-4f74-9394-c2d111fd0099&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-CASE-001:JUDICIAL_OPEN_CASE&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;judicial&quot;,\n    &quot;claim_code&quot;: &quot;JUDICIAL_OPEN_CASE&quot;,\n    &quot;title&quot;: &quot;司法案件在基准日仍未结案&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司司法案件在基准日仍未结案，属于未结司法案件风险。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 judicial、risk_type 为 judicial、fact_type 为 judicial_case_status、fact_value 为 open，且极性为 negative，满足 JUDICIAL_OPEN_CASE 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;25ae77f9-5a72-502a-bbea-a4fd3fa69b30&quot;,\n        &quot;evidence_id&quot;: &quot;86892125-38bd-5fc5-89f4-07003ee5be18&quot;,\n        &quot;content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;司法案件在基准日仍未结案。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;\n  },\n  {\n    &quot;id&quot;: &quot;60b21b79-3fe7-48e0-bc2f-f76181c83c97&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-IP-CORE-001:CORE_IP_ANOMALY&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;intellectual_property&quot;,\n    &quot;claim_code&quot;: &quot;CORE_IP_ANOMALY&quot;,\n    &quot;title&quot;: &quot;核心专利状态无效&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司核心专利状态为无效，构成核心知识产权异常。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 intellectual_property、risk_type 为 intellectual_property、fact_type 为 core_ip_status、fact_value 为 invalid，且极性为 negative，满足 CORE_IP_ANOMALY 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;54dbd835-14fd-50c2-be2e-112835e0c405&quot;,\n        &quot;evidence_id&quot;: &quot;7d793a5b-f6eb-562b-b3c4-634df3cfafe9&quot;,\n        &quot;content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n        &quot;quoted_excerpt&quot;: &quot;核心专利状态无效。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;\n  },\n  {\n    &quot;id&quot;: &quot;cfbf31f0-e44f-4921-b056-f208437a90b2&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-001:NEGATIVE_NEWS&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;claim_code&quot;: &quot;NEGATIVE_NEWS&quot;,\n    &quot;title&quot;: &quot;独立负面新闻故事一&quot;,\n    &quot;summary&quot;: &quot;证据显示存在一则独立负面新闻故事。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;cac6a608-4008-5deb-9f9c-b3893fe9f10c&quot;,\n        &quot;evidence_id&quot;: &quot;6529afed-76c6-52bc-b0e1-a332d26de157&quot;,\n        &quot;content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;独立负面新闻故事一。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;\n  },\n  {\n    &quot;id&quot;: &quot;2cd72630-cb8b-467f-9f98-55e2c429deb5&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-002:NEGATIVE_NEWS&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;claim_code&quot;: &quot;NEGATIVE_NEWS&quot;,\n    &quot;title&quot;: &quot;独立负面新闻故事二&quot;,\n    &quot;summary&quot;: &quot;证据显示存在另一则独立负面新闻故事。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;faaa7ef0-a636-5bbe-9b89-56c395fa8e6e&quot;,\n        &quot;evidence_id&quot;: &quot;11e3304a-cabb-573e-a0e3-6f769ebd69cf&quot;,\n        &quot;content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;独立负面新闻故事二。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;\n  }\n]</pre></section><section id=\"human-decisions\"><h2>人工决定</h2><pre>[\n  {\n    &quot;id&quot;: &quot;1e7ce27f-9e69-4c40-bb00-c367b5c33ac3&quot;,\n    &quot;ai_finding_id&quot;: &quot;2cd72630-cb8b-467f-9f98-55e2c429deb5&quot;,\n    &quot;finding_version&quot;: 1,\n    &quot;reviewer_id&quot;: &quot;ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7&quot;,\n    &quot;decision&quot;: &quot;approve&quot;,\n    &quot;reason&quot;: &quot;自动化合成链路验证；不是业务人工核验&quot;,\n    &quot;human_finding_version_id&quot;: null,\n    &quot;human_version&quot;: null,\n    &quot;replacement&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;89e96d4a-f911-49c5-8eed-ac6f7601b8d9&quot;,\n    &quot;ai_finding_id&quot;: &quot;60b21b79-3fe7-48e0-bc2f-f76181c83c97&quot;,\n    &quot;finding_version&quot;: 1,\n    &quot;reviewer_id&quot;: &quot;ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7&quot;,\n    &quot;decision&quot;: &quot;approve&quot;,\n    &quot;reason&quot;: &quot;自动化合成链路验证；不是业务人工核验&quot;,\n    &quot;human_finding_version_id&quot;: null,\n    &quot;human_version&quot;: null,\n    &quot;replacement&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;94be676f-1dd0-4819-aab0-149816a84b2c&quot;,\n    &quot;ai_finding_id&quot;: &quot;cfbf31f0-e44f-4921-b056-f208437a90b2&quot;,\n    &quot;finding_version&quot;: 1,\n    &quot;reviewer_id&quot;: &quot;ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7&quot;,\n    &quot;decision&quot;: &quot;approve&quot;,\n    &quot;reason&quot;: &quot;自动化合成链路验证；不是业务人工核验&quot;,\n    &quot;human_finding_version_id&quot;: null,\n    &quot;human_version&quot;: null,\n    &quot;replacement&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;aed7a3b6-65b1-481e-ab3d-42817c65787d&quot;,\n    &quot;ai_finding_id&quot;: &quot;2e32b39a-52ff-4e08-ac06-208a6163f311&quot;,\n    &quot;finding_version&quot;: 1,\n    &quot;reviewer_id&quot;: &quot;ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7&quot;,\n    &quot;decision&quot;: &quot;approve&quot;,\n    &quot;reason&quot;: &quot;自动化合成链路验证；不是业务人工核验&quot;,\n    &quot;human_finding_version_id&quot;: null,\n    &quot;human_version&quot;: null,\n    &quot;replacement&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;dc9768f4-23bc-419d-b6fc-383231487ea7&quot;,\n    &quot;ai_finding_id&quot;: &quot;9638cd5a-95fb-4f74-9394-c2d111fd0099&quot;,\n    &quot;finding_version&quot;: 1,\n    &quot;reviewer_id&quot;: &quot;ad190c95-d80c-4afe-bb1a-bb0bdd7eafb7&quot;,\n    &quot;decision&quot;: &quot;approve&quot;,\n    &quot;reason&quot;: &quot;自动化合成链路验证；不是业务人工核验&quot;,\n    &quot;human_finding_version_id&quot;: null,\n    &quot;human_version&quot;: null,\n    &quot;replacement&quot;: null\n  }\n]</pre></section><section id=\"final-findings\"><h2>最终结论</h2><pre>[\n  {\n    &quot;id&quot;: &quot;2e32b39a-52ff-4e08-ac06-208a6163f311&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-ABN-001:BUSINESS_ABNORMAL&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;business&quot;,\n    &quot;claim_code&quot;: &quot;BUSINESS_ABNORMAL&quot;,\n    &quot;title&quot;: &quot;经营异常状态仍为有效&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司在基准日的经营异常状态仍为有效，符合经营异常活跃的风险事实。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 business、risk_type 为 business、fact_type 为 business_abnormal_status、fact_value 为 active，且极性为 negative，满足 BUSINESS_ABNORMAL 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;877a55c8-6b3a-564c-b7d7-2441cbb907ac&quot;,\n        &quot;evidence_id&quot;: &quot;5cab899c-3280-5902-a2ed-834ffae971f5&quot;,\n        &quot;content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n        &quot;quoted_excerpt&quot;: &quot;经营异常在基准日仍有效。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;,\n    &quot;source&quot;: &quot;ai&quot;,\n    &quot;original_ai_finding_id&quot;: &quot;2e32b39a-52ff-4e08-ac06-208a6163f311&quot;,\n    &quot;human_version&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;9638cd5a-95fb-4f74-9394-c2d111fd0099&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-CASE-001:JUDICIAL_OPEN_CASE&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;judicial&quot;,\n    &quot;claim_code&quot;: &quot;JUDICIAL_OPEN_CASE&quot;,\n    &quot;title&quot;: &quot;司法案件在基准日仍未结案&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司司法案件在基准日仍未结案，属于未结司法案件风险。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 judicial、risk_type 为 judicial、fact_type 为 judicial_case_status、fact_value 为 open，且极性为 negative，满足 JUDICIAL_OPEN_CASE 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;25ae77f9-5a72-502a-bbea-a4fd3fa69b30&quot;,\n        &quot;evidence_id&quot;: &quot;86892125-38bd-5fc5-89f4-07003ee5be18&quot;,\n        &quot;content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;司法案件在基准日仍未结案。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;,\n    &quot;source&quot;: &quot;ai&quot;,\n    &quot;original_ai_finding_id&quot;: &quot;9638cd5a-95fb-4f74-9394-c2d111fd0099&quot;,\n    &quot;human_version&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;60b21b79-3fe7-48e0-bc2f-f76181c83c97&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-IP-CORE-001:CORE_IP_ANOMALY&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;intellectual_property&quot;,\n    &quot;claim_code&quot;: &quot;CORE_IP_ANOMALY&quot;,\n    &quot;title&quot;: &quot;核心专利状态无效&quot;,\n    &quot;summary&quot;: &quot;证据显示该公司核心专利状态为无效，构成核心知识产权异常。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 intellectual_property、risk_type 为 intellectual_property、fact_type 为 core_ip_status、fact_value 为 invalid，且极性为 negative，满足 CORE_IP_ANOMALY 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;54dbd835-14fd-50c2-be2e-112835e0c405&quot;,\n        &quot;evidence_id&quot;: &quot;7d793a5b-f6eb-562b-b3c4-634df3cfafe9&quot;,\n        &quot;content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n        &quot;quoted_excerpt&quot;: &quot;核心专利状态无效。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;,\n    &quot;source&quot;: &quot;ai&quot;,\n    &quot;original_ai_finding_id&quot;: &quot;60b21b79-3fe7-48e0-bc2f-f76181c83c97&quot;,\n    &quot;human_version&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;cfbf31f0-e44f-4921-b056-f208437a90b2&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-001:NEGATIVE_NEWS&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;claim_code&quot;: &quot;NEGATIVE_NEWS&quot;,\n    &quot;title&quot;: &quot;独立负面新闻故事一&quot;,\n    &quot;summary&quot;: &quot;证据显示存在一则独立负面新闻故事。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;cac6a608-4008-5deb-9f9c-b3893fe9f10c&quot;,\n        &quot;evidence_id&quot;: &quot;6529afed-76c6-52bc-b0e1-a332d26de157&quot;,\n        &quot;content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;独立负面新闻故事一。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;,\n    &quot;source&quot;: &quot;ai&quot;,\n    &quot;original_ai_finding_id&quot;: &quot;cfbf31f0-e44f-4921-b056-f208437a90b2&quot;,\n    &quot;human_version&quot;: null\n  },\n  {\n    &quot;id&quot;: &quot;2cd72630-cb8b-467f-9f98-55e2c429deb5&quot;,\n    &quot;finding_key&quot;: &quot;b2902304-8515-50fc-81d4-20c548e6861a:FULL-STORY-002:NEGATIVE_NEWS&quot;,\n    &quot;version&quot;: 1,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;claim_code&quot;: &quot;NEGATIVE_NEWS&quot;,\n    &quot;title&quot;: &quot;独立负面新闻故事二&quot;,\n    &quot;summary&quot;: &quot;证据显示存在另一则独立负面新闻故事。&quot;,\n    &quot;reasoning&quot;: &quot;所引证据的 source_type 为 news、risk_type 为 news、fact_type 为 negative_news_story、fact_value 为 negative，且极性为 negative，满足 NEGATIVE_NEWS 的匹配条件。&quot;,\n    &quot;citations&quot;: [\n      {\n        &quot;chunk_id&quot;: &quot;faaa7ef0-a636-5bbe-9b89-56c395fa8e6e&quot;,\n        &quot;evidence_id&quot;: &quot;11e3304a-cabb-573e-a0e3-6f769ebd69cf&quot;,\n        &quot;content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n        &quot;quoted_excerpt&quot;: &quot;独立负面新闻故事二。&quot;\n      }\n    ],\n    &quot;evidence_sufficiency&quot;: &quot;insufficient&quot;,\n    &quot;confidence_level&quot;: &quot;high&quot;,\n    &quot;review_recommended&quot;: true,\n    &quot;support_status&quot;: &quot;indeterminate&quot;,\n    &quot;support_reason&quot;: &quot;unverified_free_text_extension&quot;,\n    &quot;source&quot;: &quot;ai&quot;,\n    &quot;original_ai_finding_id&quot;: &quot;2cd72630-cb8b-467f-9f98-55e2c429deb5&quot;,\n    &quot;human_version&quot;: null\n  }\n]</pre></section><section id=\"evidence-references\"><h2>证据引用</h2><pre>[\n  {\n    &quot;rule_finding_id&quot;: &quot;cac4cc4f-418a-42d3-a15f-975b7795c417&quot;,\n    &quot;evidence_id&quot;: &quot;5cab899c-3280-5902-a2ed-834ffae971f5&quot;,\n    &quot;content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n    &quot;chunk_id&quot;: &quot;877a55c8-6b3a-564c-b7d7-2441cbb907ac&quot;,\n    &quot;chunk_content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n    &quot;title&quot;: &quot;FULL-ABN-001&quot;,\n    &quot;content&quot;: &quot;经营异常在基准日仍有效。&quot;\n  },\n  {\n    &quot;rule_finding_id&quot;: &quot;82c39037-c0b8-463e-96df-b447768eddb6&quot;,\n    &quot;evidence_id&quot;: &quot;7d793a5b-f6eb-562b-b3c4-634df3cfafe9&quot;,\n    &quot;content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n    &quot;chunk_id&quot;: &quot;54dbd835-14fd-50c2-be2e-112835e0c405&quot;,\n    &quot;chunk_content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n    &quot;title&quot;: &quot;FULL-IP-CORE-001&quot;,\n    &quot;content&quot;: &quot;核心专利状态无效。&quot;\n  },\n  {\n    &quot;rule_finding_id&quot;: &quot;fb6cff29-fafe-456d-adc3-e469dfa7a12d&quot;,\n    &quot;evidence_id&quot;: &quot;86892125-38bd-5fc5-89f4-07003ee5be18&quot;,\n    &quot;content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n    &quot;chunk_id&quot;: &quot;25ae77f9-5a72-502a-bbea-a4fd3fa69b30&quot;,\n    &quot;chunk_content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n    &quot;title&quot;: &quot;FULL-CASE-001&quot;,\n    &quot;content&quot;: &quot;司法案件在基准日仍未结案。&quot;\n  },\n  {\n    &quot;rule_finding_id&quot;: &quot;8c1b6557-0d8e-442b-8c28-ea149c8ab667&quot;,\n    &quot;evidence_id&quot;: &quot;11e3304a-cabb-573e-a0e3-6f769ebd69cf&quot;,\n    &quot;content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n    &quot;chunk_id&quot;: &quot;faaa7ef0-a636-5bbe-9b89-56c395fa8e6e&quot;,\n    &quot;chunk_content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n    &quot;title&quot;: &quot;FULL-STORY-002&quot;,\n    &quot;content&quot;: &quot;独立负面新闻故事二。&quot;\n  },\n  {\n    &quot;rule_finding_id&quot;: &quot;8c1b6557-0d8e-442b-8c28-ea149c8ab667&quot;,\n    &quot;evidence_id&quot;: &quot;6529afed-76c6-52bc-b0e1-a332d26de157&quot;,\n    &quot;content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n    &quot;chunk_id&quot;: &quot;cac6a608-4008-5deb-9f9c-b3893fe9f10c&quot;,\n    &quot;chunk_content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n    &quot;title&quot;: &quot;FULL-STORY-001&quot;,\n    &quot;content&quot;: &quot;独立负面新闻故事一。&quot;\n  }\n]</pre></section><section id=\"retrieved-evidence\"><h2>检索证据</h2><pre>[\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/abnormal-active&quot;,\n    &quot;title&quot;: &quot;经营异常（合成披露）&quot;,\n    &quot;risk_type&quot;: &quot;business&quot;,\n    &quot;chunk_id&quot;: &quot;877a55c8-6b3a-564c-b7d7-2441cbb907ac&quot;,\n    &quot;evidence_id&quot;: &quot;5cab899c-3280-5902-a2ed-834ffae971f5&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;business_abnormal_status&quot;,\n    &quot;fact_key&quot;: &quot;FULL-ABN-001&quot;,\n    &quot;fact_value&quot;: &quot;active&quot;,\n    &quot;polarity&quot;: &quot;negative&quot;,\n    &quot;content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n    &quot;evidence_content_hash&quot;: &quot;1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8&quot;,\n    &quot;source_type&quot;: &quot;business&quot;,\n    &quot;rank&quot;: 1,\n    &quot;content&quot;: &quot;经营异常在基准日仍有效。&quot;\n  },\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/core-invalid&quot;,\n    &quot;title&quot;: &quot;核心专利状态（合成公告）&quot;,\n    &quot;risk_type&quot;: &quot;intellectual_property&quot;,\n    &quot;chunk_id&quot;: &quot;54dbd835-14fd-50c2-be2e-112835e0c405&quot;,\n    &quot;evidence_id&quot;: &quot;7d793a5b-f6eb-562b-b3c4-634df3cfafe9&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;core_ip_status&quot;,\n    &quot;fact_key&quot;: &quot;FULL-IP-CORE-001&quot;,\n    &quot;fact_value&quot;: &quot;invalid&quot;,\n    &quot;polarity&quot;: &quot;negative&quot;,\n    &quot;content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n    &quot;evidence_content_hash&quot;: &quot;f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd&quot;,\n    &quot;source_type&quot;: &quot;intellectual_property&quot;,\n    &quot;rank&quot;: 1,\n    &quot;content&quot;: &quot;核心专利状态无效。&quot;\n  },\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/noncore-valid&quot;,\n    &quot;title&quot;: &quot;非核心专利状态（合成公告）&quot;,\n    &quot;risk_type&quot;: &quot;intellectual_property&quot;,\n    &quot;chunk_id&quot;: &quot;88999a6a-e74a-5012-8212-20f334e78a74&quot;,\n    &quot;evidence_id&quot;: &quot;1f1b0c59-6c30-59f0-98a3-4c1cd9d638d1&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;noncore_ip_status&quot;,\n    &quot;fact_key&quot;: &quot;FULL-IP-NONCORE-001&quot;,\n    &quot;fact_value&quot;: &quot;valid&quot;,\n    &quot;polarity&quot;: &quot;neutral&quot;,\n    &quot;content_hash&quot;: &quot;c32c98e8f740b45c538c62729ee513231193641412af41df1fc7c355ef6737ba&quot;,\n    &quot;evidence_content_hash&quot;: &quot;c32c98e8f740b45c538c62729ee513231193641412af41df1fc7c355ef6737ba&quot;,\n    &quot;source_type&quot;: &quot;intellectual_property&quot;,\n    &quot;rank&quot;: 2,\n    &quot;content&quot;: &quot;非核心专利状态有效。&quot;\n  },\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/case-open&quot;,\n    &quot;title&quot;: &quot;司法案件（合成披露）&quot;,\n    &quot;risk_type&quot;: &quot;judicial&quot;,\n    &quot;chunk_id&quot;: &quot;25ae77f9-5a72-502a-bbea-a4fd3fa69b30&quot;,\n    &quot;evidence_id&quot;: &quot;86892125-38bd-5fc5-89f4-07003ee5be18&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;judicial_case_status&quot;,\n    &quot;fact_key&quot;: &quot;FULL-CASE-001&quot;,\n    &quot;fact_value&quot;: &quot;open&quot;,\n    &quot;polarity&quot;: &quot;negative&quot;,\n    &quot;content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n    &quot;evidence_content_hash&quot;: &quot;dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9&quot;,\n    &quot;source_type&quot;: &quot;judicial&quot;,\n    &quot;rank&quot;: 1,\n    &quot;content&quot;: &quot;司法案件在基准日仍未结案。&quot;\n  },\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/story-one&quot;,\n    &quot;title&quot;: &quot;负面新闻（合成公告）&quot;,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;chunk_id&quot;: &quot;cac6a608-4008-5deb-9f9c-b3893fe9f10c&quot;,\n    &quot;evidence_id&quot;: &quot;6529afed-76c6-52bc-b0e1-a332d26de157&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;negative_news_story&quot;,\n    &quot;fact_key&quot;: &quot;FULL-STORY-001&quot;,\n    &quot;fact_value&quot;: &quot;negative&quot;,\n    &quot;polarity&quot;: &quot;negative&quot;,\n    &quot;content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n    &quot;evidence_content_hash&quot;: &quot;d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9&quot;,\n    &quot;source_type&quot;: &quot;news&quot;,\n    &quot;rank&quot;: 1,\n    &quot;content&quot;: &quot;独立负面新闻故事一。&quot;\n  },\n  {\n    &quot;source_uri&quot;: &quot;synthetic://stage3/all-rules-95/story-two&quot;,\n    &quot;title&quot;: &quot;负面新闻（合成披露）&quot;,\n    &quot;risk_type&quot;: &quot;news&quot;,\n    &quot;chunk_id&quot;: &quot;faaa7ef0-a636-5bbe-9b89-56c395fa8e6e&quot;,\n    &quot;evidence_id&quot;: &quot;11e3304a-cabb-573e-a0e3-6f769ebd69cf&quot;,\n    &quot;observed_at&quot;: &quot;2026-09-11&quot;,\n    &quot;fact_type&quot;: &quot;negative_news_story&quot;,\n    &quot;fact_key&quot;: &quot;FULL-STORY-002&quot;,\n    &quot;fact_value&quot;: &quot;negative&quot;,\n    &quot;polarity&quot;: &quot;negative&quot;,\n    &quot;content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n    &quot;evidence_content_hash&quot;: &quot;d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9&quot;,\n    &quot;source_type&quot;: &quot;news&quot;,\n    &quot;rank&quot;: 2,\n    &quot;content&quot;: &quot;独立负面新闻故事二。&quot;\n  }\n]</pre></section><section id=\"coverage\"><h2>证据覆盖</h2><pre>{\n  &quot;scope&quot;: [\n    &quot;business&quot;,\n    &quot;judicial&quot;,\n    &quot;news&quot;,\n    &quot;intellectual_property&quot;\n  ],\n  &quot;entries&quot;: [\n    {\n      &quot;source_type&quot;: &quot;business&quot;,\n      &quot;status&quot;: &quot;available&quot;,\n      &quot;coverage_id&quot;: &quot;04b47c12-9be0-53cd-8b7d-f4b9413dcf9b&quot;,\n      &quot;checked_at&quot;: &quot;2026-09-11T00:00:00+00:00&quot;\n    },\n    {\n      &quot;source_type&quot;: &quot;judicial&quot;,\n      &quot;status&quot;: &quot;available&quot;,\n      &quot;coverage_id&quot;: &quot;9451fafb-7d0e-51c8-9cc4-edd283f2b09b&quot;,\n      &quot;checked_at&quot;: &quot;2026-09-11T00:00:00+00:00&quot;\n    },\n    {\n      &quot;source_type&quot;: &quot;news&quot;,\n      &quot;status&quot;: &quot;available&quot;,\n      &quot;coverage_id&quot;: &quot;6bd9084c-ee4b-5cfe-a3cb-83fe92284e10&quot;,\n      &quot;checked_at&quot;: &quot;2026-09-11T00:00:00+00:00&quot;\n    },\n    {\n      &quot;source_type&quot;: &quot;intellectual_property&quot;,\n      &quot;status&quot;: &quot;available&quot;,\n      &quot;coverage_id&quot;: &quot;4d6baf79-ff67-52e6-9b38-a8b62aa22439&quot;,\n      &quot;checked_at&quot;: &quot;2026-09-11T00:00:00+00:00&quot;\n    }\n  ],\n  &quot;insufficiency_details&quot;: [],\n  &quot;evidence_sufficiency&quot;: &quot;sufficient&quot;\n}</pre></section></body></html>"
+}

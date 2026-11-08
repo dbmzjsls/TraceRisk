@@ -446,11 +446,14 @@ export interface components {
             current_run: components["schemas"]["CurrentRunResponse"];
             /** Decisions */
             decisions: components["schemas"]["DecisionResponse"][];
+            /** Failure Code */
+            failure_code?: string | null;
             /**
              * Id
              * Format: uuid
              */
             id: string;
+            model_execution: components["schemas"]["ModelExecutionResponse"];
             /**
              * Retrieval State
              * @enum {string}
@@ -458,6 +461,11 @@ export interface components {
             retrieval_state: "pending" | "legacy_unavailable" | "ready";
             /** Retrieved Evidence */
             retrieved_evidence: components["schemas"]["RetrievedEvidenceResponse"][];
+            /**
+             * Review Reasons
+             * @default []
+             */
+            review_reasons: string[];
             /** Rule Findings */
             rule_findings: components["schemas"]["RuleFindingResponse"][];
             /** Rule Score */
@@ -505,6 +513,20 @@ export interface components {
             password: string;
             /** Username */
             username: string;
+        };
+        /** ModelExecutionResponse */
+        ModelExecutionResponse: {
+            /** Error Categories */
+            error_categories: string[];
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "mock" | "real" | "unknown";
+            /** Models */
+            models: string[];
+            /** Statuses */
+            statuses: string[];
         };
         /** PendingFindingResponse */
         PendingFindingResponse: {
@@ -922,6 +944,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 offset?: number;
+                company_id?: string | null;
             };
             header?: never;
             path?: never;

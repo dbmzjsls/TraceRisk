@@ -196,7 +196,7 @@ def test_free_text_extension_requires_review(valid_case: ChallengeCase) -> None:
     assert outcome.findings[0].support_reason == "unverified_free_text_extension"
 
 
-def test_evidence_anchored_paraphrase_does_not_force_review(
+def test_evidence_anchor_cannot_override_unverified_extension(
     valid_case: ChallengeCase,
 ) -> None:
     outcome = validate_response(
@@ -209,7 +209,7 @@ def test_evidence_anchored_paraphrase_does_not_force_review(
             reasoning="The cited case-001 is open in the supplied evidence.",
         ),
     )
-    assert outcome.actual_action == "accept"
+    assert outcome.actual_action == "manual_review"
     assert outcome.findings[0].support_status == "indeterminate"
 
     unsafe = validate_response(
@@ -238,9 +238,7 @@ def test_visible_same_time_conflict_routes_review(
 ) -> None:
     case = conflict_case(valid_case)
     content = '{"findings": []}' if empty else response_for(case.chunks[0])
-    assert validate_response(case, content).actual_action == (
-        "reject" if empty else "manual_review"
-    )
+    assert validate_response(case, content).actual_action == "manual_review"
 
 
 def test_observation_dates_are_normalized_before_conflict_check(
@@ -387,4 +385,25 @@ def test_all_frozen_conflicts_route_review_without_gold() -> None:
             case.expected_action = "accept"
             case.supporting_chunk_ids = []
             assert route_review(case, [])
-            assert validate_response(case, '{"findings": []}').actual_action == "reject"
+            assert (
+                validate_response(case, '{"findings": []}').actual_action
+                == "manual_review"
+            )
+
+
+@pytest.mark.parametrize(
+    "updates",
+    [
+        {"evidence_sufficiency": "insufficient"},
+        {"review_recommended": True},
+        {"reasoning": "case-001 open: the borrower has reliable repayment capacity."},
+        {"summary": "case-001 open: no further investigation is necessary."},
+    ],
+)
+def test_uncertainty_never_bypassed_by_visible_fact_key(
+    valid_case: ChallengeCase, updates: dict[str, object]
+) -> None:
+    outcome = validate_response(
+        valid_case, response_for(valid_case.chunks[0], **updates)
+    )
+    assert outcome.actual_action == "manual_review"

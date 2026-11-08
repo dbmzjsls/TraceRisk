@@ -1,9 +1,9 @@
 # TraceRisk v3
 
-可追溯的企业风险调查演示：确定性规则评分、冻结检索证据、结构化 AI 发现、人工复核，以及不可变报告。Web 使用 Vue 3 / Naive UI，API 使用 FastAPI，后台以一个 combined worker 管理 Outbox 与 Procrastinate，业务数据、队列和 LangGraph checkpoint 保存在 PostgreSQL / pgvector。
+面向金融机构调查人员与复核人员的中小企业授信前调查助手：确定性规则评分、冻结检索证据、结构化 AI 发现、人工复核，以及不可变报告。Web 使用 Vue 3 / Naive UI，API 使用 FastAPI，后台以一个 combined worker 管理 Outbox 与 Procrastinate，业务数据、队列和 LangGraph checkpoint 保存在 PostgreSQL / pgvector。
 
 > [!IMPORTANT]
-> 合成数据，仅供演示。当前验收使用 Mock 生成与 Fake embedding，无真实模型质量、吞吐、延迟或成本结论。两次本地 Vite/API/worker/PostgreSQL E2E 各覆盖 8/8 路径；2026-10-08 hosted CI、fresh-clone Docker 与五分钟演练均已通过，详情见[当前验收状态](docs/acceptance.md)。
+> 合成数据，仅供演示。固定回归与浏览器验收使用 Mock 生成与 Fake embedding。2026-11-08 已单独验证真实模型生产调查链路；20例挑战复测仍有3例声明支持性硬拒绝，未达到全部质量门槛，不代表真实金融业务准确率。详见[本轮改造实施](docs/evaluation/upgrade-2026-11-08/README.md)。两次本地 Vite/API/worker/PostgreSQL E2E 各覆盖 8/8 路径；2026-10-08 hosted CI、fresh-clone Docker 与五分钟演练均已通过，详情见[当前验收状态](docs/acceptance.md)。
 
 ## 看项目
 
@@ -117,4 +117,8 @@ apps/api/.venv/Scripts/python.exe scripts/run_evaluation.py
 
 人工修改追加版本并保留原 AI；报告保存最终发现、原 AI、决定、证据、规则和版本。SSE 从持久事件恢复，前端去重及失败轮询；不是内存消息总线。
 
-项目未验证真实外部企业数据接入、真实模型质量或生产部署。更多边界及代码证据见[当前验收状态](docs/acceptance.md)和[面试讲解](docs/interview-notes.md)。
+项目未验证真实外部企业数据接入、真实金融业务效果或生产部署。40条真实模型挑战实验仅为合成小样本流程评测，存在漏复核历史记录，不代表业务准确率。更多边界及代码证据见[当前验收状态](docs/acceptance.md)和[面试讲解](docs/interview-notes.md)。
+
+## 2026-11-08 改造实施
+
+依照[项目改造计划书](docs/项目改造计划书.md)执行 P0～P3：保留确定性评分，在调查详情与报告整理风险画像、来源覆盖、模型来源和人工复核原因。首期不计算授信额度、不审批贷款、不预测违约概率。授权真实样本及业务效率验证属于 P4 条件事项。当前修改与本轮验证见[实施记录](docs/evaluation/upgrade-2026-11-08/README.md)，历史验收不能替代本轮结果。
