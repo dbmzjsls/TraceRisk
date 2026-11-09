@@ -18,6 +18,7 @@ from tracerisk.auth.models import User
 from tracerisk.auth.seed import seed_accounts
 from tracerisk.auth.service import create_access_token
 from tracerisk.config import Settings
+from tracerisk.evidence.models import Evidence
 from tracerisk.evidence.service import retrieve_evidence
 from tracerisk.investigations.models import Investigation, WorkflowRun
 from tracerisk.investigations.service import create_investigation
@@ -234,6 +235,39 @@ async def test_questions_change_sections_and_keep_frozen_citations(
     assert await persisted_state() == before
 
 
+async def test_mock_clarifies_conflicting_scope_and_contextless_questions(
+    client: httpx.AsyncClient, cases: dict[str, Case]
+) -> None:
+    case = cases["003"]
+    for question, status, reason in (
+        ("请综合调查截至2025年1月1日的结果", "clarify", "scope_mismatch"),
+        ("请说明以 2025-01-01 为基准日的结果", "clarify", "scope_mismatch"),
+        ("请调查澄明设备（合成）有限公司的司法风险", "clarify", "scope_mismatch"),
+        ("澄明设备（合成）有限公司的工商规则是什么？", "clarify", "scope_mismatch"),
+        ("请调查 SYNTHETIC-COMPANY-002 的风险", "clarify", "scope_mismatch"),
+        ("明天天气怎么样？", "unsupported", "outside_scope"),
+        ("你好", "clarify", "no_context"),
+        ("继续", "clarify", "no_context"),
+    ):
+        response = await ask(client, case, question)
+        assert response.status_code == 200, response.text
+        result = response.json()
+        assert (result["status"], result["reason_code"]) == (status, reason), question
+        assert result["citations"] == []
+        assert not any(section["findings"] for section in result["sections"])
+    for question in (
+        "请调查远景精工（合成）有限公司截至2026年9月11日的司法风险",
+        "请说明 SYNTHETIC-COMPANY-003 的司法规则",
+        "2025年1月1日立案的案件是否被本次司法证据覆盖？",
+        "为什么计35分？请看司法规则。",
+    ):
+        response = await ask(client, case, question)
+        assert response.status_code == 200, response.text
+        result = response.json()
+        assert result["status"] == "answer", question
+        assert {item["risk_type"] for item in result["citations"]} == {"judicial"}
+
+
 async def test_wrong_run_pending_run_authentication_and_request_shape(
     client: httpx.AsyncClient, cases: dict[str, Case]
 ) -> None:
@@ -393,6 +427,29 @@ async def test_completed_response_uses_report_replacement_and_hides_original(
     assert {
         item["id"] for item in kind(original.json(), "original_ai")["findings"]
     } == {str(finding.id), str(rejected.id)}
+    comparison = await ask(client, case, "请对比最终结论与原始AI发现")
+    assert comparison.status_code == 200, comparison.text
+    assert kind(comparison.json(), "original_ai")["findings"]
+
+    async def check_final_context(
+        settings: Settings, question: str, context: dict[str, Any]
+    ) -> Any:
+        assert not context["original_ai_allowed"]
+        assert all(item["source"] != "original_ai" for item in context["findings"])
+        return await model.select_answer(settings, question, context)
+
+    monkeypatch.setattr(service, "select_answer", check_final_context)
+    for question in (
+        "请说明是否审核过原始AI发现，只看最终结论。",
+        "请说明是否审核过原始AI发现。",
+        "请说明报告是否显示原始AI发现。",
+        "请查看原始AI发现是否经过人工复核。",
+        "请显示原始AI发现，只看最终结论。",
+    ):
+        response = await ask(client, case, question)
+        assert response.status_code == 200, response.text
+        assert kind(response.json(), "findings")["findings"] == [final]
+        assert "被驳回原稿" not in response.text
 
     async def smuggle_original(*args: Any) -> Any:
         _, execution = await model.select_answer(*args)
@@ -432,10 +489,22 @@ async def test_completed_response_uses_report_replacement_and_hides_original(
     monkeypatch.setattr(service, "select_answer", change_saved_report)
     assert (await ask(client, case, "综合")).status_code == 409
     monkeypatch.setattr(service, "select_answer", model.select_answer)
+    async with sessions.begin() as session:
+        evidence = await session.get(
+            Evidence, UUID(body["citations"][0]["evidence_id"])
+        )
+        assert evidence is not None
+        evidence.title = "报告保存后改过的标题"
+        evidence.source_uri = "https://example.test/live-source"
     legacy = await ask(client, case, "综合")
     assert legacy.status_code == 200, legacy.text
     assert legacy.json()["investigation_model_execution"]["mode"] == "unknown"
-    assert legacy.json()["citations"] == body["citations"]
+    assert legacy.json()["citations"] == [
+        item | {"title": "证据标题未记录", "source_uri": "未记录"}
+        for item in body["citations"]
+    ]
+    assert "报告保存后改过的标题" not in legacy.text
+    assert "https://example.test/live-source" not in legacy.text
     assert kind(legacy.json(), "findings")["findings"] == [final]
 
     async def start_new_run(*args: Any) -> Any:

@@ -26,6 +26,7 @@ from tracerisk.assistant.schemas import (
     SupportReason,
     SupportStatus,
 )
+from tracerisk.companies.models import Company
 from tracerisk.config import Settings
 from tracerisk.evidence.service import RetrievalIntegrityError
 from tracerisk.investigations.models import Investigation, WorkflowRun
@@ -90,6 +91,11 @@ SECTION_TITLES: dict[SectionKind, str] = {
 PENDING = "待人工复核的调查结果"
 COMPLETED = "已完成，以保存的报告为准"
 ORIGINAL_AI = r"(?:原始\s*AI|原\s*AI|AI\s*原始|复核前的?\s*AI|original\s+AI)"
+FINAL_FINDINGS = r"(?:最终|人工复核后(?:的)?)(?:报告|发现|结论|结果)"
+REQUEST_START = (
+    r"(?:^|[。！？!?；;，,\n])\s*"
+    r"(?:(?:请(?:问)?|麻烦|能否|可以|能不能|我想|想|再|也|同时|并|然后|先)\s*)*"
+)
 
 
 class AssistantContextChanged(ValueError):
@@ -126,6 +132,7 @@ class SavedReportRule(RuleFindingResponse):
 class SavedReportCompany(BaseModel):
     id: UUID
     name: str
+    unified_credit_code: str | None = None
 
 
 class SavedReportContext(BaseModel):
@@ -148,6 +155,7 @@ class SavedReportContext(BaseModel):
 class AnswerContext:
     run_id: UUID
     company_name: str
+    company_credit_code: str
     as_of_date: date
     run_status: AnswerRunStatus
     report_id: UUID | None
@@ -168,12 +176,12 @@ def _report_evidence(
     for raw in saved.retrieved_evidence:
         chunk_id = UUID(str(raw["chunk_id"]))
         chunk = frozen[chunk_id]
-        # Older reports omit source labels. Resolve them only against this chunk.
+        # Older reports may omit labels that were never frozen with the chunk.
         item = RetrievedEvidenceResponse.model_validate(
             {
-                "title": chunk.title,
-                "source_uri": chunk.source_uri,
                 **raw,
+                "title": raw.get("title") or "证据标题未记录",
+                "source_uri": raw.get("source_uri") or "未记录",
             }
         )
         fields = {"title", "source_uri"}
@@ -233,6 +241,10 @@ async def load_answer_context(
             raise AssistantContextChanged from None
         if detail.retrieval_state != "ready":
             raise AssistantContextChanged
+        company = await session.get(Company, detail.company_id)
+        if company is None:
+            raise AssistantContextChanged
+        company_credit_code = company.unified_credit_code
         report_id = detail.current_run.report_id
         report = await session.get(RiskReport, report_id) if report_id else None
         report_snapshot = report.snapshot if report else None
@@ -285,6 +297,7 @@ async def load_answer_context(
         ):
             raise AssistantContextChanged
         company_name = saved.company.name
+        company_credit_code = saved.company.unified_credit_code or company_credit_code
         score, reasons = saved.rule_score, saved.review_reasons
         execution = saved.model_execution or ModelExecutionResponse(
             mode="unknown", models=[], statuses=[], error_categories=[]
@@ -315,7 +328,11 @@ async def load_answer_context(
             add_finding(f"original_ai:{item.id}:{item.version}", item, "original_ai")
 
     fingerprint = json.dumps(
-        {"detail": detail.model_dump(mode="json"), "report": report_snapshot},
+        {
+            "detail": detail.model_dump(mode="json"),
+            "report": report_snapshot,
+            "company_credit_code": company_credit_code,
+        },
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -323,6 +340,7 @@ async def load_answer_context(
     return AnswerContext(
         payload.run_id,
         company_name,
+        company_credit_code,
         detail.as_of_date,
         status,
         report_id,
@@ -340,15 +358,28 @@ async def load_answer_context(
 def _allow_original_ai(question: str) -> bool:
     if re.search(
         rf"(?:不要|不用|无需|不必|不想|别|不是|不看|不显示|不展示|without|do not|don't)"
-        rf"[^。！？,，]{{0,16}}{ORIGINAL_AI}",
+        rf"[^。！？,，]{{0,16}}{ORIGINAL_AI}"
+        r"|(?:只|仅)(?:需|需要|想|希望)?\s*"
+        r"(?:看到|看|要|查看|显示|展示|列出|提供|说明|关注|输出)?"
+        rf"\s*(?:本次(?:的)?|报告(?:中|的))?\s*{FINAL_FINDINGS}"
+        rf"|{FINAL_FINDINGS}\s*(?:就好|即可|就行)"
+        r"|\b(?:only|just)\s+(?:(?:show|display|list|see)\s+)?(?:the\s+)?"
+        r"final\s+(?:conclusions?|findings?|results?|report)\b",
         question,
         re.I,
     ):
         return False
     return bool(
         re.search(
-            rf"(?:看|显示|展示|查看|列出|解释|对比|说明|提供|show|list|explain|compare)"
-            rf"[^。！？,，]{{0,20}}{ORIGINAL_AI}|^\s*{ORIGINAL_AI}(?:发现|结论|原稿)?[?？。\s]*$",
+            rf"{REQUEST_START}(?:看|显示|展示|查看|列出|提供)\s*"
+            rf"(?:一下|本次(?:的)?|被驳回的|被拒绝的)?\s*{ORIGINAL_AI}"
+            r"(?!\s*(?:发现|结论|原稿|内容)?\s*(?:是否|有无|有没有|曾否|被审核|被复核))"
+            rf"|{REQUEST_START}(?:对比|比较)\s*{ORIGINAL_AI}"
+            rf"|{REQUEST_START}(?:对比|比较)\s*{FINAL_FINDINGS}"
+            rf"\s*(?:和|与|及)\s*{ORIGINAL_AI}"
+            rf"|^\s*{ORIGINAL_AI}(?:发现|结论|原稿)\s*(?:有哪些|是什么|都有什么)"
+            rf"|(?:^|[.!?;,\n])\s*(?:(?:please|can you|could you)\s+)*"
+            rf"(?:show|display|list|compare)\s+(?:me\s+)?(?:the\s+)?{ORIGINAL_AI}",
             question,
             re.I,
         )
@@ -389,6 +420,7 @@ def _model_context(context: AnswerContext, allow_original: bool) -> dict[str, An
         )
     return {
         "company_name": context.company_name[:256],
+        "company_credit_code": context.company_credit_code,
         "as_of_date": context.as_of_date.isoformat(),
         "run_id": str(context.run_id),
         "run_status": context.run_status,
@@ -527,7 +559,10 @@ def _render(
             {
                 "scope_mismatch": "请确认要询问的企业和基准日，或重新选择调查。",
                 "no_context": "请说明想了解的规则、证据或需要核查的事项。",
-                "outside_scope": "调查助手只解释本次调查，无法给出贷款额度或审批意见。",
+                "outside_scope": (
+                    "调查助手只解释本次调查的规则、发现、证据和复核事项。"
+                    "贷款额度与审批意见超出本次调查范围。"
+                ),
             }[selection.reason_code],
         )
 

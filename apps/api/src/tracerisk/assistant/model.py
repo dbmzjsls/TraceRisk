@@ -1,6 +1,8 @@
 import json
+import re
 import time
 from typing import Any, Final, Literal
+from unicodedata import normalize
 
 import httpx
 from pydantic import ValidationError
@@ -10,6 +12,7 @@ from tracerisk.assistant.schemas import (
     AssistantExecution,
     AssistantSelection,
     AssistantUsage,
+    ReasonCode,
     SectionKind,
 )
 from tracerisk.config import Settings
@@ -58,6 +61,69 @@ class AssistantModelError(ValueError):
     def __init__(self, category: FailureCategory) -> None:
         super().__init__(category)
         self.category = category
+
+
+QUESTION_DATE = re.compile(
+    r"(?<!\d)(\d{4})(?:年|[-/.])(\d{1,2})(?:月|[-/.])(\d{1,2})日?(?!\d)"
+)
+BASELINE_PREFIX = re.compile(
+    r"(?:截至|截止(?:到|至)?|基准日|as of)(?:设为|改为|为|是)?\s*:?\s*$", re.I
+)
+BASELINE_SUFFIX = re.compile(
+    r"\s*(?:为基准日|为准|的(?:综合)?(?:调查|风险(?:报告|结果)))"
+)
+CREDIT_CODE = re.compile(
+    r"\bSYNTHETIC-COMPANY-\d{3}\b"
+    r"|(?:统一社会信用代码|信用代码|企业代码|公司代码|USCC)\s*:?\s*([0-9A-Z]{18})(?![0-9A-Z])",
+    re.I | re.ASCII,
+)
+FORMAL_COMPANY_NAME = r"[\w().· -]{2,60}?(?:有限责任公司|有限公司|集团公司)"
+COMPANY_NAME = re.compile(
+    r"(?:^|[,。!?;])\s*(?:请|帮我|麻烦)?\s*(?:综合)?"
+    r"(?:调查|分析|评估|查询|查看|了解|针对|关于|对比|比较|对)\s*(?:一下)?\s*"
+    rf"[\"“《]?({FORMAL_COMPANY_NAME})"
+    rf"|^\s*[\"“《]?({FORMAL_COMPANY_NAME})[\"”》]?\s*的"
+    r"(?:调查|风险|司法|工商|经营|舆情|新闻|知识产权|专利|报告)"
+)
+
+
+def _mock_scope_mismatch(question: str, context: dict[str, Any]) -> bool:
+    for match in QUESTION_DATE.finditer(question):
+        if BASELINE_PREFIX.search(question[: match.start()]) or BASELINE_SUFFIX.match(
+            question[match.end() :]
+        ):
+            year, month, day = map(int, match.groups())
+            if f"{year:04d}-{month:02d}-{day:02d}" != context["as_of_date"]:
+                return True
+    if any(
+        (match[1] or match[0]).upper() != context["company_credit_code"].upper()
+        for match in CREDIT_CODE.finditer(question)
+    ):
+        return True
+    company = normalize("NFKC", context["company_name"])
+    return any(
+        company not in (match[1] or match[2])
+        for match in COMPANY_NAME.finditer(question)
+    )
+
+
+def _mock_non_answer(question: str, context: dict[str, Any]) -> ReasonCode:
+    if _mock_scope_mismatch(question, context):
+        return "scope_mismatch"
+    if re.search(
+        r"贷款额度|授信额度|贷款审批|授信审批|(?:天气|股价)(?:如何|怎么样|预测)|"
+        r"(?:查|看看|预报|预测)(?:一下)?(?:今天|明天)?(?:的)?(?:天气|股价)|"
+        r"(?:今天|明天)(?:的)?天气|写.{0,4}(?:诗|故事|代码)|讲.{0,3}笑话|菜谱",
+        question,
+    ):
+        return "outside_scope"
+    if context["original_ai_allowed"] or re.search(
+        r"综合|调查|风险|规则|证据|经营|工商|司法|案号|案件|舆情|新闻|专利|知识产权|"
+        r"来源|缺资料|缺失|不可用|覆盖|报告|结论|发现|复核|核查|支持|\d+\s*分",
+        question,
+    ):
+        return "none"
+    return "no_context"
 
 
 async def _request_selection(
@@ -124,16 +190,16 @@ async def _request_selection(
 
 def _mock_selection(question: str, context: dict[str, Any]) -> AssistantSelection:
     """Deterministic demo adapter for the known questions and explicit focuses."""
-    if any(
-        term in question for term in ("贷款额度", "授信额度", "贷款审批", "授信审批")
-    ):
+    question = normalize("NFKC", question)
+    reason_code = _mock_non_answer(question, context)
+    if reason_code != "none":
         return AssistantSelection(
-            status="unsupported",
+            status="unsupported" if reason_code == "outside_scope" else "clarify",
             sections=[],
             rule_codes=[],
             finding_keys=[],
             chunk_ids=[],
-            reason_code="outside_scope",
+            reason_code=reason_code,
         )
     rules = context["rules"]
     findings = context["findings"]
