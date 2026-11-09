@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "execution_status": "not_run",
+  "source_snapshot": {
+    "code_version": "3b7d020533d63287cac6390f9f24af2d8244b91c",
+    "tracked_diff_command": "git diff --no-ext-diff --no-textconv --binary HEAD --",
+    "tracked_diff_sha256": "70c89d804a7f1aa70d3b31c5426fc623827456cd3cd7aa4e6b3904822128687f"
+  },
+  "examples": [
+    {
+      "example_id": "01",
+      "scenario": "all-rules-95",
+      "company_id": "b2902304-8515-50fc-81d4-20c548e6861a",
+      "company_name": "远景精工（合成）有限公司",
+      "unified_credit_code": "SYNTHETIC-COMPANY-003",
+      "as_of_date": "2026-09-11",
+      "reuse_run_from": null,
+      "expected_rule_score": 95,
+      "expected_explained_rules": {
+        "BUSINESS_ABNORMAL_V1": 25,
+        "JUDICIAL_OPEN_CASE_V1": 35,
+        "NEGATIVE_NEWS_V1": 20,
+        "CORE_IP_ANOMALY_V1": 15
+      },
+      "expected_requires_review": true,
+      "expected_source_coverage": {
+        "business": "available",
+        "judicial": "available",
+        "news": "available",
+        "intellectual_property": "available"
+      },
+      "execution_status": "not_run",
+      "investigation_id": null,
+      "run_id": null,
+      "code_version": null,
+      "investigation_model_execution": null,
+      "assistant_execution": null,
+      "retrieval_mode": null,
+      "prompt_version": null,
+      "answered_at": null,
+      "files": {
+        "prompt.txt": "82135e4e8cbeccd3d4fea93fb5b22085366704a30ed795a0cd8f0d2e136d5c3a",
+        "request.json": null,
+        "response.json": null,
+        "context.json": null,
+        "screenshot.png": null
+      }
+    },
+    {
+      "example_id": "02",
+      "scenario": "unavailable-source",
+      "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+      "company_name": "海晟服务（合成）有限公司",
+      "unified_credit_code": "SYNTHETIC-COMPANY-007",
+      "as_of_date": "2026-09-11",
+      "reuse_run_from": null,
+      "expected_rule_score": 0,
+      "expected_explained_rules": {},
+      "expected_requires_review": true,
+      "expected_source_coverage": {
+        "business": "unavailable",
+        "judicial": "available",
+        "news": "available",
+        "intellectual_property": "stale"
+      },
+      "execution_status": "not_run",
+      "investigation_id": null,
+      "run_id": null,
+      "code_version": null,
+      "investigation_model_execution": null,
+      "assistant_execution": null,
+      "retrieval_mode": null,
+      "prompt_version": null,
+      "answered_at": null,
+      "files": {
+        "prompt.txt": "e4cc9857897aa540023260fcfb8255a08952df172f4ec6ef2be861c7688a4e73",
+        "request.json": null,
+        "response.json": null,
+        "context.json": null,
+        "screenshot.png": null
+      }
+    },
+    {
+      "example_id": "03",
+      "scenario": "all-rules-95",
+      "company_id": "b2902304-8515-50fc-81d4-20c548e6861a",
+      "company_name": "远景精工（合成）有限公司",
+      "unified_credit_code": "SYNTHETIC-COMPANY-003",
+      "as_of_date": "2026-09-11",
+      "reuse_run_from": "01",
+      "expected_rule_score": 95,
+      "expected_explained_rules": {
+        "JUDICIAL_OPEN_CASE_V1": 35
+      },
+      "expected_requires_review": true,
+      "expected_source_coverage": {
+        "business": "available",
+        "judicial": "available",
+        "news": "available",
+        "intellectual_property": "available"
+      },
+      "execution_status": "not_run",
+      "investigation_id": null,
+      "run_id": null,
+      "code_version": null,
+      "investigation_model_execution": null,
+      "assistant_execution": null,
+      "retrieval_mode": null,
+      "prompt_version": null,
+      "answered_at": null,
+      "files": {
+        "prompt.txt": "60c3792c46fa628f1d35a0bd04aa4ca18753970e0ff9e0b300c681b3c5b65ded",
+        "request.json": null,
+        "response.json": null,
+        "context.json": null,
+        "screenshot.png": null
+      }
+    }
+  ]
+}
