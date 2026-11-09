@@ -23,6 +23,7 @@ export const router = createRouter({ history: createWebHistory(), routes: [
     { path: '', redirect: '/companies' },
     { path: 'companies', component: CompanyListPage }, { path: 'companies/:id', component: CompanyDetailPage },
     { path: 'investigations', component: InvestigationListPage }, { path: 'investigations/:id', component: InvestigationDetailPage },
+    { path: 'assistant', component: () => import('../features/assistant/AssistantPage.vue') },
     { path: 'reviews', component: ReviewListPage, meta: { roles: ['reviewer', 'admin'] } }, { path: 'reviews/:id', component: ReviewDetailPage, meta: { roles: ['reviewer', 'admin'] } },
     { path: 'reports/:id', component: ReportPage },
   ] },

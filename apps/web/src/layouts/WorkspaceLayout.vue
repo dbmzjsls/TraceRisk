@@ -9,7 +9,7 @@ const route = useRoute()
 const collapsed = shallowRef(false)
 const isMobile = shallowRef(false)
 const { user, role, logout } = useAuth()
-const menus = computed(() => [ { key: '/companies', label: () => h(RouterLink, { to: '/companies' }, () => '企业') }, { key: '/investigations', label: () => h(RouterLink, { to: '/investigations' }, () => '调查') }, ...(role.value === 'reviewer' || role.value === 'admin' ? [{ key: '/reviews', label: () => h(RouterLink, { to: '/reviews' }, () => '待复核') }] : []) ])
+const menus = computed(() => [ { key: '/companies', label: () => h(RouterLink, { to: '/companies' }, () => '企业') }, { key: '/investigations', label: () => h(RouterLink, { to: '/investigations' }, () => '调查') }, { key: '/assistant', label: () => h(RouterLink, { to: '/assistant' }, () => '调查助手') }, ...(role.value === 'reviewer' || role.value === 'admin' ? [{ key: '/reviews', label: () => h(RouterLink, { to: '/reviews' }, () => '待复核') }] : []) ])
 const selected = computed(() => '/' + route.path.split('/')[1])
 const roleName = computed(() => ({ analyst: '分析员', reviewer: '复核员', admin: '管理员' })[role.value ?? 'analyst'])
 type MediaQueryMatch = { matches: boolean }

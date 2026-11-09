@@ -34,6 +34,7 @@ const evidenceNavigation = useEvidenceNavigation(investigationId, runId)
     <header class="page-heading"><div><RouterLink to="/investigations">返回调查列表</RouterLink><h1>{{ data?.company_name ?? '调查详情' }}</h1><p v-if="data" class="muted">基准日期 {{ data.as_of_date }} · 第 {{ data.current_run.run_number }} 次运行 · 合成数据，仅供演示</p></div><NButton :loading="isFetching" @click="refetch()">刷新</NButton></header>
     <QueryFeedback :loading="isPending" :refreshing="isFetching && !!data" :error="error" @refresh="refetch()" />
     <template v-if="data">
+      <RouterLink v-if="data.retrieval_state === 'ready' && (data.current_run.status === 'awaiting_review' || data.current_run.status === 'completed')" :to="{ path: '/assistant', query: { investigation: data.id } }">在调查助手中提问</RouterLink>
       <RunConnectionStatus :status="eventStream.connectionStatus.value" :polling-fallback="eventStream.pollingFallback.value" :permission-error="eventStream.permissionError.value" @retry="eventStream.retry" />
       <p v-if="evidenceNavigation.unavailableMessage.value" class="navigation-notice" role="status">{{ evidenceNavigation.unavailableMessage.value }} <button type="button" class="text-action" @click="evidenceNavigation.clearUnavailable">关闭</button></p>
       <div class="dossier-layout">
