@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "execution_status": "not_run",
+  "execution_status": "captured_local_real",
   "source_snapshot": {
     "code_version": "3b7d020533d63287cac6390f9f24af2d8244b91c",
     "tracked_diff_command": "git diff --no-ext-diff --no-textconv --binary HEAD --",
@@ -29,21 +29,39 @@
         "news": "available",
         "intellectual_property": "available"
       },
-      "execution_status": "not_run",
-      "investigation_id": null,
-      "run_id": null,
-      "code_version": null,
-      "investigation_model_execution": null,
-      "assistant_execution": null,
-      "retrieval_mode": null,
-      "prompt_version": null,
-      "answered_at": null,
+      "execution_status": "captured_local_real",
+      "investigation_id": "7e713513-8e66-401b-809e-83db2313c826",
+      "run_id": "6a7858b4-d2ac-4e12-8f7d-494a346ffe6c",
+      "code_version": "cccb2ba90887def548c7ac544d8955bf73ee4f2f",
+      "investigation_model_execution": {
+        "mode": "real",
+        "models": [
+          "deepseek-flash"
+        ],
+        "statuses": [
+          "succeeded"
+        ],
+        "error_categories": []
+      },
+      "assistant_execution": {
+        "mode": "real",
+        "model": "deepseek-flash",
+        "prompt_version": "investigation-assistant-v1",
+        "latency_ms": 8608,
+        "usage": {
+          "prompt_tokens": 2383,
+          "completion_tokens": 945
+        }
+      },
+      "retrieval_mode": "fake",
+      "prompt_version": "investigation-assistant-v1",
+      "answered_at": "2026-11-09T14:20:41.995631Z",
       "files": {
         "prompt.txt": "82135e4e8cbeccd3d4fea93fb5b22085366704a30ed795a0cd8f0d2e136d5c3a",
-        "request.json": null,
-        "response.json": null,
-        "context.json": null,
-        "screenshot.png": null
+        "request.json": "0e6126c66a4017911a1478e5767e69a7906c370904d2eab4b08e4469e75dc5af",
+        "response.json": "574d0893303cf7bb8547729fb38093f9875bc4effa551b0a278c14fc680adbfb",
+        "context.json": "c69613a9d2c28dde3799a659bb8a2d4d956876ce827c012f0ca5855f74982dc2",
+        "screenshot.png": "b763bd66fc0fc41b81630f941c7ea1e9a6710e57ad41bf454e4c44c514f496dd"
       }
     },
     {
@@ -63,21 +81,39 @@
         "news": "available",
         "intellectual_property": "stale"
       },
-      "execution_status": "not_run",
-      "investigation_id": null,
-      "run_id": null,
-      "code_version": null,
-      "investigation_model_execution": null,
-      "assistant_execution": null,
-      "retrieval_mode": null,
-      "prompt_version": null,
-      "answered_at": null,
+      "execution_status": "captured_local_real",
+      "investigation_id": "5278150e-71c7-4ee0-9421-474298a096cc",
+      "run_id": "dd00fc82-45aa-4a8e-997d-b6c1af93ef6e",
+      "code_version": "cccb2ba90887def548c7ac544d8955bf73ee4f2f",
+      "investigation_model_execution": {
+        "mode": "real",
+        "models": [
+          "deepseek-flash"
+        ],
+        "statuses": [
+          "succeeded"
+        ],
+        "error_categories": []
+      },
+      "assistant_execution": {
+        "mode": "real",
+        "model": "deepseek-flash",
+        "prompt_version": "investigation-assistant-v1",
+        "latency_ms": 5906,
+        "usage": {
+          "prompt_tokens": 972,
+          "completion_tokens": 291
+        }
+      },
+      "retrieval_mode": "fake",
+      "prompt_version": "investigation-assistant-v1",
+      "answered_at": "2026-11-09T14:21:02.180212Z",
       "files": {
         "prompt.txt": "e4cc9857897aa540023260fcfb8255a08952df172f4ec6ef2be861c7688a4e73",
-        "request.json": null,
-        "response.json": null,
-        "context.json": null,
-        "screenshot.png": null
+        "request.json": "4c8137a8da7cff11c9f0463534c7938180be942debd415c19269272aa8c35ada",
+        "response.json": "8fb4118c1cdfc778085cc9ab239031d36d8e5d37fbecbb9bad5dab67fdef3dda",
+        "context.json": "c49c316e0485e746a236b811d34b3ad2287182c723941e69e4151e1b571c56a0",
+        "screenshot.png": "cac463af226dffba2e909ab388c6083149f61e5816a4de34f88f19ecaa940d10"
       }
     },
     {
@@ -99,22 +135,43 @@
         "news": "available",
         "intellectual_property": "available"
       },
-      "execution_status": "not_run",
-      "investigation_id": null,
-      "run_id": null,
-      "code_version": null,
-      "investigation_model_execution": null,
-      "assistant_execution": null,
-      "retrieval_mode": null,
-      "prompt_version": null,
-      "answered_at": null,
+      "execution_status": "captured_local_real",
+      "investigation_id": "7e713513-8e66-401b-809e-83db2313c826",
+      "run_id": "6a7858b4-d2ac-4e12-8f7d-494a346ffe6c",
+      "code_version": "cccb2ba90887def548c7ac544d8955bf73ee4f2f",
+      "investigation_model_execution": {
+        "mode": "real",
+        "models": [
+          "deepseek-flash"
+        ],
+        "statuses": [
+          "succeeded"
+        ],
+        "error_categories": []
+      },
+      "assistant_execution": {
+        "mode": "real",
+        "model": "deepseek-flash",
+        "prompt_version": "investigation-assistant-v1",
+        "latency_ms": 10061,
+        "usage": {
+          "prompt_tokens": 2378,
+          "completion_tokens": 1046
+        }
+      },
+      "retrieval_mode": "fake",
+      "prompt_version": "investigation-assistant-v1",
+      "answered_at": "2026-11-09T14:21:17.060591Z",
       "files": {
         "prompt.txt": "60c3792c46fa628f1d35a0bd04aa4ca18753970e0ff9e0b300c681b3c5b65ded",
-        "request.json": null,
-        "response.json": null,
-        "context.json": null,
-        "screenshot.png": null
+        "request.json": "b439971ccebc398ac38599f78edaf29133f16f745629a5064e31ba99a3a54d3a",
+        "response.json": "4ab42b8a72553e191ca9f17706cd5b19d9668e6fa0c0354ed53956eba607ed89",
+        "context.json": "c69613a9d2c28dde3799a659bb8a2d4d956876ce827c012f0ca5855f74982dc2",
+        "screenshot.png": "7fd37183f13fc17c5802bd7cd6f9667300210e3871bb09d4e5656242be8d5b44"
       }
     }
-  ]
+  ],
+  "public_access_status": "awaiting_provided_https_endpoint",
+  "capture_scope": "local_chromium_owned_database_real_models_synthetic_data_fake_retrieval",
+  "earlier_attempt": "attempts/01-coverage-disclosure.json"
 }
