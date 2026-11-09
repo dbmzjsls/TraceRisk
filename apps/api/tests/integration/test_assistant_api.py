@@ -235,6 +235,27 @@ async def test_questions_change_sections_and_keep_frozen_citations(
     assert await persisted_state() == before
 
 
+async def test_coverage_discloses_absent_findings_even_when_model_omits_section(
+    client: httpx.AsyncClient, cases: dict[str, Case], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    async def coverage_only(*args: Any) -> Any:
+        _, execution = await model.select_answer(*args)
+        return AssistantSelection(
+            status="answer",
+            sections=["coverage"],
+            rule_codes=[],
+            finding_keys=[],
+            chunk_ids=[],
+            reason_code="none",
+        ), execution
+
+    monkeypatch.setattr(service, "select_answer", coverage_only)
+    answer = await ask(client, cases["007"], "缺失或不可用的来源有哪些？")
+    assert answer.status_code == 200
+    assert "本次运行没有待审AI发现。" in kind(answer.json(), "coverage")["lines"]
+    assert "待人工复核" in answer.text
+
+
 async def test_mock_clarifies_conflicting_scope_and_contextless_questions(
     client: httpx.AsyncClient, cases: dict[str, Case]
 ) -> None:

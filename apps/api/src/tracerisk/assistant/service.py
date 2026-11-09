@@ -653,15 +653,19 @@ def _render(
                 )
             )
         elif kind == "coverage":
-            result.append(
-                section(
-                    kind,
-                    [
-                        f"{SOURCES[entry.source_type]}来源{COVERAGE_STATUSES[entry.status]}。"
-                        for entry in context.coverage.entries
-                    ],
+            lines = [
+                f"{SOURCES[entry.source_type]}来源{COVERAGE_STATUSES[entry.status]}。"
+                for entry in context.coverage.entries
+            ]
+            if (
+                context.run_status == "awaiting_review"
+                and "findings" not in selection.sections
+                and not any(
+                    item.source == "pending_ai" for item in context.findings.values()
                 )
-            )
+            ):
+                lines.append("本次运行没有待审AI发现。")
+            result.append(section(kind, lines))
         elif kind == "evidence":
             result.append(
                 section(

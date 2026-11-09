@@ -139,6 +139,7 @@ test('sends three real browser questions and reuses the first Run', async ({ pag
       if (example.id === '02') {
         await expect(turn).toContainText('工商来源不可用')
         await expect(turn).toContainText('规则分0分不代表安全')
+        await expect(turn).toContainText('本次运行没有待审AI发现')
       } else {
         if (example.id === '01') {
           const domains = new Set(answer.citations.map(item => item.risk_type))
