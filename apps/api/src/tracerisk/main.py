@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from tracerisk.assistant.router import router as assistant_router
 from tracerisk.auth.router import router as auth_router
 from tracerisk.companies.router import router as companies_router
 from tracerisk.config import Settings
@@ -42,6 +43,7 @@ app.include_router(companies_router)
 app.include_router(reports_router)
 app.include_router(reviews_router)
 app.include_router(investigations_router)
+app.include_router(assistant_router)
 app.include_router(run_reviews_router)
 app.include_router(workflow_events_router)
 
