@@ -132,11 +132,11 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
 .assistant-settings, .assistant-evidence { display: grid; gap: 1rem; min-width: 0; }
 .assistant-progress summary, .assistant-history summary { cursor: pointer; }
 .assistant-progress :deep(.run-timeline) { border: 0; padding: .65rem 0; }
-.assistant-conversation { min-width: 0; display: grid; gap: .65rem; }
+.assistant-conversation { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; }
 .assistant-conversation h2, .assistant-conversation p { margin: 0; }
 .assistant-history { border-bottom: 1px solid var(--line, #c5d8cf); padding: .3rem 0 .5rem; }
 .assistant-history:not([open]) summary { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-.assistant-turn { display: grid; gap: .85rem; }
+.assistant-turn { display: grid; grid-template-columns: minmax(0, 1fr); gap: .85rem; }
 .assistant-question { padding: .7rem .8rem; background: var(--accent-wash); border-radius: .45rem; white-space: pre-wrap; overflow-wrap: anywhere; }
 .assistant-form { display: grid; gap: .45rem; align-items: start; margin-top: .55rem; }
 .assistant-form textarea { width: 100%; padding: .55rem; resize: vertical; font: inherit; color: inherit; background: transparent; border: 1px solid var(--line, #c5d8cf); border-radius: .35rem; }
