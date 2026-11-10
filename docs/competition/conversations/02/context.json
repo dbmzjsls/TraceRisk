@@ -1,0 +1,89 @@
+{
+  "detail": {
+    "id": "5278150e-71c7-4ee0-9421-474298a096cc",
+    "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+    "company_name": "海晟服务（合成）有限公司",
+    "created_by": "648306e6-9e56-4ef4-8920-9e6fd8bac3bc",
+    "as_of_date": "2026-09-11",
+    "current_run": {
+      "id": "dd00fc82-45aa-4a8e-997d-b6c1af93ef6e",
+      "run_number": 1,
+      "status": "awaiting_review",
+      "report_id": null
+    },
+    "retrieval_state": "ready",
+    "steps": [
+      {
+        "name": "apply_rules",
+        "attempt_count": 1
+      },
+      {
+        "name": "dispatch_probe",
+        "attempt_count": 1
+      },
+      {
+        "name": "generate_validate_findings",
+        "attempt_count": 1
+      },
+      {
+        "name": "retrieve_evidence",
+        "attempt_count": 1
+      }
+    ],
+    "rule_score": 0,
+    "rule_findings": [],
+    "retrieved_evidence": [],
+    "ai_findings": [],
+    "decisions": [],
+    "coverage": {
+      "entries": [
+        {
+          "source_type": "business",
+          "status": "unavailable",
+          "coverage_id": "d0191bb3-3c0e-51fa-9b6e-f16770406344",
+          "checked_at": "2026-09-11T00:00:00Z"
+        },
+        {
+          "source_type": "judicial",
+          "status": "available",
+          "coverage_id": "f5fdb86a-3fb1-5c4a-9f97-54b833358076",
+          "checked_at": "2026-09-11T00:00:00Z"
+        },
+        {
+          "source_type": "news",
+          "status": "available",
+          "coverage_id": "2c437172-4366-5f5a-8408-1e6f6ea8d305",
+          "checked_at": "2026-09-11T00:00:00Z"
+        },
+        {
+          "source_type": "intellectual_property",
+          "status": "stale",
+          "coverage_id": "6f346bb6-c0df-59d4-9a52-b32e83df1fcb",
+          "checked_at": "2026-09-11T00:00:00Z"
+        }
+      ],
+      "insufficiency_details": [
+        "business:unavailable",
+        "intellectual_property:stale"
+      ],
+      "evidence_sufficiency": "insufficient"
+    },
+    "conflicts": [],
+    "failure_code": null,
+    "review_reasons": [
+      "evidence_insufficient"
+    ],
+    "model_execution": {
+      "mode": "real",
+      "models": [
+        "deepseek-flash"
+      ],
+      "statuses": [
+        "succeeded"
+      ],
+      "error_categories": []
+    }
+  },
+  "report": null,
+  "company_credit_code": "SYNTHETIC-COMPANY-007"
+}

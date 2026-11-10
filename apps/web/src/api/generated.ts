@@ -1,5 +1,22 @@
 /** Generated from local TraceRisk OpenAPI. Run pnpm api:generate; do not edit. */
 export interface paths {
+    "/assistant/answers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Answer */
+        post: operations["answer_assistant_answers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/login": {
         parameters: {
             query?: never;
@@ -229,6 +246,154 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AssistantAnswerRequest */
+        AssistantAnswerRequest: {
+            /**
+             * Investigation Id
+             * Format: uuid
+             */
+            investigation_id: string;
+            /** Question */
+            question: string;
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+        };
+        /** AssistantAnswerResponse */
+        AssistantAnswerResponse: {
+            /**
+             * Answer Id
+             * Format: uuid
+             */
+            answer_id: string;
+            /**
+             * Answered At
+             * Format: date-time
+             */
+            answered_at: string;
+            assistant_execution: components["schemas"]["AssistantExecution"];
+            /** Citations */
+            citations: components["schemas"]["RetrievedEvidenceResponse"][];
+            /** Context Sha256 */
+            context_sha256: string;
+            /**
+             * Investigation Id
+             * Format: uuid
+             */
+            investigation_id: string;
+            investigation_model_execution: components["schemas"]["ModelExecutionResponse"];
+            /** Question */
+            question: string;
+            /** Question Sha256 */
+            question_sha256: string;
+            /**
+             * Reason Code
+             * @enum {string}
+             */
+            reason_code: "none" | "scope_mismatch" | "no_context" | "outside_scope";
+            /** Report Id */
+            report_id: string | null;
+            /** Review Reasons */
+            review_reasons: string[];
+            /** Rule Score */
+            rule_score: number;
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+            /**
+             * Run Status
+             * @enum {string}
+             */
+            run_status: "awaiting_review" | "completed";
+            /** Sections */
+            sections: components["schemas"]["AssistantSection"][];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "answer" | "clarify" | "unsupported";
+        };
+        /** AssistantExecution */
+        AssistantExecution: {
+            /** Latency Ms */
+            latency_ms: number;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "mock" | "real";
+            /** Model */
+            model: string;
+            /**
+             * Prompt Version
+             * @constant
+             */
+            prompt_version: "investigation-assistant-v1";
+            usage: components["schemas"]["AssistantUsage"] | null;
+        };
+        /** AssistantFinding */
+        AssistantFinding: {
+            /** Citation Chunk Ids */
+            citation_chunk_ids: string[];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Risk Type
+             * @enum {string}
+             */
+            risk_type: "business" | "judicial" | "news" | "intellectual_property";
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "pending_ai" | "original_ai" | "ai" | "human";
+            /** Summary */
+            summary: string;
+            /**
+             * Support Reason
+             * @enum {string}
+             */
+            support_reason: "canonical_fact_match" | "unverified_free_text_extension" | "legacy-stage3";
+            /**
+             * Support Status
+             * @enum {string}
+             */
+            support_status: "supported" | "indeterminate";
+            /** Title */
+            title: string;
+            /** Version */
+            version: number;
+        };
+        /** AssistantSection */
+        AssistantSection: {
+            /** Citation Chunk Ids */
+            citation_chunk_ids: string[];
+            /** Findings */
+            findings: components["schemas"]["AssistantFinding"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "overview" | "rules" | "findings" | "original_ai" | "coverage" | "evidence" | "review_actions" | "limits";
+            /** Lines */
+            lines: string[];
+            /** Title */
+            title: string;
+        };
+        /** AssistantUsage */
+        AssistantUsage: {
+            /** Completion Tokens */
+            completion_tokens: number | null;
+            /** Prompt Tokens */
+            prompt_tokens: number | null;
+        };
         /** CompanyListResponse */
         CompanyListResponse: {
             /** Items */
@@ -446,11 +611,14 @@ export interface components {
             current_run: components["schemas"]["CurrentRunResponse"];
             /** Decisions */
             decisions: components["schemas"]["DecisionResponse"][];
+            /** Failure Code */
+            failure_code?: string | null;
             /**
              * Id
              * Format: uuid
              */
             id: string;
+            model_execution: components["schemas"]["ModelExecutionResponse"];
             /**
              * Retrieval State
              * @enum {string}
@@ -458,6 +626,11 @@ export interface components {
             retrieval_state: "pending" | "legacy_unavailable" | "ready";
             /** Retrieved Evidence */
             retrieved_evidence: components["schemas"]["RetrievedEvidenceResponse"][];
+            /**
+             * Review Reasons
+             * @default []
+             */
+            review_reasons: string[];
             /** Rule Findings */
             rule_findings: components["schemas"]["RuleFindingResponse"][];
             /** Rule Score */
@@ -505,6 +678,20 @@ export interface components {
             password: string;
             /** Username */
             username: string;
+        };
+        /** ModelExecutionResponse */
+        ModelExecutionResponse: {
+            /** Error Categories */
+            error_categories: string[];
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "mock" | "real" | "unknown";
+            /** Models */
+            models: string[];
+            /** Statuses */
+            statuses: string[];
         };
         /** PendingFindingResponse */
         PendingFindingResponse: {
@@ -793,6 +980,60 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    answer_assistant_answers_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantAnswerRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantAnswerResponse"];
+                };
+            };
+            /** @description Current Run is unready or its context has changed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Model call or selection validation failed */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Model call timed out */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     login_auth_login_post: {
         parameters: {
             query?: never;
@@ -922,6 +1163,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 offset?: number;
+                company_id?: string | null;
             };
             header?: never;
             path?: never;

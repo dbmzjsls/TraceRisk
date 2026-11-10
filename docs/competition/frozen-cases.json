@@ -1,0 +1,1146 @@
+{
+  "schema_version": 1,
+  "frozen_at_utc": "2026-11-08T11:44:48.263732+00:00",
+  "purpose": "competition_display_and_future_regression_design",
+  "label_status": "single_author_no_second_person_review",
+  "label_origin": "既有单人开发标签复用及本次单人反例设计；未进行独立专家评审",
+  "holdout_status": "development_set_not_independent",
+  "execution_status": "not_run_after_this_freeze",
+  "hash_scope": "文件UTF-8原始字节SHA-256见analysis-audit.json；修改任何字段须重新冻结",
+  "route_vocabulary": {
+    "accept": "可接受的有效输出/报告",
+    "manual_review": "人工复核",
+    "reject": "硬拒绝或挑战中无有效发现；原因另列，不等同贷款拒绝"
+  },
+  "cases": [
+    {
+      "case_id": "F01",
+      "category": "明确事实",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-explicit_evidence-01",
+      "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+        "chunks": [
+          {
+            "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+            "source_type": "judicial",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号",
+            "fact_value": "open",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业exp-1有限公司：（2026）验证民初8301号，截至2026-11-01未结案。",
+            "evidence_id": "ad5f450a-7e36-5407-9f38-39f68ad0d20a",
+            "chunk_id": "a8d29019-d3e2-5f2d-86c1-aa16b0165796",
+            "content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c",
+            "evidence_content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c"
+          }
+        ],
+        "allowed_claim_codes": [
+          "JUDICIAL_OPEN_CASE"
+        ]
+      },
+      "expected_rules": [
+        "JUDICIAL_OPEN_CASE_V1"
+      ],
+      "expected_rule_score": 35,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "accept",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "manual_review",
+        "validation_errors": []
+      }
+    },
+    {
+      "case_id": "F02",
+      "category": "明确事实",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-explicit_evidence-02",
+      "company_id": "73331e58-4a53-5bdc-b108-7fbc9af84529",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "73331e58-4a53-5bdc-b108-7fbc9af84529",
+        "chunks": [
+          {
+            "company_id": "73331e58-4a53-5bdc-b108-7fbc9af84529",
+            "source_type": "business",
+            "risk_type": "business",
+            "observed_at": "2026-11-01",
+            "fact_type": "business_abnormal_status",
+            "fact_key": "验证经营记录B-72",
+            "fact_value": "active",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业exp-2有限公司：验证经营记录B-72，截至2026-11-01仍在经营异常名录。",
+            "evidence_id": "e5cd1455-cb2c-59d6-ad50-7f81abcf8f51",
+            "chunk_id": "2d54fe67-88e0-5c92-969c-4a49e5aac1b6",
+            "content_hash": "b178264d6c8664eba0b1aa2a2bb008ba058fae03f131bb48a7c575312af3cdd2",
+            "evidence_content_hash": "b178264d6c8664eba0b1aa2a2bb008ba058fae03f131bb48a7c575312af3cdd2"
+          }
+        ],
+        "allowed_claim_codes": [
+          "BUSINESS_ABNORMAL"
+        ]
+      },
+      "expected_rules": [
+        "BUSINESS_ABNORMAL_V1"
+      ],
+      "expected_rule_score": 25,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "accept",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "manual_review",
+        "validation_errors": []
+      }
+    },
+    {
+      "case_id": "F03",
+      "category": "跨企业干扰",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-similar_entity_or_number-01",
+      "company_id": "13c8ff89-0ce7-5511-9e76-150d746439b1",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "13c8ff89-0ce7-5511-9e76-150d746439b1",
+        "chunks": [
+          {
+            "company_id": "9e3ed8d9-97cd-5144-88cd-dd255bd02022",
+            "source_type": "judicial",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号-近似",
+            "fact_value": "open",
+            "polarity": "negative",
+            "content": "【合成同名干扰】另一家同名企业记录：（2026）验证民初8301号-近似，未结案。企业标识不同。",
+            "evidence_id": "332c3126-7f08-56c5-9586-6f1ec2389600",
+            "chunk_id": "65764751-9a44-503e-9903-765a0836fafb",
+            "content_hash": "e0985336d9c90e5119fa6aa8ca1ca211a989617754b6db94136a54af166277a9",
+            "evidence_content_hash": "e0985336d9c90e5119fa6aa8ca1ca211a989617754b6db94136a54af166277a9"
+          }
+        ],
+        "allowed_claim_codes": [
+          "JUDICIAL_OPEN_CASE"
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "reject",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "reject",
+        "validation_errors": []
+      }
+    },
+    {
+      "case_id": "F04",
+      "category": "跨企业干扰",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-similar_entity_or_number-02",
+      "company_id": "e3e31ec6-a10d-505c-8d96-c050cf88b8a8",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "e3e31ec6-a10d-505c-8d96-c050cf88b8a8",
+        "chunks": [
+          {
+            "company_id": "ee0c2554-da76-5119-82c7-7ff926be7825",
+            "source_type": "business",
+            "risk_type": "business",
+            "observed_at": "2026-11-01",
+            "fact_type": "business_abnormal_status",
+            "fact_key": "验证经营记录B-72-近似",
+            "fact_value": "active",
+            "polarity": "negative",
+            "content": "【合成同名干扰】另一家同名企业记录：验证经营记录B-72-近似，仍在经营异常名录。企业标识不同。",
+            "evidence_id": "efe3003d-fca7-52fb-a3f0-fb9474e7e51f",
+            "chunk_id": "221bd019-8f90-5ed8-9773-81622bc05827",
+            "content_hash": "1bab49b0bd61ad8deab7cace6dc332fa77b91cdb6dc8d35d8b988618540bb4c2",
+            "evidence_content_hash": "1bab49b0bd61ad8deab7cace6dc332fa77b91cdb6dc8d35d8b988618540bb4c2"
+          }
+        ],
+        "allowed_claim_codes": [
+          "BUSINESS_ABNORMAL"
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "reject",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "reject",
+        "validation_errors": []
+      }
+    },
+    {
+      "case_id": "F05",
+      "category": "时间更新",
+      "origin_type": "derived_synthetic",
+      "reuse_status": "development_reuse_existing_offline_package",
+      "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\data\\cases.jsonl",
+      "source_case_id": "SC-DER-201B",
+      "company_id": "SYN-DER-201",
+      "as_of_date": "2026-11-03",
+      "visible_input": {
+        "company_id": "SYN-DER-201",
+        "as_of_date": "2026-11-03",
+        "entity": [
+          {
+            "aliases": [],
+            "entity_id": "SYN-DER-201",
+            "identifier_source": "本数据集人工构造的虚构标识",
+            "identifier_type": "synthetic_id",
+            "identifier_value": "SYNTHETIC-DER-201",
+            "identity_note": "改编自某真实上市公司“重大诉讼→和解撤诉”公开披露写法；主体、案号、金额全部虚构。",
+            "legal_name": "津渡农商行（合成）有限公司",
+            "listing_venue": null,
+            "origin_type": "derived_synthetic",
+            "short_name": "津渡农商行（合成）有限公司"
+          }
+        ],
+        "evidence": [
+          {
+            "case_id": "SC-DER-201B",
+            "content": "合成司法来源显示：津渡农商行（合成）有限公司于2026-06-01收到应诉通知书（案号：（2026）津03民初88号），案件已立案受理，尚未开庭审理。",
+            "content_hash": "d4b1fcc41487b98b0e5666ab7ee1f37a50c8a38c0df887edf307b50ebd537fda",
+            "document_date": "2026-06-01",
+            "entity_id": "SYN-DER-201",
+            "event_date": "2026-06-01",
+            "evidence_id": "344a5134-3e41-57a3-b39d-36bb15de7632",
+            "excerpt": "（2026）津03民初88号），案件已立案受理，尚未开庭审理",
+            "fact_key": "（2026）津03民初88号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "open",
+            "observed_at": "2026-06-01",
+            "origin_type": "derived_synthetic",
+            "page_or_section": "虚构文本：合成公告第1段",
+            "polarity": "negative",
+            "risk_type": "judicial",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "judicial"
+          },
+          {
+            "case_id": "SC-DER-201B",
+            "content": "合成司法来源显示：2026-10-28法院作出民事裁定书，准许原告撤回对（2026）津03民初88号案件的起诉。",
+            "content_hash": "6d999c44e8c2d0fc7662115fe9faa6a9bb8f62b80f1d07c8c4005c5510915226",
+            "document_date": "2026-10-28",
+            "entity_id": "SYN-DER-201",
+            "event_date": "2026-10-28",
+            "evidence_id": "0e6186fd-5397-5dbe-a23c-11310cafd2e5",
+            "excerpt": "准许原告撤回对（2026）津03民初88号案件的起诉",
+            "fact_key": "（2026）津03民初88号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "closed",
+            "observed_at": "2026-10-28",
+            "origin_type": "derived_synthetic",
+            "page_or_section": "虚构文本：合成公告第2段",
+            "polarity": "neutral",
+            "risk_type": "judicial",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "judicial"
+          }
+        ],
+        "chunks": [
+          {
+            "case_id": "SC-DER-201B",
+            "chunk_id": "ce4aa7df-6387-5d9e-8107-4ee0e18824b7",
+            "chunk_schema_version": "v1",
+            "content": "合成司法来源显示：津渡农商行（合成）有限公司于2026-06-01收到应诉通知书（案号：（2026）津03民初88号），案件已立案受理，尚未开庭审理。",
+            "content_hash": "d4b1fcc41487b98b0e5666ab7ee1f37a50c8a38c0df887edf307b50ebd537fda",
+            "entity_id": "SYN-DER-201",
+            "evidence_content_hash": "d4b1fcc41487b98b0e5666ab7ee1f37a50c8a38c0df887edf307b50ebd537fda",
+            "evidence_id": "344a5134-3e41-57a3-b39d-36bb15de7632",
+            "fact_key": "（2026）津03民初88号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "open",
+            "observed_at": "2026-06-01",
+            "origin_type": "derived_synthetic",
+            "polarity": "negative",
+            "risk_type": "judicial",
+            "source_type": "judicial"
+          },
+          {
+            "case_id": "SC-DER-201B",
+            "chunk_id": "b60391d9-a664-564b-982c-b8151b9529e2",
+            "chunk_schema_version": "v1",
+            "content": "合成司法来源显示：2026-10-28法院作出民事裁定书，准许原告撤回对（2026）津03民初88号案件的起诉。",
+            "content_hash": "6d999c44e8c2d0fc7662115fe9faa6a9bb8f62b80f1d07c8c4005c5510915226",
+            "entity_id": "SYN-DER-201",
+            "evidence_content_hash": "6d999c44e8c2d0fc7662115fe9faa6a9bb8f62b80f1d07c8c4005c5510915226",
+            "evidence_id": "0e6186fd-5397-5dbe-a23c-11310cafd2e5",
+            "fact_key": "（2026）津03民初88号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "closed",
+            "observed_at": "2026-10-28",
+            "origin_type": "derived_synthetic",
+            "polarity": "neutral",
+            "risk_type": "judicial",
+            "source_type": "judicial"
+          }
+        ],
+        "coverage": [
+          {
+            "as_of_date": "2026-11-03",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-201B",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "1af7ea4d-f629-5cf4-82ee-a8a7ecb8bdf1",
+            "entity_id": "SYN-DER-201",
+            "origin_type": "derived_synthetic",
+            "source_type": "business",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-11-03",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-201B",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "18f1bc1a-e856-521c-be85-9a467045ef87",
+            "entity_id": "SYN-DER-201",
+            "origin_type": "derived_synthetic",
+            "source_type": "judicial",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-11-03",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-201B",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "df35d50c-667c-5e38-9907-7b0e9f90c678",
+            "entity_id": "SYN-DER-201",
+            "origin_type": "derived_synthetic",
+            "source_type": "news",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-11-03",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-201B",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "4bba4e29-dc67-55ae-b2d6-4f5d55afba7a",
+            "entity_id": "SYN-DER-201",
+            "origin_type": "derived_synthetic",
+            "source_type": "intellectual_property",
+            "status": "available"
+          }
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "数据包离线解析标签；未证明生产端到端实现",
+      "expected_route": "accept",
+      "route_layer": "workflow_valid_latest_state_report",
+      "candidate_response_constraint": "仅采用基准日前已披露最新closed状态；旧open声明不得放行",
+      "allowed_statements": [
+        "司法规则不命中；不等于债权风险消失"
+      ],
+      "forbidden_statements": [
+        "引用旧open声称截至基准日仍未结案",
+        "将更正披露日当作实际结案日"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\runs\\per_case.jsonl",
+        "case_id": "SC-DER-201B",
+        "semantic_counterexample_claim_id": null
+      }
+    },
+    {
+      "case_id": "F06",
+      "category": "时间更新",
+      "origin_type": "derived_synthetic",
+      "reuse_status": "development_reuse_existing_offline_package",
+      "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\data\\cases.jsonl",
+      "source_case_id": "SC-DER-203",
+      "company_id": "SYN-DER-203",
+      "as_of_date": "2026-10-29",
+      "visible_input": {
+        "company_id": "SYN-DER-203",
+        "as_of_date": "2026-10-29",
+        "entity": [
+          {
+            "aliases": [],
+            "entity_id": "SYN-DER-203",
+            "identifier_source": "本数据集人工构造的虚构标识",
+            "identifier_type": "synthetic_id",
+            "identifier_value": "SYNTHETIC-DER-203",
+            "identity_note": "改编自某真实上市公司“原披露被更正”写法并移植到司法状态；主体与事实全部虚构。",
+            "legal_name": "启衡消费金融（合成）有限公司",
+            "listing_venue": null,
+            "origin_type": "derived_synthetic",
+            "short_name": "启衡消费金融（合成）有限公司"
+          }
+        ],
+        "evidence": [
+          {
+            "case_id": "SC-DER-203",
+            "content": "合成司法来源显示：（2026）合成民初203号案件状态为未结案。",
+            "content_hash": "7f2e8787c4fd1052640c64584852279e9d23797bcda52b4b6884a0fd47879e8b",
+            "document_date": "2026-05-01",
+            "entity_id": "SYN-DER-203",
+            "event_date": "2026-05-01",
+            "evidence_id": "1e602b23-36ae-55b3-a329-b01e27bd884a",
+            "excerpt": "（2026）合成民初203号案件状态为未结案",
+            "fact_key": "（2026）合成民初203号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "open",
+            "observed_at": "2026-05-01",
+            "origin_type": "derived_synthetic",
+            "page_or_section": "虚构文本：首次公告",
+            "polarity": "negative",
+            "risk_type": "judicial",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "judicial"
+          },
+          {
+            "case_id": "SC-DER-203",
+            "content": "合成更正公告显示：经核实，（2026）合成民初203号案件已于2026-04-20结案，首次公告披露有误，现予更正。",
+            "content_hash": "e3e98f3027ba5b436b5a42612c83165f27bf95b8aaa7aa9890dbf9b3a32105e3",
+            "document_date": "2026-10-29",
+            "entity_id": "SYN-DER-203",
+            "event_date": "2026-10-29",
+            "evidence_id": "04610adc-4663-5c25-ba8b-9870ceaf645d",
+            "excerpt": "（2026）合成民初203号案件已于2026-04-20结案，首次公告披露有误，现予更正",
+            "fact_key": "（2026）合成民初203号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "closed",
+            "observed_at": "2026-10-29",
+            "origin_type": "derived_synthetic",
+            "page_or_section": "虚构文本：更正公告第1段",
+            "polarity": "neutral",
+            "risk_type": "judicial",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "judicial"
+          }
+        ],
+        "chunks": [
+          {
+            "case_id": "SC-DER-203",
+            "chunk_id": "dd9c5a06-2243-51ad-84e4-6993e28a6b1f",
+            "chunk_schema_version": "v1",
+            "content": "合成司法来源显示：（2026）合成民初203号案件状态为未结案。",
+            "content_hash": "7f2e8787c4fd1052640c64584852279e9d23797bcda52b4b6884a0fd47879e8b",
+            "entity_id": "SYN-DER-203",
+            "evidence_content_hash": "7f2e8787c4fd1052640c64584852279e9d23797bcda52b4b6884a0fd47879e8b",
+            "evidence_id": "1e602b23-36ae-55b3-a329-b01e27bd884a",
+            "fact_key": "（2026）合成民初203号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "open",
+            "observed_at": "2026-05-01",
+            "origin_type": "derived_synthetic",
+            "polarity": "negative",
+            "risk_type": "judicial",
+            "source_type": "judicial"
+          },
+          {
+            "case_id": "SC-DER-203",
+            "chunk_id": "d6476f69-ec0a-5121-9900-37b89d6dbc91",
+            "chunk_schema_version": "v1",
+            "content": "合成更正公告显示：经核实，（2026）合成民初203号案件已于2026-04-20结案，首次公告披露有误，现予更正。",
+            "content_hash": "e3e98f3027ba5b436b5a42612c83165f27bf95b8aaa7aa9890dbf9b3a32105e3",
+            "entity_id": "SYN-DER-203",
+            "evidence_content_hash": "e3e98f3027ba5b436b5a42612c83165f27bf95b8aaa7aa9890dbf9b3a32105e3",
+            "evidence_id": "04610adc-4663-5c25-ba8b-9870ceaf645d",
+            "fact_key": "（2026）合成民初203号",
+            "fact_type": "judicial_case_status",
+            "fact_value": "closed",
+            "observed_at": "2026-10-29",
+            "origin_type": "derived_synthetic",
+            "polarity": "neutral",
+            "risk_type": "judicial",
+            "source_type": "judicial"
+          }
+        ],
+        "coverage": [
+          {
+            "as_of_date": "2026-10-29",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-203",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "402bea97-a0db-586f-9ab7-3f55281f267a",
+            "entity_id": "SYN-DER-203",
+            "origin_type": "derived_synthetic",
+            "source_type": "business",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-10-29",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-203",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "9c552715-0dbe-51b8-8eed-566d3a8eca2c",
+            "entity_id": "SYN-DER-203",
+            "origin_type": "derived_synthetic",
+            "source_type": "judicial",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-10-29",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-203",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "28e03ab2-b42c-5013-9043-61b40c517b06",
+            "entity_id": "SYN-DER-203",
+            "origin_type": "derived_synthetic",
+            "source_type": "news",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-10-29",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-DER-203",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "ca0633b0-f620-5670-8fdf-a85709adafe8",
+            "entity_id": "SYN-DER-203",
+            "origin_type": "derived_synthetic",
+            "source_type": "intellectual_property",
+            "status": "available"
+          }
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "数据包离线解析标签；未证明生产端到端实现",
+      "expected_route": "accept",
+      "route_layer": "workflow_valid_latest_state_report",
+      "candidate_response_constraint": "仅采用基准日前已披露最新closed状态；旧open声明不得放行",
+      "allowed_statements": [
+        "司法规则不命中；不等于债权风险消失"
+      ],
+      "forbidden_statements": [
+        "引用旧open声称截至基准日仍未结案",
+        "将更正披露日当作实际结案日"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\runs\\per_case.jsonl",
+        "case_id": "SC-DER-203",
+        "semantic_counterexample_claim_id": "CL-SC-DER-203-1"
+      }
+    },
+    {
+      "case_id": "F07",
+      "category": "跨源冲突",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-source_conflict-01",
+      "company_id": "6a6a396c-1647-513b-80e0-120d72683cad",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "6a6a396c-1647-513b-80e0-120d72683cad",
+        "chunks": [
+          {
+            "company_id": "6a6a396c-1647-513b-80e0-120d72683cad",
+            "source_type": "judicial",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号",
+            "fact_value": "open",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业sou-1有限公司：（2026）验证民初8301号，截至2026-11-01未结案。",
+            "evidence_id": "5e59b1a1-5500-5137-ac5b-e299481b65ea",
+            "chunk_id": "729989a6-13d7-5767-92b3-31dec7c54723",
+            "content_hash": "928a487db6f6051fd7c53d84872bc29a2e2de1ffeea214e9d6d9d6b36577ddbb",
+            "evidence_content_hash": "928a487db6f6051fd7c53d84872bc29a2e2de1ffeea214e9d6d9d6b36577ddbb"
+          },
+          {
+            "company_id": "6a6a396c-1647-513b-80e0-120d72683cad",
+            "source_type": "business",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号",
+            "fact_value": "closed",
+            "polarity": "positive",
+            "content": "【合成冲突资料】验证合成企业sou-1有限公司：同一（2026）验证民初8301号，同一观察日2026-11-01，已结案。",
+            "evidence_id": "221c6b57-65e4-5944-be6e-3a82540bdb55",
+            "chunk_id": "8ea5ffab-abbd-5e8d-b9d3-6733d4c3868b",
+            "content_hash": "5a048ba4addcc80b3423986661bf2269afff13578882f97bc6f06ec9bace5011",
+            "evidence_content_hash": "5a048ba4addcc80b3423986661bf2269afff13578882f97bc6f06ec9bace5011"
+          }
+        ],
+        "allowed_claim_codes": [
+          "JUDICIAL_OPEN_CASE"
+        ]
+      },
+      "expected_rules": [
+        "JUDICIAL_OPEN_CASE_V1"
+      ],
+      "expected_rule_score": 35,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "manual_review",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "reject",
+        "validation_errors": [
+          "support_error"
+        ]
+      }
+    },
+    {
+      "case_id": "F08",
+      "category": "跨源冲突",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_selected_after_historical_results",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl",
+      "source_case_id": "validation-source_conflict-02",
+      "company_id": "6c27e7e3-d867-56cd-8535-e888c62367fa",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原ChallengeCase未含调查基准日，不倒填为历史运行参数",
+      "visible_input": {
+        "company_id": "6c27e7e3-d867-56cd-8535-e888c62367fa",
+        "chunks": [
+          {
+            "company_id": "6c27e7e3-d867-56cd-8535-e888c62367fa",
+            "source_type": "business",
+            "risk_type": "business",
+            "observed_at": "2026-11-01",
+            "fact_type": "business_abnormal_status",
+            "fact_key": "验证经营记录B-72",
+            "fact_value": "active",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业sou-2有限公司：验证经营记录B-72，截至2026-11-01仍在经营异常名录。",
+            "evidence_id": "fee84215-46dd-5122-846d-9e4ab147b50f",
+            "chunk_id": "4d325c76-e0cb-53b0-b4bd-80863d99d1e3",
+            "content_hash": "7a9c599586e9b28bfb2233c7e53407ce4aaf6aae72a093b3a47f0fee07a5ad92",
+            "evidence_content_hash": "7a9c599586e9b28bfb2233c7e53407ce4aaf6aae72a093b3a47f0fee07a5ad92"
+          },
+          {
+            "company_id": "6c27e7e3-d867-56cd-8535-e888c62367fa",
+            "source_type": "news",
+            "risk_type": "business",
+            "observed_at": "2026-11-01",
+            "fact_type": "business_abnormal_status",
+            "fact_key": "验证经营记录B-72",
+            "fact_value": "resolved",
+            "polarity": "positive",
+            "content": "【合成冲突资料】验证合成企业sou-2有限公司：同一验证经营记录B-72，同一观察日2026-11-01，已移出异常名录。",
+            "evidence_id": "7180a7e0-539e-56bf-8ff3-42d4a3a2b13f",
+            "chunk_id": "5eab73bc-bfce-5e0a-932c-324afeb884c4",
+            "content_hash": "c9232d4a158b82380d01f3bc736ef48ef2ec07f15a345015a3b08023c6ed76b6",
+            "evidence_content_hash": "c9232d4a158b82380d01f3bc736ef48ef2ec07f15a345015a3b08023c6ed76b6"
+          }
+        ],
+        "allowed_claim_codes": [
+          "BUSINESS_ABNORMAL"
+        ]
+      },
+      "expected_rules": [
+        "BUSINESS_ABNORMAL_V1"
+      ],
+      "expected_rule_score": 25,
+      "rule_expectation_scope": "展示设计标签；挑战运行未执行规则引擎，未测规则一致性",
+      "expected_route": "manual_review",
+      "route_layer": "challenge_findings",
+      "allowed_statements": [
+        "仅声明本企业可见结构化事实；遇冲突保留双方并复核"
+      ],
+      "forbidden_statements": [
+        "贷款批准/额度/违约概率",
+        "把其他企业事实归给目标企业",
+        "将未核实自然语言扩展当确定事实"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "run": "docs/evaluation/upgrade-2026-11-08/independent-final-live",
+        "actual_route": "manual_review",
+        "validation_errors": []
+      }
+    },
+    {
+      "case_id": "F09",
+      "category": "来源缺失",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_existing_offline_package",
+      "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\data\\cases.jsonl",
+      "source_case_id": "SC-unavailable-source",
+      "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+      "as_of_date": "2026-09-11",
+      "visible_input": {
+        "company_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+        "as_of_date": "2026-09-11",
+        "entity": [
+          {
+            "aliases": [],
+            "entity_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+            "identifier_source": "tracerisk.synthetic.generate_catalog() + 金融机构主题重命名",
+            "identifier_type": "synthetic_credit_code",
+            "identifier_value": "SYNTHETIC-COMPANY-007",
+            "identity_note": "仓库既有合成场景改写为虚构金融机构名称；无真实对应主体，事实结构、日期、期望值与仓库冻结目录一致。",
+            "legal_name": "海晟农商行（合成）有限公司",
+            "listing_venue": null,
+            "origin_type": "synthetic",
+            "short_name": "海晟农商行（合成）有限公司"
+          }
+        ],
+        "evidence": [],
+        "chunks": [],
+        "coverage": [
+          {
+            "as_of_date": "2026-09-11",
+            "basis": "仓库合成目录显式覆盖状态",
+            "case_id": "SC-unavailable-source",
+            "checked_at": "2026-09-11T00:00:00+00:00",
+            "coverage_id": "d0191bb3-3c0e-51fa-9b6e-f16770406344",
+            "entity_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+            "origin_type": "synthetic",
+            "source_type": "business",
+            "status": "unavailable"
+          },
+          {
+            "as_of_date": "2026-09-11",
+            "basis": "仓库合成目录显式覆盖状态",
+            "case_id": "SC-unavailable-source",
+            "checked_at": "2026-09-11T00:00:00+00:00",
+            "coverage_id": "f5fdb86a-3fb1-5c4a-9f97-54b833358076",
+            "entity_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+            "origin_type": "synthetic",
+            "source_type": "judicial",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-09-11",
+            "basis": "仓库合成目录显式覆盖状态",
+            "case_id": "SC-unavailable-source",
+            "checked_at": "2026-09-11T00:00:00+00:00",
+            "coverage_id": "2c437172-4366-5f5a-8408-1e6f6ea8d305",
+            "entity_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+            "origin_type": "synthetic",
+            "source_type": "news",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-09-11",
+            "basis": "仓库合成目录显式覆盖状态",
+            "case_id": "SC-unavailable-source",
+            "checked_at": "2026-09-11T00:00:00+00:00",
+            "coverage_id": "6f346bb6-c0df-59d4-9a52-b32e83df1fcb",
+            "entity_id": "03569db8-3cea-5c34-8dd7-51e95fa355ff",
+            "origin_type": "synthetic",
+            "source_type": "intellectual_property",
+            "status": "stale"
+          }
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "数据包离线解析标签；未证明生产端到端实现",
+      "expected_route": "manual_review",
+      "route_layer": "workflow_coverage",
+      "allowed_statements": [
+        "本次证据不足，需补充来源或人工复核"
+      ],
+      "forbidden_statements": [
+        "零分等于安全",
+        "空发现等于没有风险"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\runs\\per_case.jsonl",
+        "case_id": "SC-unavailable-source"
+      }
+    },
+    {
+      "case_id": "F10",
+      "category": "来源缺失",
+      "origin_type": "synthetic",
+      "reuse_status": "development_reuse_existing_offline_package",
+      "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\data\\cases.jsonl",
+      "source_case_id": "SC-SUP-102",
+      "company_id": "SYN-SUP-102",
+      "as_of_date": "2026-10-01",
+      "visible_input": {
+        "company_id": "SYN-SUP-102",
+        "as_of_date": "2026-10-01",
+        "entity": [
+          {
+            "aliases": [],
+            "entity_id": "SYN-SUP-102",
+            "identifier_source": "本数据集人工构造的虚构标识",
+            "identifier_type": "synthetic_id",
+            "identifier_value": "SYNTHETIC-SUP-102",
+            "identity_note": "用于新闻超出365天窗口且来源过期的案例。",
+            "legal_name": "恒沙保险（合成）有限公司",
+            "listing_venue": null,
+            "origin_type": "synthetic",
+            "short_name": "恒沙保险（合成）有限公司"
+          }
+        ],
+        "evidence": [
+          {
+            "case_id": "SC-SUP-102",
+            "content": "合成新闻来源A：2025-03-01报道恒沙保险（合成）有限公司遭客户集中投诉。",
+            "content_hash": "c8a9fef0b559f4afdc97b286229be08423707d9b609464afb84656ad1e90b0ab",
+            "document_date": "2025-03-01",
+            "entity_id": "SYN-SUP-102",
+            "event_date": "2025-03-01",
+            "evidence_id": "9b49e642-f0f5-5e1c-916e-a746a61319a6",
+            "excerpt": "2025-03-01报道恒沙保险（合成）有限公司遭客户集中投诉",
+            "fact_key": "STORY-SUP-102-A",
+            "fact_type": "negative_news_story",
+            "fact_value": "negative",
+            "observed_at": "2025-03-01",
+            "origin_type": "synthetic",
+            "page_or_section": "虚构文本：合成新闻A第1段",
+            "polarity": "negative",
+            "risk_type": "news",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "news"
+          },
+          {
+            "case_id": "SC-SUP-102",
+            "content": "合成新闻来源B：2025-04-01报道恒沙保险（合成）有限公司延迟交付。",
+            "content_hash": "26f41736733fd904df7177411156bb729063775f07d5d398f6f58f990c3e63cf",
+            "document_date": "2025-04-01",
+            "entity_id": "SYN-SUP-102",
+            "event_date": "2025-04-01",
+            "evidence_id": "b9513408-9f67-550a-b65e-6dcf5cffcdcd",
+            "excerpt": "2025-04-01报道恒沙保险（合成）有限公司延迟交付",
+            "fact_key": "STORY-SUP-102-B",
+            "fact_type": "negative_news_story",
+            "fact_value": "negative",
+            "observed_at": "2025-04-01",
+            "origin_type": "synthetic",
+            "page_or_section": "虚构文本：合成新闻B第1段",
+            "polarity": "negative",
+            "risk_type": "news",
+            "source_id": "AUTHORED-SYNTHETIC",
+            "source_type": "news"
+          }
+        ],
+        "chunks": [
+          {
+            "case_id": "SC-SUP-102",
+            "chunk_id": "08ea4679-2bdb-5568-8cf0-ffef9b65c426",
+            "chunk_schema_version": "v1",
+            "content": "合成新闻来源A：2025-03-01报道恒沙保险（合成）有限公司遭客户集中投诉。",
+            "content_hash": "c8a9fef0b559f4afdc97b286229be08423707d9b609464afb84656ad1e90b0ab",
+            "entity_id": "SYN-SUP-102",
+            "evidence_content_hash": "c8a9fef0b559f4afdc97b286229be08423707d9b609464afb84656ad1e90b0ab",
+            "evidence_id": "9b49e642-f0f5-5e1c-916e-a746a61319a6",
+            "fact_key": "STORY-SUP-102-A",
+            "fact_type": "negative_news_story",
+            "fact_value": "negative",
+            "observed_at": "2025-03-01",
+            "origin_type": "synthetic",
+            "polarity": "negative",
+            "risk_type": "news",
+            "source_type": "news"
+          },
+          {
+            "case_id": "SC-SUP-102",
+            "chunk_id": "b8d98237-445c-556a-80f2-b49e49930d88",
+            "chunk_schema_version": "v1",
+            "content": "合成新闻来源B：2025-04-01报道恒沙保险（合成）有限公司延迟交付。",
+            "content_hash": "26f41736733fd904df7177411156bb729063775f07d5d398f6f58f990c3e63cf",
+            "entity_id": "SYN-SUP-102",
+            "evidence_content_hash": "26f41736733fd904df7177411156bb729063775f07d5d398f6f58f990c3e63cf",
+            "evidence_id": "b9513408-9f67-550a-b65e-6dcf5cffcdcd",
+            "fact_key": "STORY-SUP-102-B",
+            "fact_type": "negative_news_story",
+            "fact_value": "negative",
+            "observed_at": "2025-04-01",
+            "origin_type": "synthetic",
+            "polarity": "negative",
+            "risk_type": "news",
+            "source_type": "news"
+          }
+        ],
+        "coverage": [
+          {
+            "as_of_date": "2026-10-01",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-SUP-102",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "212b769e-a87e-594a-a0a7-4552b4a197f2",
+            "entity_id": "SYN-SUP-102",
+            "origin_type": "synthetic",
+            "source_type": "business",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-10-01",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-SUP-102",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "f840db15-06ec-595b-b66e-8d1a53e8cdff",
+            "entity_id": "SYN-SUP-102",
+            "origin_type": "synthetic",
+            "source_type": "judicial",
+            "status": "available"
+          },
+          {
+            "as_of_date": "2026-10-01",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-SUP-102",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "e4dcf042-8126-5f3c-8dae-9401740f76b6",
+            "entity_id": "SYN-SUP-102",
+            "origin_type": "synthetic",
+            "source_type": "news",
+            "status": "stale"
+          },
+          {
+            "as_of_date": "2026-10-01",
+            "basis": "虚构案例的显式覆盖状态标注。",
+            "case_id": "SC-SUP-102",
+            "checked_at": "2026-11-08T00:00:00+08:00",
+            "coverage_id": "15500d45-daf9-5018-8ddf-62acfe9eb9ab",
+            "entity_id": "SYN-SUP-102",
+            "origin_type": "synthetic",
+            "source_type": "intellectual_property",
+            "status": "available"
+          }
+        ]
+      },
+      "expected_rules": [],
+      "expected_rule_score": 0,
+      "rule_expectation_scope": "数据包离线解析标签；未证明生产端到端实现",
+      "expected_route": "manual_review",
+      "route_layer": "workflow_coverage",
+      "allowed_statements": [
+        "本次证据不足，需补充来源或人工复核"
+      ],
+      "forbidden_statements": [
+        "零分等于安全",
+        "空发现等于没有风险"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": {
+        "source": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求\\runs\\per_case.jsonl",
+        "case_id": "SC-SUP-102"
+      }
+    },
+    {
+      "case_id": "F11",
+      "category": "错误引用",
+      "origin_type": "synthetic_adaptation",
+      "reuse_status": "development_adaptation_of_inspected_response",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/cases.jsonl",
+      "source_case_id": "validation-explicit_evidence-01",
+      "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原挑战无调查基准日字段",
+      "visible_input": {
+        "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+        "chunks": [
+          {
+            "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+            "source_type": "judicial",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号",
+            "fact_value": "open",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业exp-1有限公司：（2026）验证民初8301号，截至2026-11-01未结案。",
+            "evidence_id": "ad5f450a-7e36-5407-9f38-39f68ad0d20a",
+            "chunk_id": "a8d29019-d3e2-5f2d-86c1-aa16b0165796",
+            "content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c",
+            "evidence_content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c"
+          }
+        ],
+        "allowed_claim_codes": [
+          "JUDICIAL_OPEN_CASE"
+        ]
+      },
+      "candidate_response": {
+        "findings": [
+          {
+            "finding_key": "judicial_open_case:（2026）验证民初8301号",
+            "risk_type": "judicial",
+            "claim_code": "JUDICIAL_OPEN_CASE",
+            "title": "未结诉讼案件：（2026）验证民初8301号",
+            "summary": "截至2026-11-01，验证合成企业exp-1有限公司涉及的（2026）验证民初8301号案件仍未结案。",
+            "reasoning": "证据显示该案件状态为“open”（未结案），且观察日期为2026-11-01，表明存在尚未了结的司法程序。",
+            "evidence_citations": [
+              {
+                "evidence_id": "ad5f450a-7e36-5407-9f38-39f68ad0d20a",
+                "chunk_id": "a8d29019-d3e2-5f2d-86c1-aa16b0165796",
+                "content_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+                "quoted_excerpt": "（2026）验证民初8301号，截至2026-11-01未结案。"
+              }
+            ],
+            "evidence_sufficiency": "sufficient",
+            "confidence_level": "high",
+            "review_recommended": false
+          }
+        ]
+      },
+      "mutation": "content_hash",
+      "expected_rules": [
+        "JUDICIAL_OPEN_CASE_V1"
+      ],
+      "expected_rule_score": 35,
+      "rule_expectation_scope": "展示设计标签；未运行规则引擎",
+      "expected_route": "reject",
+      "route_layer": "citation_validation",
+      "allowed_statements": [
+        "引用版本或摘录不符，拒绝该输出"
+      ],
+      "forbidden_statements": [
+        "引用失败仍输出报告",
+        "为了复核召回绕过硬校验"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": null
+    },
+    {
+      "case_id": "F12",
+      "category": "错误引用",
+      "origin_type": "synthetic_adaptation",
+      "reuse_status": "development_adaptation_of_inspected_response",
+      "source": "docs/evaluation/upgrade-2026-11-08/independent-final-live/cases.jsonl",
+      "source_case_id": "validation-explicit_evidence-01",
+      "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+      "as_of_date": "2026-11-01",
+      "date_basis": "展示标签约定；原挑战无调查基准日字段",
+      "visible_input": {
+        "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+        "chunks": [
+          {
+            "company_id": "590d5eee-4e8b-5b03-99d0-e9724ef50fa0",
+            "source_type": "judicial",
+            "risk_type": "judicial",
+            "observed_at": "2026-11-01",
+            "fact_type": "judicial_case_status",
+            "fact_key": "（2026）验证民初8301号",
+            "fact_value": "open",
+            "polarity": "negative",
+            "content": "【合成验证资料】验证合成企业exp-1有限公司：（2026）验证民初8301号，截至2026-11-01未结案。",
+            "evidence_id": "ad5f450a-7e36-5407-9f38-39f68ad0d20a",
+            "chunk_id": "a8d29019-d3e2-5f2d-86c1-aa16b0165796",
+            "content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c",
+            "evidence_content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c"
+          }
+        ],
+        "allowed_claim_codes": [
+          "JUDICIAL_OPEN_CASE"
+        ]
+      },
+      "candidate_response": {
+        "findings": [
+          {
+            "finding_key": "judicial_open_case:（2026）验证民初8301号",
+            "risk_type": "judicial",
+            "claim_code": "JUDICIAL_OPEN_CASE",
+            "title": "未结诉讼案件：（2026）验证民初8301号",
+            "summary": "截至2026-11-01，验证合成企业exp-1有限公司涉及的（2026）验证民初8301号案件仍未结案。",
+            "reasoning": "证据显示该案件状态为“open”（未结案），且观察日期为2026-11-01，表明存在尚未了结的司法程序。",
+            "evidence_citations": [
+              {
+                "evidence_id": "ad5f450a-7e36-5407-9f38-39f68ad0d20a",
+                "chunk_id": "a8d29019-d3e2-5f2d-86c1-aa16b0165796",
+                "content_hash": "4779f1fd875a27c9b1e4868c76afc54366fc32d010133fde912d06bf86a6675c",
+                "quoted_excerpt": "输入中不存在的摘录_冻结错误引用反例"
+              }
+            ],
+            "evidence_sufficiency": "sufficient",
+            "confidence_level": "high",
+            "review_recommended": false
+          }
+        ]
+      },
+      "mutation": "quoted_excerpt",
+      "expected_rules": [
+        "JUDICIAL_OPEN_CASE_V1"
+      ],
+      "expected_rule_score": 35,
+      "rule_expectation_scope": "展示设计标签；未运行规则引擎",
+      "expected_route": "reject",
+      "route_layer": "citation_validation",
+      "allowed_statements": [
+        "引用版本或摘录不符，拒绝该输出"
+      ],
+      "forbidden_statements": [
+        "引用失败仍输出报告",
+        "为了复核召回绕过硬校验"
+      ],
+      "new_matrix_execution_status": "not_run",
+      "actual_route": null,
+      "historical_reference": null
+    }
+  ],
+  "model_input_policy": "仅visible_input事实/覆盖及必要声明目录可交给模型；expected_*、允许/禁止声明、historical_reference、路由标签、来源案例映射不进入模型上下文。candidate_response仅作为离线校验输入。"
+}

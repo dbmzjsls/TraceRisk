@@ -1,0 +1,204 @@
+{
+  "audit_date": "2026-11-08",
+  "method": "读取历史逐例记录并复算；以当前IO-free validate_response重校验相同最终响应；未网络请求、未数据库修改",
+  "new_model_calls": 0,
+  "database_writes": 0,
+  "source_hashes": {
+    "docs/evaluation/model-challenge/improved/cases.jsonl": "f3496fe26fb259c1c76c38b62281c31bd69a03565c45e409fc8701babc93ab5b",
+    "docs/evaluation/model-challenge/improved/dataset.jsonl": "53dbf7a5f97eadd65b4acdba94a93d667114f612c8463a08a4559972d76c9d85",
+    "docs/evaluation/model-challenge/improved/manifest.json": "e777431af167176fd494343f1b8414b3619a05e87704af830d4a0f92dc3accea",
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/cases.jsonl": "d48c7b9d64f0713389cec6ffe90cb87bb47c2d9c348e56d38ffc74a057d249dc",
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl": "7002dfc8ee02977bd91cb495108cb841b18b74502ab306cef18e61bdb6f8038c",
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/attempts.jsonl": "9fa4cf1fb42cbf561c17042cb60d6b60639a14b9b8f05bfbc1ea679ff2458963",
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/manifest.json": "ddd7c768b93567c9d2f374c6a96cf4a5dc617ae5f4b10c0505e54d4d9058e5b5",
+    "docs/evaluation/upgrade-2026-11-08/replay-final/replay.json": "4a862fc4b7fefa61377832390f7bf0f4def7282d8055b976a46d03f9e64c3673",
+    "apps/api/src/tracerisk/challenge_eval/validation.py": "94150add5f1c0aff442d98f77d851296e8aa6f53cc4ce44925519733b498a835",
+    "apps/api/src/tracerisk/ai/validation.py": "c9c8fdd06def7ceb3d560786788a9962de340a8b9f45dc4067cada0edb600e40",
+    "apps/api/src/tracerisk/ai/claims.py": "e6d2d7005be8fb6a19f38adf5c2d48cfb32a2f8b89e628c98c603d26d0dd01ab",
+    "apps/api/src/tracerisk/workflows/routing.py": "26835bf76c51a91306e9af2ee42a5d48955fad73f0ead0eec9bac296186caaa3",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/cases.jsonl": "ded8785ad91a462e4761558e234083c55b0c17b78a6d51c06d35c2dc502a717d",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/entities.jsonl": "09924420b6779fd2f1232d6a478601e5a7f543183228c4159104491205214aab",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/evidence.jsonl": "2cec999e7632a5910152eb79c3dd5edbfcbc67bab281806b860a5d3878ee5714",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/chunks.jsonl": "dc4c4ba208114091f908e8aaf58a29f73ffaf5ea363ef84f2f66fc9832de5505",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/coverage.jsonl": "8824ebf76818cd87092c07a847968f69bf07f401ae905c5dbb0643129f5ee410",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/data/claims.jsonl": "7d77a154acdd3b877912f747fbb9549d56949b17ae811f8d4c23f52e2afd383a",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/runs/per_claim.jsonl": "0a1faa7dc8b5c11f7cd51669e93e04910edc3645a699c7ee1226884da36c8f18",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/runs/per_case.jsonl": "27ba43ccda43317074f96dc67e7eaf6f935276b2cf3f87edeb8dcc39f95cde41",
+    "C:/Users/jsls/Desktop/作业/人工智能应用创新大赛/TraceRisk_金融机构数据包_含预处理及对接要求/runs/results.md": "47e282bc937e68c98bd1fe52cc21a2ce9042f09d7951fc1c3060244fcaa8c1a6",
+    "datasets/evaluation/model_challenge_cases.jsonl": "0fce7f2cf949bf45d2d19073ae65ee6e8523019f893addf924976ee546ad384e"
+  },
+  "historical40": {
+    "count": 40,
+    "before": {
+      "missed_review": 9,
+      "required_review_routed": 1,
+      "unnecessary_review": 0
+    },
+    "after": {
+      "missed_review": 1,
+      "required_review_routed": 9,
+      "unnecessary_review": 15
+    },
+    "recorded_raw_response_input_sha256": "f3496fe26fb259c1c76c38b62281c31bd69a03565c45e409fc8701babc93ab5b",
+    "raw_response_input_hash_matches": true,
+    "replay_loader_dataset_sha256": "53dbf7a5f97eadd65b4acdba94a93d667114f612c8463a08a4559972d76c9d85",
+    "manifest_dataset_hash": "0fce7f2cf949bf45d2d19073ae65ee6e8523019f893addf924976ee546ad384e",
+    "dataset_hash_note": "快照为CRLF，原始数据集为LF；load_cases按原始字节计算哈希，不做规范化。当前快照原始哈希53db…与manifest的0fce…不同；仅换行归一后完全相同，逐行JSON对象也相同。",
+    "prompt_hash": "4f597de0c09c3a8dd9565eb8974c982afb71371e4f1822627ca8b23e7d360417",
+    "lf_normalized_dataset_sha256": "0fce7f2cf949bf45d2d19073ae65ee6e8523019f893addf924976ee546ad384e",
+    "newline_only_difference_from_original_dataset": true,
+    "before_required_review_reject_reasons": {
+      "empty_final_findings": 8,
+      "support_error_final": 1,
+      "accept": 0,
+      "note": "conflict-010汇总validation_errors含历史support_error，但最终为空发现；不得把历次错误总表当最终失败类型"
+    },
+    "after_required_review_reject_reasons": {
+      "support_error_final": 1,
+      "accept": 0
+    }
+  },
+  "challenge20": {
+    "count": 20,
+    "http_attempts": 23,
+    "structure_pass_final": 20,
+    "structure_and_citation_boundary_pass_final": 20,
+    "required_review_routed": 2,
+    "required_review_hard_reject": 3,
+    "extra_review": 5,
+    "support_failures": [
+      {
+        "case_id": "validation-source_conflict-01",
+        "errors": [
+          "support_error"
+        ]
+      },
+      {
+        "case_id": "validation-source_conflict-04",
+        "errors": [
+          "support_error"
+        ]
+      },
+      {
+        "case_id": "validation-source_conflict-05",
+        "errors": [
+          "support_error"
+        ]
+      }
+    ],
+    "prompt_hash": "e835074fd85ece370f12c78a973d478c26b62aea90abca1bed0a87d800f00453",
+    "manifest_dataset_hash": "7002dfc8ee02977bd91cb495108cb841b18b74502ab306cef18e61bdb6f8038c",
+    "empty_findings_count": 12,
+    "boundary_note": "结构和引用空集通过不证明发现完整性或语义正确"
+  },
+  "confusion_matrices": {
+    "historical40_before": {
+      "accept": {
+        "accept": 15,
+        "manual_review": 0,
+        "reject": 0
+      },
+      "manual_review": {
+        "accept": 0,
+        "manual_review": 1,
+        "reject": 9
+      },
+      "reject": {
+        "accept": 0,
+        "manual_review": 0,
+        "reject": 15
+      }
+    },
+    "historical40_after_same_response": {
+      "accept": {
+        "accept": 0,
+        "manual_review": 15,
+        "reject": 0
+      },
+      "manual_review": {
+        "accept": 0,
+        "manual_review": 9,
+        "reject": 1
+      },
+      "reject": {
+        "accept": 0,
+        "manual_review": 0,
+        "reject": 15
+      }
+    },
+    "challenge20_final": {
+      "accept": {
+        "accept": 0,
+        "manual_review": 5,
+        "reject": 0
+      },
+      "manual_review": {
+        "accept": 0,
+        "manual_review": 2,
+        "reject": 3
+      },
+      "reject": {
+        "accept": 0,
+        "manual_review": 0,
+        "reject": 10
+      }
+    }
+  },
+  "current_io_free_revalidation": {
+    "count": 60,
+    "route_discrepancies": [],
+    "scope": "当前校验器与历史路由一致；不是新模型输出质量测量"
+  },
+  "frozen12": {
+    "case_count": 12,
+    "category_counts": {
+      "明确事实": 2,
+      "跨企业干扰": 2,
+      "时间更新": 2,
+      "跨源冲突": 2,
+      "来源缺失": 2,
+      "错误引用": 2
+    },
+    "expected_route_counts": {
+      "accept": 4,
+      "reject": 4,
+      "manual_review": 4
+    },
+    "actual_route_count": 0,
+    "sha256": "53f4960906cb10ac2a30a15dcdfb6a430cde430c0f50e86dd605a0a7c623fda2",
+    "label_status": "single_author_no_second_review",
+    "execution_status": "not_run",
+    "scope": "展示开发集，不是独立盲测集；混合层次不计算总准确率"
+  },
+  "counterexample": {
+    "accepted_as_supported": true,
+    "applicable": true,
+    "case_id": "SC-DER-203",
+    "claim_id": "CL-SC-DER-203-1",
+    "conformant": true,
+    "detail": "canonical_fact_match",
+    "expected_support": "supported",
+    "origin_type": "derived_synthetic",
+    "outcome": "supported_canonical",
+    "semantic_truth": "incorrect_claim"
+  },
+  "validation_assertions": {
+    "40_cases": true,
+    "20_cases": true,
+    "112_csv_rows": true,
+    "12_categories_two_each": true,
+    "source_response_hash_matches": true,
+    "frozen_actuals_all_null": true,
+    "visible_input_contains_no_expected_or_gold_fields": true,
+    "all_recorded_source_hashes_match": true,
+    "all_output_hashes_match": true,
+    "markdown_local_links_exist": true,
+    "frozen_routes_blank_in_csv": true
+  },
+  "output_hashes": {
+    "docs/competition/frozen-cases.json": "53f4960906cb10ac2a30a15dcdfb6a430cde430c0f50e86dd605a0a7c623fda2",
+    "docs/competition/tables/evaluation-matrix.csv": "d63961afb7c60397b1b8bc43bdc500011c4dc1ce29ae0d0721619dcc25906b89",
+    "docs/competition/tables/case-results.csv": "12fcc290d54d64d10fa7f3fbeb095dfe1883ba9616b41fca05fad314c5b45255",
+    "docs/competition/analysis-argument.md": "8a147782bc207b723a29a3089bb5206c136bc824112b2f1d110009bd8520a26c"
+  }
+}

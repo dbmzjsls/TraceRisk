@@ -1,0 +1,285 @@
+{
+  "answer_id": "ec3872ca-1e2c-458b-ad8e-f7dfea03e5d5",
+  "investigation_id": "7e713513-8e66-401b-809e-83db2313c826",
+  "run_id": "6a7858b4-d2ac-4e12-8f7d-494a346ffe6c",
+  "report_id": null,
+  "question": "请对远景精工（合成）有限公司开展截至2026年9月11日的授信前调查，汇总经营、司法、舆情和知识产权方面的规则命中、对应证据及需要人工核实的事项。",
+  "context_sha256": "cc8c135714e7feaa640a501522fe84118b5d31428ac71e07bcbb0695655acc9a",
+  "question_sha256": "2f878a07a17a31602bf0af29e2054afa58d17dc85f4d8186e36e0d52ee879d46",
+  "answered_at": "2026-11-09T14:20:41.995631Z",
+  "status": "answer",
+  "reason_code": "none",
+  "sections": [
+    {
+      "kind": "overview",
+      "title": "调查概览",
+      "lines": [
+        "远景精工（合成）有限公司，基准日2026-09-11。",
+        "规则合计95分。待人工复核的调查结果。",
+        "复核触发原因为规则分达到高风险阈值（60分）、模型发现的证据不足、模型或支持性校验建议复核、自然语言扩展尚无法确认支持程度。"
+      ],
+      "citation_chunk_ids": [],
+      "findings": []
+    },
+    {
+      "kind": "rules",
+      "title": "规则命中",
+      "lines": [
+        "工商规则（基准日仍有效的经营异常）命中，计25分。",
+        "知识产权规则（核心专利失效或存在权属争议）命中，计15分。",
+        "司法规则（基准日存在未结案件）命中，计35分。",
+        "舆情规则（基准日前含当日365天内至少两条独立负面报道）命中，计20分。"
+      ],
+      "citation_chunk_ids": [
+        "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+        "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+        "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e"
+      ],
+      "findings": []
+    },
+    {
+      "kind": "findings",
+      "title": "调查发现",
+      "lines": [
+        "经营异常状态有效（待复核AI发现，支持程度待确认）。证据显示，公司经营异常在基准日仍有效。",
+        "司法案件未结案（待复核AI发现，支持程度待确认）。证据显示，司法案件在基准日仍未结案。",
+        "核心专利无效（待复核AI发现，支持程度待确认）。证据显示，核心专利状态为无效。",
+        "负面新闻故事一（待复核AI发现，支持程度待确认）。证据显示，存在独立负面新闻故事一。",
+        "负面新闻故事二（待复核AI发现，支持程度待确认）。证据显示，存在独立负面新闻故事二。"
+      ],
+      "citation_chunk_ids": [
+        "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+        "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+        "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e"
+      ],
+      "findings": [
+        {
+          "id": "8b75ff6f-2950-4305-a7c3-b85721c39443",
+          "source": "pending_ai",
+          "version": 1,
+          "risk_type": "business",
+          "title": "经营异常状态有效",
+          "summary": "证据显示，公司经营异常在基准日仍有效。",
+          "support_status": "indeterminate",
+          "support_reason": "unverified_free_text_extension",
+          "citation_chunk_ids": [
+            "877a55c8-6b3a-564c-b7d7-2441cbb907ac"
+          ]
+        },
+        {
+          "id": "3e0bc48c-7ff7-4976-9051-e8cbb84c641d",
+          "source": "pending_ai",
+          "version": 1,
+          "risk_type": "judicial",
+          "title": "司法案件未结案",
+          "summary": "证据显示，司法案件在基准日仍未结案。",
+          "support_status": "indeterminate",
+          "support_reason": "unverified_free_text_extension",
+          "citation_chunk_ids": [
+            "25ae77f9-5a72-502a-bbea-a4fd3fa69b30"
+          ]
+        },
+        {
+          "id": "cad4ae9b-3a60-406a-8e2f-542f299529a9",
+          "source": "pending_ai",
+          "version": 1,
+          "risk_type": "intellectual_property",
+          "title": "核心专利无效",
+          "summary": "证据显示，核心专利状态为无效。",
+          "support_status": "indeterminate",
+          "support_reason": "unverified_free_text_extension",
+          "citation_chunk_ids": [
+            "54dbd835-14fd-50c2-be2e-112835e0c405"
+          ]
+        },
+        {
+          "id": "2fb72d31-b0ac-414c-9065-96a07cebeda2",
+          "source": "pending_ai",
+          "version": 1,
+          "risk_type": "news",
+          "title": "负面新闻故事一",
+          "summary": "证据显示，存在独立负面新闻故事一。",
+          "support_status": "indeterminate",
+          "support_reason": "unverified_free_text_extension",
+          "citation_chunk_ids": [
+            "cac6a608-4008-5deb-9f9c-b3893fe9f10c"
+          ]
+        },
+        {
+          "id": "ecbe5b75-fc19-462f-be1e-5698e72288e2",
+          "source": "pending_ai",
+          "version": 1,
+          "risk_type": "news",
+          "title": "负面新闻故事二",
+          "summary": "证据显示，存在独立负面新闻故事二。",
+          "support_status": "indeterminate",
+          "support_reason": "unverified_free_text_extension",
+          "citation_chunk_ids": [
+            "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "coverage",
+      "title": "来源覆盖",
+      "lines": [
+        "工商来源可用。",
+        "司法来源可用。",
+        "舆情来源可用。",
+        "知识产权来源可用。"
+      ],
+      "citation_chunk_ids": [],
+      "findings": []
+    },
+    {
+      "kind": "evidence",
+      "title": "引用证据",
+      "lines": [
+        "经营异常（合成披露），观察日期2026-09-11。",
+        "核心专利状态（合成公告），观察日期2026-09-11。",
+        "司法案件（合成披露），观察日期2026-09-11。",
+        "负面新闻（合成公告），观察日期2026-09-11。",
+        "负面新闻（合成披露），观察日期2026-09-11。"
+      ],
+      "citation_chunk_ids": [
+        "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+        "54dbd835-14fd-50c2-be2e-112835e0c405",
+        "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+        "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+        "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e"
+      ],
+      "findings": []
+    },
+    {
+      "kind": "review_actions",
+      "title": "人工核查事项",
+      "lines": [
+        "核对经营异常的列入、移出记录及基准日状态。",
+        "核对案号、案件状态及基准日后的进展。",
+        "核对报道的独立来源、发布日期及后续更正。",
+        "核对核心专利的法律状态、权属登记及争议进展。"
+      ],
+      "citation_chunk_ids": [],
+      "findings": []
+    },
+    {
+      "kind": "limits",
+      "title": "判断边界",
+      "lines": [
+        "模型发现仍需结合证据核查。"
+      ],
+      "citation_chunk_ids": [],
+      "findings": []
+    }
+  ],
+  "citations": [
+    {
+      "risk_type": "business",
+      "rank": 1,
+      "chunk_id": "877a55c8-6b3a-564c-b7d7-2441cbb907ac",
+      "evidence_id": "5cab899c-3280-5902-a2ed-834ffae971f5",
+      "source_uri": "synthetic://stage3/all-rules-95/abnormal-active",
+      "title": "经营异常（合成披露）",
+      "observed_at": "2026-09-11",
+      "fact_type": "business_abnormal_status",
+      "fact_key": "FULL-ABN-001",
+      "fact_value": "active",
+      "polarity": "negative",
+      "content": "经营异常在基准日仍有效。",
+      "content_hash": "1c1456432139ace57db43cb396d01abce9a417aa808883f334ee1be51293d6a8"
+    },
+    {
+      "risk_type": "intellectual_property",
+      "rank": 1,
+      "chunk_id": "54dbd835-14fd-50c2-be2e-112835e0c405",
+      "evidence_id": "7d793a5b-f6eb-562b-b3c4-634df3cfafe9",
+      "source_uri": "synthetic://stage3/all-rules-95/core-invalid",
+      "title": "核心专利状态（合成公告）",
+      "observed_at": "2026-09-11",
+      "fact_type": "core_ip_status",
+      "fact_key": "FULL-IP-CORE-001",
+      "fact_value": "invalid",
+      "polarity": "negative",
+      "content": "核心专利状态无效。",
+      "content_hash": "f27a4f34e73ec15ffa4933343c21c7fdcc52b8dc3da297d34342b120528448dd"
+    },
+    {
+      "risk_type": "judicial",
+      "rank": 1,
+      "chunk_id": "25ae77f9-5a72-502a-bbea-a4fd3fa69b30",
+      "evidence_id": "86892125-38bd-5fc5-89f4-07003ee5be18",
+      "source_uri": "synthetic://stage3/all-rules-95/case-open",
+      "title": "司法案件（合成披露）",
+      "observed_at": "2026-09-11",
+      "fact_type": "judicial_case_status",
+      "fact_key": "FULL-CASE-001",
+      "fact_value": "open",
+      "polarity": "negative",
+      "content": "司法案件在基准日仍未结案。",
+      "content_hash": "dd97b21336b1a7b94776d162cfa152bf9f95df68641777dcdf85f009732e2ac9"
+    },
+    {
+      "risk_type": "news",
+      "rank": 1,
+      "chunk_id": "cac6a608-4008-5deb-9f9c-b3893fe9f10c",
+      "evidence_id": "6529afed-76c6-52bc-b0e1-a332d26de157",
+      "source_uri": "synthetic://stage3/all-rules-95/story-one",
+      "title": "负面新闻（合成公告）",
+      "observed_at": "2026-09-11",
+      "fact_type": "negative_news_story",
+      "fact_key": "FULL-STORY-001",
+      "fact_value": "negative",
+      "polarity": "negative",
+      "content": "独立负面新闻故事一。",
+      "content_hash": "d292c8b7543c3a2e30195cf4377030cb9fea84f4791d08add03ac475219d3ca9"
+    },
+    {
+      "risk_type": "news",
+      "rank": 2,
+      "chunk_id": "faaa7ef0-a636-5bbe-9b89-56c395fa8e6e",
+      "evidence_id": "11e3304a-cabb-573e-a0e3-6f769ebd69cf",
+      "source_uri": "synthetic://stage3/all-rules-95/story-two",
+      "title": "负面新闻（合成披露）",
+      "observed_at": "2026-09-11",
+      "fact_type": "negative_news_story",
+      "fact_key": "FULL-STORY-002",
+      "fact_value": "negative",
+      "polarity": "negative",
+      "content": "独立负面新闻故事二。",
+      "content_hash": "d4e654e65ec4d8efef5cb2d63efc56775f8fd2f1babbbcbcb4ba4c377b8da6d9"
+    }
+  ],
+  "run_status": "awaiting_review",
+  "rule_score": 95,
+  "review_reasons": [
+    "high_risk",
+    "model_evidence_insufficient",
+    "model_recommended",
+    "unverified_free_text_extension"
+  ],
+  "investigation_model_execution": {
+    "mode": "real",
+    "models": [
+      "deepseek-flash"
+    ],
+    "statuses": [
+      "succeeded"
+    ],
+    "error_categories": []
+  },
+  "assistant_execution": {
+    "mode": "real",
+    "model": "deepseek-flash",
+    "prompt_version": "investigation-assistant-v1",
+    "latency_ms": 8608,
+    "usage": {
+      "prompt_tokens": 2383,
+      "completion_tokens": 945
+    }
+  }
+}

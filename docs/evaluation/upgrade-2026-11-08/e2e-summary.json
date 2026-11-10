@@ -1,0 +1,16 @@
+{
+  "database": "tracerisk_e2e_3580801ff78941e2902db66e0876f57e",
+  "normal": "passed",
+  "invalid": "passed",
+  "cleaned": true,
+  "paths_passed": 8,
+  "normal_paths_passed": 7,
+  "invalid_paths_passed": 1,
+  "model": "mock",
+  "embedding": "fake",
+  "api_port": 8011,
+  "web_port": 3211,
+  "intercepted_api_fixtures": false,
+  "tracing": false,
+  "ownership_record_removed": true
+}

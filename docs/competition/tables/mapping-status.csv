@@ -1,0 +1,10 @@
+﻿origin_type,mapping_status,count,denominator,percent,unit,imported_this_delivery,interpretation,source
+real_public,rule_mapped,18,55,32.727273,case_level_evidence_rows,0,structural_candidate_pending_identity_time_semantics,data/evidence.jsonl
+real_public,context_only,34,55,61.818182,case_level_evidence_rows,0,context_archive_not_score,data/evidence.jsonl
+real_public,not_importable,3,55,5.454545,case_level_evidence_rows,0,quarantine_missing_key_or_unsupported_fact,data/evidence.jsonl
+synthetic,rule_mapped,34,34,100.0,case_level_evidence_rows,0,structural_candidate_pending_identity_time_semantics,data/evidence.jsonl
+synthetic,context_only,0,34,0.0,case_level_evidence_rows,0,context_archive_not_score,data/evidence.jsonl
+synthetic,not_importable,0,34,0.0,case_level_evidence_rows,0,quarantine_missing_key_or_unsupported_fact,data/evidence.jsonl
+derived_synthetic,rule_mapped,5,6,83.333333,case_level_evidence_rows,0,structural_candidate_pending_identity_time_semantics,data/evidence.jsonl
+derived_synthetic,context_only,0,6,0.0,case_level_evidence_rows,0,context_archive_not_score,data/evidence.jsonl
+derived_synthetic,not_importable,1,6,16.666667,case_level_evidence_rows,0,quarantine_missing_key_or_unsupported_fact,data/evidence.jsonl
