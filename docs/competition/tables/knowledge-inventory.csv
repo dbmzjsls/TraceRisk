@@ -1,0 +1,25 @@
+﻿file,unit,origin_type,count,content_class,file_organized,human_review,database_imported_this_delivery,indexed_this_delivery,actual_state,count_method
+data/cases.jsonl,cases,real_public,10,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/cases.jsonl,cases,synthetic,17,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/cases.jsonl,cases,derived_synthetic,4,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/chunks.jsonl,chunks,real_public,18,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/chunks.jsonl,chunks,synthetic,34,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/chunks.jsonl,chunks,derived_synthetic,5,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/claims.jsonl,claims,real_public,6,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/claims.jsonl,claims,synthetic,15,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/claims.jsonl,claims,derived_synthetic,2,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/coverage.jsonl,coverage,real_public,40,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/coverage.jsonl,coverage,synthetic,68,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/coverage.jsonl,coverage,derived_synthetic,16,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/entities.jsonl,entities,real_public,4,identity_or_provenance,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/entities.jsonl,entities,synthetic,17,identity_or_provenance,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/entities.jsonl,entities,derived_synthetic,3,identity_or_provenance,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/evidence.jsonl,evidence,real_public,55,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/evidence.jsonl,evidence,synthetic,34,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/evidence.jsonl,evidence,derived_synthetic,6,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/labels.jsonl,labels,real_public,10,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/labels.jsonl,labels,synthetic,17,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/labels.jsonl,labels,derived_synthetic,4,evaluation_label,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/sources.jsonl,sources,real_public,10,fact_candidate,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/synthetic_generation.jsonl,synthetic_generation,synthetic,2,identity_or_provenance,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type
+data/synthetic_generation.jsonl,synthetic_generation,derived_synthetic,1,identity_or_provenance,True,pending_or_not_recorded,0,0,offline_files_only,nonblank JSONL rows grouped by origin_type

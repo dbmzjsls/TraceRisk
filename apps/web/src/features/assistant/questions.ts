@@ -6,6 +6,11 @@ export const recommendedQuestions = [
   { label: '司法追问', text: '请继续解释这次调查中司法规则为何计35分：展示引用原文、来源和观察日期，区分证据事实与尚待人工确认的判断，并列出下一步核查事项。' },
 ]
 
+export const exampleDrafts = {
+  '01': { companyCode: 'SYNTHETIC-COMPANY-003', question: recommendedQuestions[0].text },
+  '02': { companyCode: 'SYNTHETIC-COMPANY-007', question: recommendedQuestions[1].text },
+}
+
 export function scopeConflict(question: string, companyId: string, date: string, companies: Company[]): string {
   const text = question.normalize('NFKC')
   if (companies.some(company => company.id !== companyId && (

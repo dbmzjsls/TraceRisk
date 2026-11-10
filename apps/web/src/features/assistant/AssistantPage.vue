@@ -12,6 +12,7 @@ import { useEvidenceNavigation } from '../investigations/useEvidenceNavigation'
 import { statusLabel } from '../investigations/status'
 import AssistantAnswer from './AssistantAnswer.vue'
 import AssistantContext from './AssistantContext.vue'
+import { exampleDrafts } from './questions'
 import { useAssistant } from './useAssistant'
 
 const route = useRoute()
@@ -23,6 +24,21 @@ const initialId = typeof route.query.investigation === 'string' && /^[0-9a-f-]{3
   ? route.query.investigation : ''
 const assistant = useAssistant(companies, canCreate, initialId)
 const { sessions, active, companyId, date, draft, notice, busy, detail, events, currentRunChanged } = assistant
+const exampleId = route.query.example
+if (!initialId && (exampleId === '01' || exampleId === '02')) {
+  const example = exampleDrafts[exampleId]
+  let applied = false
+  watch(companies, items => {
+    if (!items || applied) return
+    applied = true
+    const company = items.find(item => item.unified_credit_code === example.companyCode)
+    if (company && canCreate.value && !companyId.value && !draft.value) {
+      assistant.setCompany(company.id)
+      assistant.setDate('2026-09-11')
+      draft.value = example.question
+    }
+  }, { immediate: true })
+}
 const lastTurn = computed(() => active.value?.turns.at(-1))
 const historicalTurns = computed(() => active.value?.turns.slice(0, -1) ?? [])
 const currentDetail = computed(() => detail.data.value?.id === assistant.investigationId.value ? detail.data.value : undefined)
@@ -49,6 +65,7 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
         <h1>调查助手</h1>
         <p class="muted">围绕一次授信前调查提问，查看规则、复核状态和冻结证据。</p>
       </div>
+      <RouterLink to="/demo">查看比赛示例</RouterLink>
     </header>
 
     <p v-if="catalog.error.value" role="alert">{{ catalog.error.value.message }} <button type="button" class="text-action" @click="catalog.refetch()">刷新企业</button></p>

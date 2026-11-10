@@ -1,0 +1,1099 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-08T19:46:07+08:00",
+  "review_method": "AI-assisted filesystem recount and local PDF text inspection; no independent human review",
+  "human_reviewer": null,
+  "human_reviewed_at": null,
+  "input_root": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求",
+  "inputs": [
+    {
+      "path": "data/cases.jsonl",
+      "sha256": "ded8785ad91a462e4761558e234083c55b0c17b78a6d51c06d35c2dc502a717d",
+      "bytes": 22167
+    },
+    {
+      "path": "data/chunks.jsonl",
+      "sha256": "dc4c4ba208114091f908e8aaf58a29f73ffaf5ea363ef84f2f66fc9832de5505",
+      "bytes": 40440
+    },
+    {
+      "path": "data/claims.jsonl",
+      "sha256": "7d77a154acdd3b877912f747fbb9549d56949b17ae811f8d4c23f52e2afd383a",
+      "bytes": 13840
+    },
+    {
+      "path": "data/coverage.jsonl",
+      "sha256": "8824ebf76818cd87092c07a847968f69bf07f401ae905c5dbb0643129f5ee410",
+      "bytes": 42889
+    },
+    {
+      "path": "data/entities.jsonl",
+      "sha256": "09924420b6779fd2f1232d6a478601e5a7f543183228c4159104491205214aab",
+      "bytes": 12654
+    },
+    {
+      "path": "data/evidence.jsonl",
+      "sha256": "2cec999e7632a5910152eb79c3dd5edbfcbc67bab281806b860a5d3878ee5714",
+      "bytes": 107841
+    },
+    {
+      "path": "data/labels.jsonl",
+      "sha256": "f39d6d56b72703897fda24471433a597edec48fd03d922668c7695503856532a",
+      "bytes": 17693
+    },
+    {
+      "path": "data/sources.jsonl",
+      "sha256": "c11befa254c77bff6c5bd3a77aefe6faaf5ae24104ff379aeec036b26adda59b",
+      "bytes": 15041
+    },
+    {
+      "path": "data/synthetic_generation.jsonl",
+      "sha256": "42e7f4f928dd8d54bd6fc0f07ace1c7d504888523c6eeab162e146532d63d5ae",
+      "bytes": 1922
+    },
+    {
+      "path": "sources/document_manifest.json",
+      "sha256": "e15b9e09fc30ead2afcc5ab10ea4183b142801dacfd3e9f67cc66bffcb2451b6",
+      "bytes": 8760
+    },
+    {
+      "path": "runs/results.json",
+      "sha256": "f6a4ccbc71ba9dc258ad84d0907b2f1a580438edbcb6bd765180965579eb0a58",
+      "bytes": 8073
+    },
+    {
+      "path": "runs/per_case.jsonl",
+      "sha256": "27ba43ccda43317074f96dc67e7eaf6f935276b2cf3f87edeb8dcc39f95cde41",
+      "bytes": 21059
+    },
+    {
+      "path": "runs/per_claim.jsonl",
+      "sha256": "0a1faa7dc8b5c11f7cd51669e93e04910edc3645a699c7ee1226884da36c8f18",
+      "bytes": 7062
+    },
+    {
+      "path": "runs/import_compatibility.json",
+      "sha256": "1002e988898c58289c14512fc3508d54da75cf79edb7d8e8a55e3d170740426f",
+      "bytes": 6586
+    }
+  ],
+  "counts_by_origin": {
+    "cases": {
+      "real_public": 10,
+      "synthetic": 17,
+      "derived_synthetic": 4
+    },
+    "chunks": {
+      "real_public": 18,
+      "synthetic": 34,
+      "derived_synthetic": 5
+    },
+    "claims": {
+      "real_public": 6,
+      "synthetic": 15,
+      "derived_synthetic": 2
+    },
+    "coverage": {
+      "real_public": 40,
+      "synthetic": 68,
+      "derived_synthetic": 16
+    },
+    "entities": {
+      "real_public": 4,
+      "synthetic": 17,
+      "derived_synthetic": 3
+    },
+    "evidence": {
+      "real_public": 55,
+      "synthetic": 34,
+      "derived_synthetic": 6
+    },
+    "labels": {
+      "real_public": 10,
+      "synthetic": 17,
+      "derived_synthetic": 4
+    },
+    "sources": {
+      "real_public": 10,
+      "synthetic": 0,
+      "derived_synthetic": 0
+    },
+    "synthetic_generation": {
+      "real_public": 0,
+      "synthetic": 2,
+      "derived_synthetic": 1
+    }
+  },
+  "totals": {
+    "cases": 31,
+    "chunks": 57,
+    "claims": 23,
+    "coverage": 124,
+    "entities": 24,
+    "evidence": 95,
+    "labels": 31,
+    "sources": 10,
+    "synthetic_generation": 3
+  },
+  "source_pdf_checks": [
+    {
+      "source_id": "CNINFO-1224871976",
+      "path": "sources/pdf/CNINFO-1224871976.pdf",
+      "sha256": "a0f00c6ea76cae884c359a7b32ab0cf226e18f19cf4d71ae63db98963ae9c1d0",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225388226",
+      "path": "sources/pdf/CNINFO-1225388226.pdf",
+      "sha256": "d467bc42d70a5bd4383f45a2da9bf09788ca85e892d71d0c9cb0157e389e4858",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225577082",
+      "path": "sources/pdf/CNINFO-1225577082.pdf",
+      "sha256": "b65b0e1bf5392772c9e1d75afb80217dcd1afc98058945af163f37529a6875ea",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225590975",
+      "path": "sources/pdf/CNINFO-1225590975.pdf",
+      "sha256": "441376e0ed8653fd3387a1cc786d5fc6bc8f93fb3668751bea80548849ca3419",
+      "matches_source_hash": true,
+      "pages": 3,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1224919319",
+      "path": "sources/pdf/CNINFO-1224919319.pdf",
+      "sha256": "cc27695d8a282d17eab6f72a33d704bb23a8e37599f4580c7ef8f423b91314e1",
+      "matches_source_hash": true,
+      "pages": 3,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225371694",
+      "path": "sources/pdf/CNINFO-1225371694.pdf",
+      "sha256": "6aecdc7afebaef74a50fbe713a97162762f8f396b76678e09185d513b5b3e017",
+      "matches_source_hash": true,
+      "pages": 3,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225417168",
+      "path": "sources/pdf/CNINFO-1225417168.pdf",
+      "sha256": "4373d5344df01a6ecfec62bc8d89835102fed8dd9cbd47911770491fe98ee82f",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225323533",
+      "path": "sources/pdf/CNINFO-1225323533.pdf",
+      "sha256": "9a3e8f1ff49b795db5081d97b31cdac210a9bb3c296d22552c9667dd376e295c",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225448825",
+      "path": "sources/pdf/CNINFO-1225448825.pdf",
+      "sha256": "ed56af9aedd5c6a5a09cf40fe9b9e40dddc44bf582ae7f40ef0d8e729c43336d",
+      "matches_source_hash": true,
+      "pages": 2,
+      "matches_source_pages": true
+    },
+    {
+      "source_id": "CNINFO-1225386155",
+      "path": "sources/pdf/CNINFO-1225386155.pdf",
+      "sha256": "86cc44e41cd2ee271ad7d6285adec72e168da6efbe417d46acd62ded2ffb8164",
+      "matches_source_hash": true,
+      "pages": 3,
+      "matches_source_pages": true
+    }
+  ],
+  "evidence_content_hash_failures": [],
+  "mapping_distribution": {
+    "real_public": {
+      "context_only": 34,
+      "rule_mapped": 18,
+      "not_importable": 3
+    },
+    "synthetic": {
+      "rule_mapped": 34
+    },
+    "derived_synthetic": {
+      "rule_mapped": 5,
+      "not_importable": 1
+    }
+  },
+  "real_mapping_rows": [
+    {
+      "evidence_id": "29362ec1-b272-5560-a31a-e5f2794673f2",
+      "case_id": "RC-600816-20251213",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；非规范fact_type，不产生规则分数。",
+      "observed_at": "2025-12-13",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-13",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "5462f558-cf8f-5aa3-826a-72684e2455a3",
+      "case_id": "RC-600816-20251213",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同一争议的二审案号，二审已受理尚未开庭→open。",
+      "observed_at": "2025-12-11",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-11",
+      "page_or_section": "第2页；一（一）三峡资本案件"
+    },
+    {
+      "evidence_id": "6036c89c-6a88-5cda-af1f-d8e65071b3ad",
+      "case_id": "RC-600816-20251213",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "context_only",
+      "mapping_note": "一审判决金额，已被上诉；规则不读取金额，不产生分数。",
+      "observed_at": "2025-08-27",
+      "document_date": "2025-12-13",
+      "event_date": "2025-08-27",
+      "page_or_section": "第1页；一（一）"
+    },
+    {
+      "evidence_id": "8681fa3f-fa08-5642-8b74-8f642a8231af",
+      "case_id": "RC-600816-20251213",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "context_only",
+      "mapping_note": "阶段汇总；用于复核，不单独计分。",
+      "observed_at": "2025-12-13",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-13",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "0630d4f8-6e40-53b2-81b6-928f795ee010",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；非规范fact_type，不产生规则分数。",
+      "observed_at": "2025-12-13",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-13",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "86099ee7-8f47-541d-8624-d77a2d0367b4",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同一争议的二审案号，二审已受理尚未开庭→open。",
+      "observed_at": "2025-12-11",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-11",
+      "page_or_section": "第2页；一（一）三峡资本案件"
+    },
+    {
+      "evidence_id": "23f7937a-fca5-5fd9-872c-53f6924b9339",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-06-26",
+      "document_date": "2026-06-26",
+      "event_date": "2026-06-26",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "3406c8d7-bd41-5d4d-b6a7-af732a7a8372",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "mapping_status": "context_only",
+      "mapping_note": "“终结本次执行程序”是执行程序阶段性终结，不等同于债权消灭或案件彻底结案；规则无执行状态口径，不产生分数。",
+      "observed_at": "2026-06-24",
+      "document_date": "2026-06-26",
+      "event_date": "2026-06-24",
+      "page_or_section": "第1页；一、前期诉讼进展情况"
+    },
+    {
+      "evidence_id": "4e0edd04-5ada-5d1b-96d9-2f0b47dbf945",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "mapping_status": "context_only",
+      "mapping_note": "公司为被执行人；规则无当事人地位维度。",
+      "observed_at": "2026-06-26",
+      "document_date": "2026-06-26",
+      "event_date": "2026-06-26",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "5ca44326-2339-59dd-a65f-4fc6be7c30ca",
+      "case_id": "RC-600816-20260626",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "mapping_status": "context_only",
+      "mapping_note": "本金金额；不产生规则分数。",
+      "observed_at": "2026-06-26",
+      "document_date": "2026-06-26",
+      "event_date": "2026-06-26",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "08d42def-4d2a-51b5-a53e-458bc09b7102",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同一争议的二审案号，二审已受理尚未开庭→open。",
+      "observed_at": "2025-12-11",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-11",
+      "page_or_section": "第2页；一（一）三峡资本案件"
+    },
+    {
+      "evidence_id": "f36757f1-d1b1-50f6-aa3d-722e08041b51",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-09-23",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-23",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "2fb121b5-a827-575b-ba2d-561a09bb7e10",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "已立案、尚未开庭→open，与司法规则口径一致。",
+      "observed_at": "2026-09-15",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-15",
+      "page_or_section": "第1页；一、本次诉讼基本情况"
+    },
+    {
+      "evidence_id": "09af773b-9e7e-59d9-a627-c51f802888bb",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同案号的阶段说明，与case-filed同键去重。",
+      "observed_at": "2026-09-15",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-15",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "8d2e3dad-f1c4-5241-8d5a-01aff08c9f87",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "context_only",
+      "mapping_note": "公司为被告，属不利方向；规则无当事人地位维度。",
+      "observed_at": "2026-09-15",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-15",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "09b60a33-d3aa-51ff-ac55-af8b13596476",
+      "case_id": "RC-600816-20260923",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "context_only",
+      "mapping_note": "诉请金额，非判决金额；不产生规则分数。",
+      "observed_at": "2026-09-10",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-10",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "bde86eba-8648-5586-bc83-8173f5610379",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同一争议的二审案号，二审已受理尚未开庭→open。",
+      "observed_at": "2025-12-11",
+      "document_date": "2025-12-13",
+      "event_date": "2025-12-11",
+      "page_or_section": "第2页；一（一）三峡资本案件"
+    },
+    {
+      "evidence_id": "a35f1a46-87ef-5d7e-925f-36057d83b0bf",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "已立案、尚未开庭→open，与司法规则口径一致。",
+      "observed_at": "2026-09-15",
+      "document_date": "2026-09-23",
+      "event_date": "2026-09-15",
+      "page_or_section": "第1页；一、本次诉讼基本情况"
+    },
+    {
+      "evidence_id": "fba93bc1-4887-5fed-be7b-32e810eef63a",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-10-01",
+      "document_date": "2026-10-01",
+      "event_date": "2026-10-01",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "33434ed4-0862-5e0d-9429-cc36dbfc9422",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "一审判决后二审维持（2021）鄂民终243号，执行程序亦已结案；本争议已终结→closed。",
+      "observed_at": "2020-06-30",
+      "document_date": "2026-10-01",
+      "event_date": "2020-06-30",
+      "page_or_section": "第1页；一（一）交银国际信托案件"
+    },
+    {
+      "evidence_id": "f05bda57-3359-531f-82c9-5231d1751270",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "执行结案是closed的补充依据；同键与jiaoyin-case一致。",
+      "observed_at": "2026-09-30",
+      "document_date": "2026-10-01",
+      "event_date": "2026-09-30",
+      "page_or_section": "第2页；一（一）交银国际信托案件"
+    },
+    {
+      "evidence_id": "bc8b7af6-57a2-5da9-ac97-ecb646736f18",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "mapping_status": "context_only",
+      "mapping_note": "多案件状态汇总；用于复核，不整体计分。",
+      "observed_at": "2026-10-01",
+      "document_date": "2026-10-01",
+      "event_date": "2026-10-01",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "affebea7-c5d4-5e9a-885e-8fd939ad634c",
+      "case_id": "RC-600816-20261001",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "mapping_status": "context_only",
+      "mapping_note": "多数案件公司为被告/被申请人；规则无此维度。",
+      "observed_at": "2026-10-01",
+      "document_date": "2026-10-01",
+      "event_date": "2026-10-01",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "f780411d-f5d0-566d-9325-a876d8753faf",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-01-06",
+      "document_date": "2026-01-06",
+      "event_date": "2026-01-06",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "2fec1d4e-047e-5320-a79b-92628dfcae29",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "一审判决已作出但可上诉、尚未生效结案→open；二审终审后才置closed。",
+      "observed_at": "2025-12-30",
+      "document_date": "2026-01-06",
+      "event_date": "2025-12-30",
+      "page_or_section": "第2页；二、本次诉讼事项的进展情况"
+    },
+    {
+      "evidence_id": "2f5e2a33-8593-53dc-9523-4b00563eb948",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同案号阶段说明，与case-number同键去重。",
+      "observed_at": "2025-12-30",
+      "document_date": "2026-01-06",
+      "event_date": "2025-12-30",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "ebdad3f0-22d5-59ff-977b-eef99236d306",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "银行作为原告追偿；与“被告未结案”风险方向不同，规则无此维度。",
+      "observed_at": "2026-01-06",
+      "document_date": "2026-01-06",
+      "event_date": "2026-01-06",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "14299321-5ac4-59db-bf6e-0282a11a3813",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "贷款已纳入不良并计提减值，是实质风险信号；规则无财务/资产质量口径，不产生分数。",
+      "observed_at": "2026-01-06",
+      "document_date": "2026-01-06",
+      "event_date": "2026-01-06",
+      "page_or_section": "第1页；三、影响"
+    },
+    {
+      "evidence_id": "b3be717e-0c0e-54fd-8620-42cfc3e157c7",
+      "case_id": "RC-600928-20260106",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "本金金额；不产生规则分数。",
+      "observed_at": "2025-04-17",
+      "document_date": "2026-01-06",
+      "event_date": "2025-04-17",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "f7bb06fb-9d70-5f8c-ada0-356d7c211bd0",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-01-06",
+      "document_date": "2026-01-06",
+      "event_date": "2026-01-06",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "fab35807-47f0-5657-82b0-67e3a474b023",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "一审判决已作出但可上诉、尚未生效结案→open；二审终审后才置closed。",
+      "observed_at": "2025-12-30",
+      "document_date": "2026-01-06",
+      "event_date": "2025-12-30",
+      "page_or_section": "第2页；二、本次诉讼事项的进展情况"
+    },
+    {
+      "evidence_id": "7ab36db0-3257-54a5-aa1c-421f4548a37d",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-06-16",
+      "document_date": "2026-06-16",
+      "event_date": "2026-06-16",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "9eb24717-6073-508a-b275-e17ae4ac4f90",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "二审案号对应的争议以一审判案号为稳定键；终审后置closed。",
+      "observed_at": "2026-06-10",
+      "document_date": "2026-06-16",
+      "event_date": "2026-06-10",
+      "page_or_section": "第2页；二、本次诉讼二审判决情况"
+    },
+    {
+      "evidence_id": "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "终审判决生效→closed，与appeal-judgment同键一致。",
+      "observed_at": "2026-06-10",
+      "document_date": "2026-06-16",
+      "event_date": "2026-06-10",
+      "page_or_section": "第3页；二、本次诉讼二审判决情况 末尾"
+    },
+    {
+      "evidence_id": "80510a12-6fd9-5992-921e-1b23837a2f88",
+      "case_id": "RC-600928-20260616",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "mapping_status": "context_only",
+      "mapping_note": "阶段说明；closed依据以终审判决为准。",
+      "observed_at": "2026-06-10",
+      "document_date": "2026-06-16",
+      "event_date": "2026-06-10",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "9b4f48dd-3414-5db2-ae2f-9b95b6dc6343",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-01-06",
+      "document_date": "2026-01-06",
+      "event_date": "2026-01-06",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "a54808f7-27d8-568f-a0ce-4ebdf5ae4d3d",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "一审判决已作出但可上诉、尚未生效结案→open；二审终审后才置closed。",
+      "observed_at": "2025-12-30",
+      "document_date": "2026-01-06",
+      "event_date": "2025-12-30",
+      "page_or_section": "第2页；二、本次诉讼事项的进展情况"
+    },
+    {
+      "evidence_id": "ca22db21-df72-52c3-b26b-78c9a514f541",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "终审判决生效→closed，与appeal-judgment同键一致。",
+      "observed_at": "2026-06-10",
+      "document_date": "2026-06-16",
+      "event_date": "2026-06-10",
+      "page_or_section": "第3页；二、本次诉讼二审判决情况 末尾"
+    },
+    {
+      "evidence_id": "3e6a8131-aeef-5c20-a438-727fb63ce0c2",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-07-10",
+      "document_date": "2026-07-10",
+      "event_date": "2026-07-10",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "e0b70071-b751-5a84-a968-2c33c24a2f5b",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "mapping_status": "not_importable",
+      "mapping_note": "执行程序已受理且公司为申请执行人；若直接按open计入司法规则，会把“银行追债”误判为“被诉未结风险”，方向失真。列为待项目方确认，不计分。",
+      "observed_at": "2026-07-09",
+      "document_date": "2026-07-10",
+      "event_date": "2026-07-09",
+      "page_or_section": "第2页；二、执行情况"
+    },
+    {
+      "evidence_id": "cef7ec02-ddce-57b7-b2d2-1acc2798035f",
+      "case_id": "RC-600928-20260710",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "mapping_status": "context_only",
+      "mapping_note": "执行阶段说明；不产生规则分数。",
+      "observed_at": "2026-07-09",
+      "document_date": "2026-07-10",
+      "event_date": "2026-07-09",
+      "page_or_section": "第1页；重要内容提示"
+    },
+    {
+      "evidence_id": "f5affd45-17bc-5622-9e2e-23a5671c063b",
+      "case_id": "RC-600155-20260522",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；注意诉讼主体为子公司华创证券有限责任公司。",
+      "observed_at": "2026-05-22",
+      "document_date": "2026-05-22",
+      "event_date": "2026-05-22",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "043e48df-0b7a-5958-8494-f27edc7c3069",
+      "case_id": "RC-600155-20260522",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "mapping_status": "not_importable",
+      "mapping_note": "公告未披露案号，且当事人为自然人（摘录刻意不含姓名），无法形成稳定去重键。",
+      "observed_at": "2026-06-04",
+      "document_date": "2026-05-22",
+      "event_date": "2026-06-04",
+      "page_or_section": "第1页；重要提示1"
+    },
+    {
+      "evidence_id": "82b191f2-cb9e-5c04-941f-ec1772e397fd",
+      "case_id": "RC-600155-20260522",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "mapping_status": "context_only",
+      "mapping_note": "华创证券本诉原告、反诉被告；规则无当事人地位维度。",
+      "observed_at": "2026-05-22",
+      "document_date": "2026-05-22",
+      "event_date": "2026-05-22",
+      "page_or_section": "第1页；重要提示2"
+    },
+    {
+      "evidence_id": "b4fdf063-dba6-5d32-937a-1adb456ad93e",
+      "case_id": "RC-600155-20260522",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "mapping_status": "context_only",
+      "mapping_note": "反诉请求金额，非判决金额；不产生规则分数。",
+      "observed_at": "2026-05-22",
+      "document_date": "2026-05-22",
+      "event_date": "2026-05-22",
+      "page_or_section": "第1页；重要提示3"
+    },
+    {
+      "evidence_id": "f5f2decf-b0dc-53c4-aa48-18dcba17fe5e",
+      "case_id": "RC-600155-20260731",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；注意诉讼主体为子公司华创证券有限责任公司。",
+      "observed_at": "2026-05-22",
+      "document_date": "2026-05-22",
+      "event_date": "2026-05-22",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "6fb91b74-cb6a-5424-b2e4-7f1867e147bd",
+      "case_id": "RC-600155-20260731",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；诉讼主体为子公司华创证券。",
+      "observed_at": "2026-07-31",
+      "document_date": "2026-07-31",
+      "event_date": "2026-07-31",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "a56f7d5b-28f3-56f1-ad59-4e31ebf5ff58",
+      "case_id": "RC-600155-20260731",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "mapping_status": "not_importable",
+      "mapping_note": "一审判决但未披露案号，且无法确认是否终审；摘录不含自然人姓名。",
+      "observed_at": "2026-07-31",
+      "document_date": "2026-07-31",
+      "event_date": "2026-07-31",
+      "page_or_section": "第1页；正文"
+    },
+    {
+      "evidence_id": "daaea6cf-57a5-5b88-ac0f-cf9f7a85ad97",
+      "case_id": "RC-600155-20260731",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "mapping_status": "context_only",
+      "mapping_note": "既有原告身份也有被告身份；规则无此维度。",
+      "observed_at": "2026-07-31",
+      "document_date": "2026-07-31",
+      "event_date": "2026-07-31",
+      "page_or_section": "第1页；重要提示2"
+    },
+    {
+      "evidence_id": "972ec052-1072-5b7a-b172-0ccf9d27cf7b",
+      "case_id": "RC-600155-20260731",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "mapping_status": "context_only",
+      "mapping_note": "本次未涉及具体金额；不产生规则分数。",
+      "observed_at": "2026-07-31",
+      "document_date": "2026-07-31",
+      "event_date": "2026-07-31",
+      "page_or_section": "第1页；重要提示3"
+    },
+    {
+      "evidence_id": "b308d1aa-4544-5c76-af85-70402fa60d31",
+      "case_id": "RC-002966-20260625",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "mapping_status": "context_only",
+      "mapping_note": "实体识别证据；不产生规则分数。",
+      "observed_at": "2026-06-25",
+      "document_date": "2026-06-25",
+      "event_date": "2026-06-25",
+      "page_or_section": "第1页；页眉与标题"
+    },
+    {
+      "evidence_id": "50b2149d-0846-546d-8e5f-5efd00e9a9d9",
+      "case_id": "RC-002966-20260625",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "二审终审裁定撤销一审驳回起诉并指令审理，案件回到一审、尚未开庭→open。",
+      "observed_at": "2026-06-23",
+      "document_date": "2026-06-25",
+      "event_date": "2026-06-23",
+      "page_or_section": "第2页；二、有关本案进展情况"
+    },
+    {
+      "evidence_id": "e5702c58-7dba-5a44-ad3b-011eb5a932a1",
+      "case_id": "RC-002966-20260625",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "mapping_status": "rule_mapped",
+      "mapping_note": "同案号阶段说明，与remand-open同键去重。",
+      "observed_at": "2026-06-25",
+      "document_date": "2026-06-25",
+      "event_date": "2026-06-25",
+      "page_or_section": "第1页；特别提示1"
+    },
+    {
+      "evidence_id": "6a57dfdd-0594-54f2-95c8-6bff3352592b",
+      "case_id": "RC-002966-20260625",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "mapping_status": "context_only",
+      "mapping_note": "银行为被告之一，属不利方向；规则无当事人地位维度。",
+      "observed_at": "2026-06-25",
+      "document_date": "2026-06-25",
+      "event_date": "2026-06-25",
+      "page_or_section": "第1页；特别提示2"
+    },
+    {
+      "evidence_id": "c9f4ab9e-7c9a-5567-a2a2-fb26240505cf",
+      "case_id": "RC-002966-20260625",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "mapping_status": "context_only",
+      "mapping_note": "涉案金额（暂计），非判决金额；不产生规则分数。",
+      "observed_at": "2024-06-12",
+      "document_date": "2026-06-25",
+      "event_date": "2024-06-12",
+      "page_or_section": "第1页；特别提示3"
+    }
+  ],
+  "package_dedup": {
+    "key_fields": [
+      "entity_id",
+      "source_id",
+      "fact_type",
+      "fact_key",
+      "fact_value"
+    ],
+    "input_rows": 18,
+    "groups": [
+      {
+        "key": {
+          "entity_id": "REAL-600816",
+          "source_id": "CNINFO-1224871976",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2025）沪民终567号",
+          "fact_value": "open"
+        },
+        "evidence_ids": [
+          "5462f558-cf8f-5aa3-826a-72684e2455a3",
+          "86099ee7-8f47-541d-8624-d77a2d0367b4",
+          "08d42def-4d2a-51b5-a53e-458bc09b7102",
+          "bde86eba-8648-5586-bc83-8173f5610379"
+        ]
+      },
+      {
+        "key": {
+          "entity_id": "REAL-600816",
+          "source_id": "CNINFO-1225577082",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2026）沪74民初1294号",
+          "fact_value": "open"
+        },
+        "evidence_ids": [
+          "2fb121b5-a827-575b-ba2d-561a09bb7e10",
+          "09af773b-9e7e-59d9-a627-c51f802888bb",
+          "a35f1a46-87ef-5d7e-925f-36057d83b0bf"
+        ]
+      },
+      {
+        "key": {
+          "entity_id": "REAL-600816",
+          "source_id": "CNINFO-1225590975",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2019）鄂01民初8460号",
+          "fact_value": "closed"
+        },
+        "evidence_ids": [
+          "33434ed4-0862-5e0d-9429-cc36dbfc9422",
+          "f05bda57-3359-531f-82c9-5231d1751270"
+        ]
+      },
+      {
+        "key": {
+          "entity_id": "REAL-600928",
+          "source_id": "CNINFO-1224919319",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2025）陕04民初34号",
+          "fact_value": "open"
+        },
+        "evidence_ids": [
+          "2fec1d4e-047e-5320-a79b-92628dfcae29",
+          "2f5e2a33-8593-53dc-9523-4b00563eb948",
+          "fab35807-47f0-5657-82b0-67e3a474b023",
+          "a54808f7-27d8-568f-a0ce-4ebdf5ae4d3d"
+        ]
+      },
+      {
+        "key": {
+          "entity_id": "REAL-600928",
+          "source_id": "CNINFO-1225371694",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2025）陕04民初34号",
+          "fact_value": "closed"
+        },
+        "evidence_ids": [
+          "9eb24717-6073-508a-b275-e17ae4ac4f90",
+          "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+          "ca22db21-df72-52c3-b26b-78c9a514f541"
+        ]
+      },
+      {
+        "key": {
+          "entity_id": "REAL-002966",
+          "source_id": "CNINFO-1225386155",
+          "fact_type": "judicial_case_status",
+          "fact_key": "（2024）内06民初70号",
+          "fact_value": "open"
+        },
+        "evidence_ids": [
+          "50b2149d-0846-546d-8e5f-5efd00e9a9d9",
+          "e5702c58-7dba-5a44-ad3b-011eb5a932a1"
+        ]
+      }
+    ],
+    "output_structural_candidates": 6,
+    "warning": "This key omits event date, disclosure date and content hash; multiple excerpts/state occurrences collapse. Six is not six verified importable facts."
+  },
+  "date_checks": {
+    "document_after_observed_count_all_origins": 26,
+    "real_document_after_observed_ids": [
+      "5462f558-cf8f-5aa3-826a-72684e2455a3",
+      "6036c89c-6a88-5cda-af1f-d8e65071b3ad",
+      "86099ee7-8f47-541d-8624-d77a2d0367b4",
+      "3406c8d7-bd41-5d4d-b6a7-af732a7a8372",
+      "08d42def-4d2a-51b5-a53e-458bc09b7102",
+      "2fb121b5-a827-575b-ba2d-561a09bb7e10",
+      "09af773b-9e7e-59d9-a627-c51f802888bb",
+      "8d2e3dad-f1c4-5241-8d5a-01aff08c9f87",
+      "09b60a33-d3aa-51ff-ac55-af8b13596476",
+      "bde86eba-8648-5586-bc83-8173f5610379",
+      "a35f1a46-87ef-5d7e-925f-36057d83b0bf",
+      "33434ed4-0862-5e0d-9429-cc36dbfc9422",
+      "f05bda57-3359-531f-82c9-5231d1751270",
+      "2fec1d4e-047e-5320-a79b-92628dfcae29",
+      "2f5e2a33-8593-53dc-9523-4b00563eb948",
+      "b3be717e-0c0e-54fd-8620-42cfc3e157c7",
+      "fab35807-47f0-5657-82b0-67e3a474b023",
+      "9eb24717-6073-508a-b275-e17ae4ac4f90",
+      "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+      "80510a12-6fd9-5992-921e-1b23837a2f88",
+      "a54808f7-27d8-568f-a0ce-4ebdf5ae4d3d",
+      "ca22db21-df72-52c3-b26b-78c9a514f541",
+      "e0b70071-b751-5a84-a968-2c33c24a2f5b",
+      "cef7ec02-ddce-57b7-b2d2-1acc2798035f",
+      "50b2149d-0846-546d-8e5f-5efd00e9a9d9",
+      "c9f4ab9e-7c9a-5567-a2a2-fb26240505cf"
+    ],
+    "warning": "observation/event date cannot substitute for first public disclosure date"
+  },
+  "spot_check": {
+    "source_id": "CNINFO-1225386155",
+    "method": "fitz text extraction of local source PDF pages 1-2, cross-checked against packaged snapshot",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-06-25/1225386155.PDF",
+    "entity": "苏州银行股份有限公司",
+    "case_number": "（2024）内06民初70号",
+    "appeal_ruling": "（2026）内民终25号",
+    "party_role": "被告之一",
+    "status": "一审尚未开庭；撤销驳回起诉裁定并指令审理，不能把终审裁定解释为争议已结案",
+    "amount_yuan": "981270983.96",
+    "amount_as_of": "2024-06-12",
+    "amount_includes": "另有诉讼费用；不是苏州银行单独应付金额",
+    "event_date": "2026-06-23",
+    "event_kind": "收到裁定",
+    "disclosure_date": "2026-06-25",
+    "disclosure_date_basis": "sources.jsonl metadata / URL; not printed filing date",
+    "signed_date": "2026-06-24",
+    "package_accessed_at": "2026-11-08",
+    "identity_uscc": null,
+    "identity_uscc_candidate": "91320000768299855B",
+    "identity_candidate_source": "https://www.suzhoubank.com/suzhoubank/attachDir/2025/04/2025042822523362319.pdf",
+    "online_verification": "announcement web fetch failed; identity annual report web fetch timed out and requests SSL legacy renegotiation failed; candidate code remains unverified",
+    "human_reviewer": null,
+    "human_reviewed_at": null
+  },
+  "nonfinancial_candidate": {
+    "name": "武汉东方赛思软件股份有限公司",
+    "uscc": "914201035910583777",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2025-04-25/1223311433.PDF",
+    "document": "2024年年度报告，公告2025-004",
+    "identity_page": 5,
+    "business": "软件和信息技术服务业",
+    "size_basis_page": 6,
+    "size_basis": "年报自述2024年科技型中小企业入库登记编号2024420111A8042",
+    "verification": "web primary PDF text checked on this audit date; no government roster cross-check, no current size certification and no lending workflow validation",
+    "counted_in_package_totals": false,
+    "imported": false
+  },
+  "stale_fact_counterexample": {
+    "case_id": "SC-DER-203",
+    "origin_type": "derived_synthetic",
+    "as_of_date": "2026-10-29",
+    "old_evidence_id": "1e602b23-36ae-55b3-a329-b01e27bd884a",
+    "correction_evidence_id": "04610adc-4663-5c25-ba8b-9870ceaf645d",
+    "claim_id": "CL-SC-DER-203-1",
+    "claim_semantic_truth": "incorrect_claim",
+    "field_support_outcome": "supported_canonical",
+    "conformant": true,
+    "rule_score": 0,
+    "predicted_requires_review": false,
+    "counting_issue": "claims.reason says exclude from support accuracy numerator, yet per_claim conformant=true and results counts derived_synthetic 2/2, overall22/22; this measures field contract, not semantic correctness"
+  },
+  "additional_findings": [
+    {
+      "kind": "later_disclosure_backfill",
+      "detail": "RC-600928-20260106 original announcement says recently received. Exact 2025-12-30 appears in 2026-06-16 later announcement; RC-600928-20260616 says recently received, exact 2026-06-10 appears in 2026-07-10 as court issuance date, not receipt. Retrospective dates cannot be claimed as contemporaneously known."
+    },
+    {
+      "kind": "source_announcement_number_mismatch",
+      "source_id": "CNINFO-1225417168",
+      "manifest_title_number": "2026-028",
+      "local_pdf_header_number": "2026-023",
+      "resolution": "Use source_id/hash as join key; title metadata correction needed before import."
+    }
+  ],
+  "operation_state": {
+    "database_writes": false,
+    "imported_this_delivery": 0,
+    "indexed_this_delivery": 0,
+    "real_workflow_validated": false
+  },
+  "recount_recipe": "Read each data/*.jsonl as UTF-8; skip blank lines; json.loads each row; Counter origin_type; Counter (origin_type,mapping_status) for evidence; group real rule_mapped by key_fields; sha256 raw input/PDF bytes and UTF-8 evidence.content."
+}
