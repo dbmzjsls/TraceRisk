@@ -11,17 +11,17 @@ const evidenceLabels = computed(() => new Map(props.answer.citations.map(item =>
 </script>
 
 <template>
-  <section class="assistant-answer" aria-label="调查助手回答">
+  <section class="panel assistant-answer" aria-label="调查助手回答">
     <header class="assistant-answer-heading">
       <strong>调查助手</strong>
       <span>{{ company }} · {{ date }}</span>
-      <span class="provenance-stamp">{{ answer.run_status === 'awaiting_review' ? '待人工复核' : '已完成' }}</span>
+      <span class="status-label" :data-status="answer.run_status">{{ answer.run_status === 'awaiting_review' ? '待人工复核' : '已完成' }}</span>
       <strong v-if="answer.status === 'answer'">规则分 {{ answer.rule_score }}</strong>
     </header>
 
     <div v-if="answer.citations.length" class="assistant-citations" aria-label="本次回答引用">
       <button
-        v-for="item in answer.citations" :key="item.chunk_id" type="button" class="text-action"
+        v-for="item in answer.citations" :key="item.chunk_id" type="button" class="text-action source-marker"
         :data-citation-chunk="item.chunk_id" @click="emit('navigate', item.chunk_id, $event.currentTarget)">
         引用 · {{ item.title }}
       </button>
@@ -33,7 +33,7 @@ const evidenceLabels = computed(() => new Map(props.answer.citations.map(item =>
         <p v-for="(line, index) in section.lines" :key="index">{{ line }}</p>
         <div class="assistant-citations">
           <button
-            v-for="chunk in section.citation_chunk_ids" :key="chunk" type="button" class="text-action"
+            v-for="chunk in section.citation_chunk_ids" :key="chunk" type="button" class="text-action source-marker"
             @click="emit('navigate', chunk, $event.currentTarget)">
 {{ evidenceLabels.get(chunk) }}
 </button>
@@ -60,7 +60,8 @@ const evidenceLabels = computed(() => new Map(props.answer.citations.map(item =>
 <style scoped>
 .assistant-answer { display: grid; gap: .7rem; overflow-wrap: anywhere; }
 .assistant-answer-heading, .assistant-citations { display: flex; flex-wrap: wrap; gap: .55rem 1rem; align-items: center; }
-.assistant-answer-heading { border-bottom: 1px solid var(--line, #c5d8cf); padding-bottom: .55rem; }
+.assistant-answer-heading { border-bottom: 1px solid var(--border); padding-bottom: .55rem; }
+.assistant-citations button { text-align: left; overflow-wrap: anywhere; }
 .assistant-section h3, .assistant-section p, .assistant-provenance p { margin: .16rem 0; }
 .assistant-section h3, .assistant-section summary { font-size: .95rem; font-weight: 650; }
 .assistant-section summary, .assistant-provenance summary { cursor: pointer; }

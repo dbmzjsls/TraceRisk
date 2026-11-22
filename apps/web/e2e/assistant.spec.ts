@@ -17,6 +17,7 @@ const examples = [
 ] as const
 const viewport = { width: 1600, height: 1000 }
 const capture = process.env.E2E_CAPTURE_DIR
+const screenshots = process.env.E2E_UI_SCREENSHOT_DIR
 const mode = process.env.E2E_ASSISTANT_MODE ?? 'mock'
 
 function required(key: string) {
@@ -109,6 +110,15 @@ test('sends three real browser questions and reuses the first Run', async ({ pag
       const replied = capturePage.waitForResponse(res =>
         res.request().method() === 'POST' && new URL(res.url()).pathname === '/api/assistant/answers',
       { timeout: 95_000 })
+      if (example.id === '01' && !capture) {
+        await capturePage.route('**/api/investigations', async route => {
+          try {
+            await expect(turn.getByRole('status')).toHaveText('等待调查结果…')
+          } finally {
+            await route.continue()
+          }
+        }, { times: 1 })
+      }
       await send.click()
       const response = await Promise.race([
         replied,
@@ -140,6 +150,8 @@ test('sends three real browser questions and reuses the first Run', async ({ pag
         await expect(turn).toContainText('工商来源不可用')
         await expect(turn).toContainText('规则分0分不代表安全')
         await expect(turn).toContainText('本次运行没有待审AI发现')
+        expect(answer.citations).toHaveLength(0)
+        await expect(capturePage.locator('.assistant-evidence')).toContainText('这条回答没有引用冻结证据。')
       } else {
         if (example.id === '01') {
           const domains = new Set(answer.citations.map(item => item.risk_type))
@@ -158,6 +170,11 @@ test('sends three real browser questions and reuses the first Run', async ({ pag
         await expect(evidence).toBeFocused()
         await expect(evidence).toContainText(answer.citations[0].content)
         if (capture) await capturePage.waitForTimeout(1800)
+        if (screenshots && example.id === '03') {
+          mkdirSync(screenshots, { recursive: true })
+          await capturePage.locator('.workspace-main').evaluate(element => { element.scrollTop = 0 })
+          await capturePage.screenshot({ path: join(screenshots, 'assistant-evidence.png'), animations: 'disabled' })
+        }
         await evidence.getByRole('button', { name: '返回引用位置' }).click()
         await expect(citation).toBeFocused()
       }
@@ -215,9 +232,23 @@ test('opens a completed investigation after refresh and answers on its saved Run
   await page.reload()
   await expect(page).toHaveURL(/\/assistant\?investigation=/)
   await expect(page.getByLabel('企业', { exact: true })).toHaveValue(company!.id)
-  await page.getByLabel('输入问题').fill('请说明这次调查的最终结论。')
-  await page.getByRole('button', { name: '发送', exact: true }).click()
+  const question = '请说明这次调查的最终结论。'
+  const input = page.getByLabel('输入问题')
+  const send = page.getByRole('button', { name: '发送', exact: true })
   const turn = page.getByRole('article', { name: '当前问答' })
+  // Interrupt only the first answer request to exercise the retry UI after a real Run is loaded.
+  await page.route('**/api/assistant/answers', async route => {
+    try {
+      await expect(turn.getByRole('status')).toHaveText('正在解释本次调查…')
+    } finally {
+      await route.abort()
+    }
+  }, { times: 1 })
+  await input.fill(question)
+  await send.click()
+  await expect(turn.getByRole('alert')).toBeVisible()
+  await expect(input).toHaveValue(question)
+  await send.click()
   await expect(turn).toContainText('已完成')
   await expect(turn.getByRole('link', { name: '查看已保存报告' })).toBeVisible()
 })

@@ -9,6 +9,9 @@ const props = defineProps<{
   activeChunkId?: string | null
   selectedChunkId?: string | null
   canReturn?: boolean
+  title?: string
+  emptyMessage?: string
+  citationNumbers?: ReadonlyMap<string, number>
 }>()
 defineEmits<{ return: [] }>()
 
@@ -17,11 +20,10 @@ const orderedEvidence = computed(() => [...props.evidence].sort((left, right) =>
 
 <template>
   <section class="panel dossier-section evidence-section" aria-labelledby="evidence-heading">
-    <div class="section-kicker">FROZEN SOURCE FILE</div>
-    <h2 id="evidence-heading">检索证据</h2>
+    <h2 id="evidence-heading" class="source-heading">{{ title ?? '检索证据' }}</h2>
     <p v-if="retrievalState === 'pending'" class="state-note" role="status">检索尚未完成，证据清单等待生成。</p>
     <p v-else-if="retrievalState === 'legacy_unavailable'" class="state-note">历史运行没有可定位的冻结检索证据。</p>
-    <p v-else-if="!orderedEvidence.length" class="state-note">检索已完成，本次运行没有返回证据分块。</p>
+    <p v-else-if="!orderedEvidence.length" class="state-note">{{ emptyMessage ?? '检索已完成，本次运行没有返回证据分块。' }}</p>
     <article
       v-for="item in orderedEvidence"
       :id="evidenceElementId(item.chunk_id)"
@@ -29,9 +31,10 @@ const orderedEvidence = computed(() => [...props.evidence].sort((left, right) =>
       class="evidence-card"
       :class="{ 'citation-highlight': activeChunkId === item.chunk_id }"
       :data-chunk-id="item.chunk_id"
+      :data-selected="selectedChunkId === item.chunk_id"
       tabindex="-1"
     >
-      <header><span class="provenance-stamp">{{ item.risk_type }}</span><span>排名 {{ item.rank }}</span></header>
+      <header><span v-if="citationNumbers?.has(item.chunk_id)" class="source-marker">引用 {{ citationNumbers.get(item.chunk_id) }}</span><span class="provenance-stamp">{{ item.risk_type }}</span><span>排名 {{ item.rank }}</span></header>
       <h3>{{ item.title }}</h3>
       <p>{{ item.content }}</p>
       <dl class="evidence-facts"><dt>观察日期</dt><dd>{{ item.observed_at }}</dd><dt>事实</dt><dd>{{ item.fact_type }} / {{ item.fact_key }} = {{ item.fact_value }} · {{ item.polarity }}</dd></dl>

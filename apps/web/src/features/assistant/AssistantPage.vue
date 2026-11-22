@@ -9,10 +9,10 @@ import EvidenceList from '../investigations/EvidenceList.vue'
 import RunConnectionStatus from '../investigations/RunConnectionStatus.vue'
 import RunEventTimeline from '../investigations/RunEventTimeline.vue'
 import { useEvidenceNavigation } from '../investigations/useEvidenceNavigation'
-import { statusLabel } from '../investigations/status'
+import { approvedReviewCount, statusLabel } from '../investigations/status'
 import AssistantAnswer from './AssistantAnswer.vue'
 import AssistantContext from './AssistantContext.vue'
-import { exampleDrafts } from './questions'
+import { contextQuestions, exampleDrafts, recommendedQuestions } from './questions'
 import { useAssistant } from './useAssistant'
 
 const route = useRoute()
@@ -24,6 +24,8 @@ const initialId = typeof route.query.investigation === 'string' && /^[0-9a-f-]{3
   ? route.query.investigation : ''
 const assistant = useAssistant(companies, canCreate, initialId)
 const { sessions, active, companyId, date, draft, notice, busy, detail, events, currentRunChanged } = assistant
+const prompts = computed(() => companies.value?.find(item => item.id === companyId.value)?.is_synthetic
+  ? recommendedQuestions : contextQuestions)
 const exampleId = route.query.example
 if (!initialId && (exampleId === '01' || exampleId === '02')) {
   const example = exampleDrafts[exampleId]
@@ -39,9 +41,16 @@ if (!initialId && (exampleId === '01' || exampleId === '02')) {
     }
   }, { immediate: true })
 }
+const questionInput = shallowRef<{ focus: () => void } | null>(null)
+function fillQuestion(question: string) {
+  draft.value = question
+  questionInput.value?.focus()
+}
 const lastTurn = computed(() => active.value?.turns.at(-1))
 const historicalTurns = computed(() => active.value?.turns.slice(0, -1) ?? [])
 const currentDetail = computed(() => detail.data.value?.id === assistant.investigationId.value ? detail.data.value : undefined)
+const approvals = computed(() => currentDetail.value?.current_run.id === assistant.runId.value
+  ? approvedReviewCount(currentDetail.value) : 0)
 const navigation = useEvidenceNavigation(assistant.investigationId, assistant.runId)
 const { activeChunkId, selectedChunkId, canReturn, unavailableMessage } = navigation
 const selectedAnswer = shallowRef<Answer>()
@@ -64,6 +73,7 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
       <div>
         <h1>调查助手</h1>
         <p class="muted">围绕一次授信前调查提问，查看规则、复核状态和冻结证据。</p>
+        <span v-if="approvals" class="status-label" data-status="saved">人工复核全部通过（{{ approvals }} 项）</span>
       </div>
       <RouterLink to="/demo">查看比赛示例</RouterLink>
     </header>
@@ -75,9 +85,9 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
           :companies="companies ?? []" :company-id="companyId" :date="date" :busy="busy"
           :can-create="canCreate" :sessions="sessions" :selected-id="active?.id"
           @company="assistant.setCompany" @date="assistant.setDate" @select="assistant.select"
-          @new="assistant.startNew" @fill="draft = $event" />
+          @new="assistant.startNew" />
         <details v-if="currentDetail" class="panel assistant-progress" :open="busy">
-          <summary>调查进度 · {{ statusLabel(currentDetail.current_run.status) }}</summary>
+          <summary>调查进度 <span class="status-label" :data-status="currentDetail.current_run.status">{{ statusLabel(currentDetail.current_run.status) }}</span></summary>
           <RunConnectionStatus
             :status="events.connectionStatus.value" :polling-fallback="events.pollingFallback.value"
             :permission-error="events.permissionError.value" @retry="events.retry" />
@@ -88,16 +98,25 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
         </details>
       </aside>
 
-      <section class="panel assistant-conversation" aria-label="调查对话">
-        <h2>对话</h2>
-        <p v-if="!active?.turns.length" class="muted">选择企业和基准日，然后发送问题。后续追问沿用本次运行。</p>
+      <section class="assistant-conversation" aria-label="调查对话">
+        <section class="panel assistant-prompts">
+          <h2>示例问题</h2>
+          <div class="page-actions">
+            <NButton
+              v-for="item in prompts" :key="item.label" secondary size="small"
+              :disabled="busy" @click="fillQuestion(item.text)">
+{{ item.label }}
+</NButton>
+          </div>
+        </section>
+        <p v-if="!active?.turns.length" class="state-note empty-conversation">选择企业和基准日，然后发送问题。后续追问沿用本次运行。</p>
         <p v-if="detail.error.value && !lastTurn?.error" role="alert">
           {{ detail.error.value.message }} <button type="button" class="text-action" @click="detail.refetch()">刷新调查</button>
         </p>
         <p v-if="currentRunChanged" role="alert">
           调查已切换运行。<button type="button" class="text-action" :disabled="busy" @click="assistant.confirmCurrentRun">在当前运行中重新提问</button>
         </p>
-        <details v-for="turn in historicalTurns" :key="turn.id" class="assistant-history">
+        <details v-for="turn in historicalTurns" :key="turn.id" class="panel assistant-history">
           <summary>{{ turn.question }}</summary>
           <AssistantAnswer
             v-if="turn.answer && active" :answer="turn.answer" :company="active.companyName" :date="active.date"
@@ -109,8 +128,8 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
           <AssistantAnswer
             v-if="lastTurn.answer" :answer="lastTurn.answer" :company="active.companyName" :date="active.date"
             @navigate="(chunk, origin) => lastTurn?.answer && cite(lastTurn.answer, chunk, origin)" />
-          <p v-else-if="lastTurn.error" role="alert">{{ lastTurn.error }}</p>
-          <p v-else-if="busy" role="status">{{ currentDetail?.retrieval_state === 'ready' && ['awaiting_review', 'completed'].includes(currentDetail.current_run.status) ? '正在解释本次调查…' : '等待调查结果…' }}</p>
+          <p v-else-if="lastTurn.error" class="state-note error-note" role="alert">{{ lastTurn.error }}</p>
+          <p v-else-if="busy" class="state-note" role="status">{{ currentDetail?.retrieval_state === 'ready' && ['awaiting_review', 'completed'].includes(currentDetail.current_run.status) ? '正在解释本次调查…' : '等待调查结果…' }}</p>
           <NButton
             v-if="lastTurn.error && currentDetail?.current_run.status === 'failed' && canCreate" size="small"
             @click="assistant.startNew">
@@ -118,24 +137,24 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
 </NButton>
         </article>
 
-        <form class="assistant-form" @submit.prevent="assistant.submit">
+        <form class="panel assistant-form" @submit.prevent="assistant.submit">
           <label for="assistant-question">输入问题</label>
           <textarea
-            id="assistant-question" v-model="draft" rows="3" maxlength="2000" :disabled="busy"
-            placeholder="例如，司法规则为什么计35分？" />
-          <p v-if="notice" role="alert">{{ notice }}</p>
+            id="assistant-question" ref="questionInput" v-model="draft" rows="3" maxlength="2000" :disabled="busy"
+            placeholder="例如，司法规则命中的依据是什么？" />
+          <p v-if="notice" class="state-note error-note" role="alert">{{ notice }}</p>
           <NButton type="primary" attr-type="submit" :disabled="busy">发送</NButton>
         </form>
       </section>
 
       <aside class="assistant-evidence" aria-label="回答引用证据">
-        <p v-if="unavailableMessage" role="status">{{ unavailableMessage }}</p>
+        <p v-if="unavailableMessage" class="navigation-notice" role="status">{{ unavailableMessage }}</p>
         <EvidenceList
-          v-if="evidence.length" :evidence="evidence" retrieval-state="ready"
+          v-if="evidence.length" :evidence="evidence" retrieval-state="ready" title="回答引用证据"
           :active-chunk-id="activeChunkId" :selected-chunk-id="selectedChunkId"
           :can-return="canReturn" @return="navigation.returnToOrigin" />
         <section v-else class="panel">
-          <h2>回答引用证据</h2>
+          <h2 class="source-heading">回答引用证据</h2>
           <p class="state-note">{{ lastTurn?.answer ? '这条回答没有引用冻结证据。' : '回答中的引用会在这里显示。' }}</p>
         </section>
       </aside>
@@ -144,26 +163,36 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
 </template>
 
 <style scoped>
-.assistant-page { max-width: 1700px; }
-.assistant-layout { display: grid; grid-template-columns: minmax(190px, .8fr) minmax(0, 2.2fr) minmax(240px, 1.25fr); gap: 1rem; align-items: start; }
-.assistant-settings, .assistant-evidence { display: grid; gap: 1rem; min-width: 0; }
+.assistant-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 2fr) minmax(0, 1.13fr);
+  gap: var(--panel-gap);
+  align-items: start;
+}
+.assistant-settings, .assistant-evidence { display: grid; gap: var(--panel-gap); min-width: 0; }
 .assistant-progress summary, .assistant-history summary { cursor: pointer; }
-.assistant-progress :deep(.run-timeline) { border: 0; padding: .65rem 0; }
-.assistant-conversation { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .65rem; }
-.assistant-conversation h2, .assistant-conversation p { margin: 0; }
-.assistant-history { border-bottom: 1px solid var(--line, #c5d8cf); padding: .3rem 0 .5rem; }
+.assistant-progress :deep(.run-timeline) { border: 0; padding: .65rem 0; box-shadow: none; }
+.assistant-progress :deep(.run-timeline h2) { display: none; }
+.assistant-conversation, .assistant-turn { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.assistant-history { padding: 8px 12px; }
 .assistant-history:not([open]) summary { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-.assistant-turn { display: grid; grid-template-columns: minmax(0, 1fr); gap: .85rem; }
-.assistant-question { padding: .7rem .8rem; background: var(--accent-wash); border-radius: .45rem; white-space: pre-wrap; overflow-wrap: anywhere; }
-.assistant-form { display: grid; gap: .45rem; align-items: start; margin-top: .55rem; }
-.assistant-form textarea { width: 100%; padding: .55rem; resize: vertical; font: inherit; color: inherit; background: transparent; border: 1px solid var(--line, #c5d8cf); border-radius: .35rem; }
+.assistant-history[open] summary { margin-bottom: 12px; overflow-wrap: anywhere; }
+.assistant-question {
+  margin: 0; padding: 12px 16px; border-radius: 8px; background: var(--accent-wash);
+  color: var(--selected-text); white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.empty-conversation { margin: 0; }
+.assistant-form { display: grid; gap: 8px; align-items: start; }
+.assistant-form textarea {
+  width: 100%; padding: 10px; resize: vertical; font: inherit; color: inherit;
+  background: var(--panel-bg); border: 1px solid var(--border); border-radius: 6px;
+}
 .assistant-form button { justify-self: end; }
-.assistant-evidence :deep(.evidence-card) { overflow-wrap: anywhere; }
-@media (max-width: 1200px) {
-  .assistant-layout { grid-template-columns: minmax(180px, .75fr) minmax(0, 2fr); }
+@media (max-width: 1090px) {
+  .assistant-layout { grid-template-columns: minmax(0, .75fr) minmax(0, 2fr); }
   .assistant-evidence { grid-column: 2; }
 }
-@media (max-width: 760px) {
+@media (max-width: 767px) {
   .assistant-layout { grid-template-columns: minmax(0, 1fr); }
   .assistant-evidence { grid-column: 1; }
 }

@@ -1,18 +1,19 @@
 import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { readFileSync } from 'node:fs'
+import { mkdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { expect, test, type APIRequestContext, type Browser, type Page } from '@playwright/test'
 import { safeRequest } from './safeRequest'
 
 type Status = 'queued' | 'running' | 'awaiting_review' | 'resume_queued' | 'completed' | 'failed'
-type Finding = { finding_id: string; finding_key: string; finding_version: number; title: string; summary: string; reasoning: string }
+type Finding = { citations: { chunk_id: string; content_hash: string; evidence_id: string }[]; finding_id: string; finding_key: string; finding_version: number; title: string; summary: string; reasoning: string }
 type Detail = {
   id: string
   company_name: string
   current_run: { id: string; status: Status; report_id: string | null }
   rule_score: number
+  retrieved_evidence: { chunk_id: string; content: string; content_hash: string; evidence_id: string }[]
   ai_findings: Finding[]
   decisions: { id: string; ai_finding_id: string | null; decision: string }[]
   conflicts: {
@@ -54,6 +55,13 @@ type DbEvidence = {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 const database = process.env.E2E_DB_NAME ?? ''
 const phase = process.env.E2E_PHASE ?? 'normal'
+const screenshots = process.env.E2E_UI_SCREENSHOT_DIR
+async function capture(page: Page, filename: string) {
+  if (!screenshots) return
+  mkdirSync(screenshots, { recursive: true })
+  await page.locator('.workspace-main').evaluate(element => { element.scrollTop = 0 })
+  await page.screenshot({ path: path.join(screenshots, filename), animations: 'disabled' })
+}
 const names: Record<string, string> = {
   'clean-operations': 'SYNTHETIC-COMPANY-002',
   'all-rules-95': 'SYNTHETIC-COMPANY-003',
@@ -127,7 +135,7 @@ async function waitStatus(request: APIRequestContext, token: string, id: string,
 
 async function pageState(page: Page, item: Detail, status: Status): Promise<void> {
   await page.goto(`/investigations/${item.id}`)
-  await expect(page.locator('.run-summary')).toContainText(status)
+  await expect(page.locator(`.page-heading .status-label[data-status="${status}"]`)).toBeVisible()
   await expect(page.locator('.run-timeline')).toContainText(item.current_run.id)
   await expect(page.locator('.timeline-list')).toBeVisible()
 }
@@ -158,7 +166,8 @@ async function reviewerPage(browser: Browser, item: Detail): Promise<void> {
     const page = await context.newPage()
     await loginUi(page, 'reviewer')
     await page.goto('/reviews')
-    await expect(page.getByText(item.ai_findings[0].title)).toBeVisible()
+    const finding = item.ai_findings[0]
+    await expect(page.locator(`a[href="/reviews/${finding.finding_id}"]`)).toBeVisible()
   } finally {
     await context.close()
   }
@@ -227,6 +236,22 @@ test('path 2: high risk waits for review and resumes once', async ({ page, reque
   await pageState(page, done, 'completed')
   await expect(page.locator('.timeline-list')).toContainText('复核完成，等待恢复执行')
   await expect(page.locator('.timeline-list')).toContainText('调查完成，风险报告已生成')
+  await expect(page.getByText(`人工复核全部通过（${done.decisions.length} 项）`, { exact: true })).toBeVisible()
+  await expect(page.getByRole('link', { name: '查看复核记录' })).toHaveCount(0)
+  const reviewerContext = await browser.newContext()
+  try {
+    const archive = await reviewerContext.newPage()
+    await loginUi(archive, 'reviewer')
+    await archive.goto(`/investigations/${done.id}`)
+    await archive.getByRole('link', { name: '查看复核记录' }).first().click()
+    await expect(archive.getByRole('heading', { name: '已保存的人工决定' })).toBeVisible()
+    await expect(archive.locator('.page-heading [data-status="saved"]')).toHaveText('已通过')
+    await expect(archive.getByRole('button', { name: '提交复核' })).toHaveCount(0)
+    await archive.reload()
+    await expect(archive.getByRole('heading', { name: '已保存的人工决定' })).toBeVisible()
+  } finally {
+    await reviewerContext.close()
+  }
   const saved = evidence(done.current_run.id)
   expect(saved.rule_score).toBe(95)
   expect(saved.decisions).toHaveLength(waiting.ai_findings.length)
@@ -239,8 +264,27 @@ test('path 2: high risk waits for review and resumes once', async ({ page, reque
 test('path 3: modified finding uses human replacement', async ({ page, request }) => {
   test.skip(phase !== 'normal', 'Normal worker phase only')
   const analyst = await loginApi(request, 'analyst')
-  const started = await createRun(request, analyst, 'all-rules-95')
-  const waiting = await waitStatus(request, analyst, started.id, 'awaiting_review')
+  const company = await companyId(request, analyst, 'all-rules-95')
+  await loginUi(page, 'analyst')
+  await page.goto('/companies/' + company)
+  await expect(page.getByLabel('基准日期')).toHaveValue('2026-09-11')
+  await page.getByRole('button', { name: '创建调查' }).click()
+  await expect(page).toHaveURL(/\/investigations\/[0-9a-f-]+$/)
+  const investigationId = new URL(page.url()).pathname.split('/').at(-1)!
+  const waiting = await waitStatus(request, analyst, investigationId, 'awaiting_review')
+  await expect(page.locator('.timeline-list')).toBeVisible()
+  await expect(page.getByRole('heading', { name: waiting.company_name, exact: true })).toBeVisible()
+  await capture(page, 'investigation-detail.png')
+  const firstInvestigationCitation = page.locator('.provenance-wrapper .citation-trigger').first()
+  const investigationChunk = waiting.ai_findings[0]?.citations[0]?.chunk_id
+  expect(investigationChunk).toBeDefined()
+  await firstInvestigationCitation.click()
+  const investigationExcerpt = page.locator(`[data-chunk-id="${investigationChunk}"]`)
+  await expect(investigationExcerpt).toBeFocused()
+  await investigationExcerpt.getByRole('button', { name: '返回引用位置' }).click()
+  await expect(firstInvestigationCitation).toBeFocused()
+  await page.getByRole('button', { name: '退出', exact: true }).click()
+  await expect(page).toHaveURL(/\/login/)
   expect(waiting.ai_findings.length).toBeGreaterThan(0)
   const original = waiting.ai_findings[0]
   const edited = { title: `人工复核 · ${original.title}`, summary: '人工复核确认原引用，对风险范围补充限定。', reasoning: '依据保留的合成证据进行人工复核，采用此独立人工版本。' }
@@ -250,6 +294,36 @@ test('path 3: modified finding uses human replacement', async ({ page, request }
   await page.goto(`/reviews/${original.finding_id}`)
   await expect(page.getByRole('heading', { name: '原始 AI 发现', exact: true })).toBeVisible()
   await expect(page.locator('.finding').first()).toContainText(original.title)
+  const citedChunks = [...new Set(original.citations.map(citation => citation.chunk_id))]
+  const firstChunk = citedChunks[0]
+  const frozen = waiting.retrieved_evidence.find(item => item.chunk_id === firstChunk)
+  expect(frozen).toBeDefined()
+  const citation = page.locator(`.finding [data-citation-target="${firstChunk}"]`).first()
+  const reviewEvidence = page.locator('.review-evidence')
+  await expect(reviewEvidence.locator('[data-chunk-id]')).toHaveCount(citedChunks.length)
+  const excerpt = reviewEvidence.locator(`[data-chunk-id="${firstChunk}"]`)
+  await citation.focus()
+  await citation.press('Enter')
+  await expect(excerpt).toBeFocused()
+  await expect(excerpt).toContainText(frozen!.content)
+  await expect(excerpt).toContainText('引用 1')
+  await capture(page, 'review-evidence.png')
+  const returnButton = excerpt.getByRole('button', { name: '返回引用位置' })
+  await page.keyboard.press('Tab')
+  await expect(returnButton).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(citation).toBeFocused()
+
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await expect(page.locator('.review-progress:not([open]) summary')).toBeVisible()
+  await page.setViewportSize({ width: 390, height: 844 })
+  await expect.poll(() => page.locator('.review-layout').evaluate(element => {
+    const finding = element.querySelector('.review-column')!.getBoundingClientRect()
+    const evidence = element.querySelector('.review-evidence')!.getBoundingClientRect()
+    const decision = element.querySelector('.review-decision')!.getBoundingClientRect()
+    return evidence.top >= finding.bottom && decision.top >= evidence.bottom && element.scrollWidth <= element.clientWidth
+  })).toBe(true)
+  await page.setViewportSize({ width: 1440, height: 900 })
   const approveOption = page.locator('.form-panel').getByText('通过（approve）', { exact: true })
   const modifyOption = page.locator('.form-panel').getByText('修改（modify）', { exact: true })
   const rejectOption = page.locator('.form-panel').getByText('驳回（reject）', { exact: true })
@@ -286,7 +360,7 @@ test('path 3: modified finding uses human replacement', async ({ page, request }
     await page.getByRole('button', { name: '提交复核' }).click()
     await expect(page).toHaveURL(new RegExp(`/investigations/${waiting.id}$`))
   }
-  const done = await waitStatus(request, analyst, started.id, 'completed')
+  const done = await waitStatus(request, analyst, waiting.id, 'completed')
   await pageState(page, done, 'completed')
   await expect(page.locator('[aria-labelledby="human-replacement-heading"]')).toContainText(edited.reasoning)
   await page.getByRole('link', { name: '查看不可变风险报告' }).click()
@@ -383,7 +457,7 @@ test('path 6: unavailable source with zero score requires run-level review', asy
   await expect(page.locator('.coverage-stamp[data-status="unavailable"]')).toBeVisible()
   await expect(page.locator('.evidence-sufficiency')).toContainText('insufficient')
   await expect(page.getByRole('region', { name: '企业风险画像与评分说明' })).toContainText('零分不代表企业安全')
-  await expect(page.locator('.dossier-main')).toContainText('来源覆盖不足或冲突尚未解决')
+  await expect(page.locator('.feature-page')).toContainText('来源覆盖不足或冲突尚未解决')
   await expect(page.locator('.provenance-wrapper')).toContainText('本次运行暂无 AI 发现。')
   const reviewerContext = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   try {

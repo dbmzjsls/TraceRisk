@@ -12,7 +12,7 @@ const { data, isPending, isFetching, error, refetch } = useQuery({ queryKey: com
 </script>
 <template>
   <section class="feature-page">
-    <header class="page-heading"><div><RouterLink to="/investigations">返回调查列表</RouterLink><h1>{{ data ? `${data.snapshot.company.name} · 风险报告` : '风险报告' }}</h1><p class="muted">已生成报告为不可变快照。合成数据，仅供演示。</p></div><NButton :loading="isFetching" @click="refetch()">刷新</NButton></header>
+    <header class="page-heading"><div><RouterLink to="/investigations">返回调查列表</RouterLink><h1>{{ data ? `${data.snapshot.company.name} · 风险报告` : '风险报告' }}</h1><p class="muted">已生成报告为不可变快照。</p></div><NButton :loading="isFetching" @click="refetch()">刷新</NButton></header>
     <QueryFeedback :loading="isPending" :refreshing="isFetching && !!data" :error="error" @refresh="refetch()" />
     <template v-if="data"><ReportSections :snapshot="data.snapshot" /><section class="panel"><h2>存档 HTML 报告</h2><iframe class="report-frame" title="存档风险报告" sandbox="" referrerpolicy="no-referrer" :srcdoc="data.html_content" /></section></template>
   </section>

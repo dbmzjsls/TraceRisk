@@ -673,6 +673,7 @@ export async function runStage5EventBoundaryTests() {
     }
     queryClient.clear()
     queryClient.setQueryData(investigationKeys.detail(investigationId), detail)
+    queryClient.setQueryData(['companies', companyId], { id: companyId, name: detail.company_name, unified_credit_code: 'DEMO', is_synthetic: true })
     configureAuth(() => 'page-token', () => undefined)
     const originalFetch = globalThis.fetch
     const streamReady = frame({ history_drained: true, history_available: false, run_status: 'completed', high_water_mark: 0 }, { event: 'stream.ready' })

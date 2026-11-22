@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import DemoExample from './DemoExample.vue'
-import examples from './examples.json'
-
-const caseDescriptions: Record<string, string> = {
-  '01': '汇总四类风险线索与规则命中',
-  '02': '查看资料缺口如何影响判断',
-  '03': '在同一次调查中查证司法得分',
-}
+import publicCases from './publicCases.json'
 
 const features = [
   { title: '规则得分', description: '按企业和基准日查看工商、司法、舆情与知识产权规则。' },
@@ -29,7 +23,7 @@ const features = [
 
       <main>
         <section id="overview" class="intro" aria-labelledby="demo-title">
-          <p class="kicker">项目介绍</p>
+          <p class="kicker">企业公开披露案例</p>
           <h1 id="demo-title">中小企业授信前调查助手</h1>
           <p class="description">面向金融机构调查人员，在同一次调查中查看规则得分、追溯证据，并确认还需要补查哪些资料。</p>
           <div class="intro-actions">
@@ -50,15 +44,11 @@ const features = [
 
         <section id="examples" class="examples" aria-labelledby="examples-title">
           <div class="section-heading">
-            <h2 id="examples-title">调查案例</h2>
-            <p>比赛示例资料</p>
+            <h2 id="examples-title">诉讼事项披露</h2>
+            <p>按公告披露日排列</p>
           </div>
-          <DemoExample
-            v-for="example in examples"
-            :key="example.id"
-            :example="example"
-            :description="caseDescriptions[example.id] ?? ''"
-          />
+          <p class="case-scope">以下展示公告中的事项进展和出处。</p>
+          <DemoExample v-for="example in publicCases" :key="example.id" :example="example" />
         </section>
       </main>
     </div>
@@ -75,14 +65,14 @@ const features = [
 .demo-header a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: .25em; }
 .demo-content a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 main > section { scroll-margin-top: .75rem; }
-.intro { padding-block: clamp(1.5rem, 3.6vw, 2.7rem) 1.75rem; }
+.intro { padding: clamp(1.25rem, 4vw, 2.7rem); margin-block: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel-bg); }
 .intro p, h2, h3 { margin: 0; }
-.kicker { color: var(--accent); font-weight: 650; font-size: .86rem; }
+.kicker { color: var(--source-text); font-weight: 650; font-size: .86rem; }
 .intro h1 { margin: .35rem 0 .6rem; font-size: clamp(1.85rem, 4.2vw, 3.5rem); line-height: 1.16; letter-spacing: -.025em; }
 .description { max-width: 39rem; color: var(--ink-soft); line-height: 1.65; font-size: clamp(.95rem, 1.7vw, 1.07rem); }
 .intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.2rem; margin-top: 1rem; }
 .intro-actions a { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.55rem; font-size: .9rem; font-weight: 650; }
-.primary-action { padding-inline: .85rem; border-radius: .3rem; background: var(--accent); color: var(--panel-bg); text-decoration: none; }
+.primary-action { padding-inline: .85rem; border-radius: .3rem; background: var(--accent); color: var(--action-text); text-decoration: none; }
 .primary-action:hover { filter: brightness(.94); }
 .secondary-action { color: var(--accent); text-underline-offset: .25em; }
 .feature-section { padding-block: 1rem; border-block: 1px solid var(--border); }
@@ -92,6 +82,7 @@ main > section { scroll-margin-top: .75rem; }
 .feature-list p { margin: .25rem 0 0; color: var(--ink-soft); font-size: .87rem; line-height: 1.55; }
 .examples { margin-top: 1.25rem; }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .55rem; }
+.case-scope { margin: 0 0 12px; color: var(--ink-soft); font-size: .9rem; }
 .section-heading p { margin: 0; color: var(--ink-soft); font-size: .82rem; }
 @media (max-width: 620px) {
   .feature-list { grid-template-columns: 1fr; gap: .5rem; }

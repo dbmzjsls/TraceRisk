@@ -2,8 +2,9 @@
 
 **调查助手补充交付已完成本地验收。** 已保存三组真实模型问答、运行快照和截图，并补齐两页 PPT 素材与约五分钟演示视频。公网 HTTPS 入口、二维码和评审账号待补齐。
 
-- [三组实际问答](conversations/README.md)
-- [本地比赛示例页](http://127.0.0.1:8080/demo) · [示例页截图](ppt-materials/screenshots/competition-demo.png) · [司法证据展开截图](ppt-materials/screenshots/competition-demo-evidence.png)
+- [三组历史演示问答](conversations/README.md)
+- [本地比赛示例页](http://127.0.0.1:8080/demo) · [示例页截图](ppt-materials/screenshots/competition-demo.png) · [公开公告摘录截图](ppt-materials/screenshots/competition-demo-evidence.png)
+- 苏州银行登录后案例截图：[调查详情](ppt-materials/screenshots/investigation-detail.png) · [复核记录](ppt-materials/screenshots/review-evidence.png) · [报告](ppt-materials/screenshots/approved-demo-report.png) · [助手引用](ppt-materials/screenshots/assistant-evidence.png)
 - [第 7 页 · 对话界面](ppt-materials/slides/07.png) · [第 8 页 · 三条提示词与实际输出](ppt-materials/slides/08.png)
 - [演示视频](TraceRisk调查助手演示.mp4) · [访问说明](agent-access.md)
 

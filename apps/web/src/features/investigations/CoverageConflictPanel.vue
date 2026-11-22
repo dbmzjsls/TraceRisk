@@ -13,8 +13,7 @@ const statusLabels = { available: '可用', unavailable: '不可用', stale: '�
 
 <template>
   <section class="panel dossier-section" aria-labelledby="coverage-heading">
-    <div class="section-kicker">PROVENANCE / COVERAGE</div>
-    <h2 id="coverage-heading">来源覆盖与事实冲突</h2>
+    <h2 id="coverage-heading" class="source-heading">来源覆盖与事实冲突</h2>
     <p class="provenance-note">覆盖与冲突仅解释证据质量，不调整规则分。</p>
     <p v-if="retrievalState === 'pending'" class="state-note" role="status">检索尚未完成，来源覆盖等待生成。</p>
     <p v-else-if="retrievalState === 'legacy_unavailable'" class="state-note">历史运行未保存结构化来源覆盖与冲突数据。</p>

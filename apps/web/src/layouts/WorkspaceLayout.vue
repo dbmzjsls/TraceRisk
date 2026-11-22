@@ -32,13 +32,12 @@ onUnmounted(() => mobileQuery?.removeEventListener('change', syncMobileLayout))
 </script>
 <template>
   <div class="workspace wh-full flex">
-    <aside class="workspace-sidebar flex-col" :class="{ 'sidebar-collapsed': collapsed }">
+    <aside id="workspace-sidebar" class="workspace-sidebar flex-col" :class="{ 'sidebar-collapsed': collapsed }" :inert="isMobile && collapsed">
       <RouterLink to="/companies" class="side-logo">{{ collapsed ? 'TR' : 'TraceRisk' }}</RouterLink>
       <NMenu class="cus-scroll-y" :options="menus" :value="selected" :collapsed="collapsed" :collapsed-width="64" @update:value="selectMenu" />
     </aside>
     <article class="workspace-body flex-col">
-      <header class="workspace-header"><NButton quaternary aria-label="展开或收起菜单" @click="collapsed = !collapsed">☰</NButton><strong class="workspace-title">中小企业授信前调查</strong><NButton quaternary :aria-label="isDark ? '切换浅色主题' : '切换深色主题'" @click="toggleTheme">{{ isDark ? '☾' : '☀' }}</NButton><span class="user-label">{{ user?.username }} · {{ roleName }}</span><NButton size="small" @click="logout">退出</NButton></header>
-      <div class="demo-notice" role="note">合成数据，仅供演示</div>
+      <header class="workspace-header"><NButton quaternary aria-label="展开或收起菜单" aria-controls="workspace-sidebar" :aria-expanded="!collapsed" @click="collapsed = !collapsed">☰</NButton><strong class="workspace-title">中小企业授信前调查</strong><NButton quaternary :aria-label="isDark ? '切换浅色主题' : '切换深色主题'" @click="toggleTheme">{{ isDark ? '☾' : '☀' }}</NButton><span class="user-label">{{ user?.username }} · {{ roleName }}</span><NButton size="small" @click="logout">退出</NButton></header>
       <main class="workspace-main cus-scroll-y"><RouterView /></main>
     </article>
   </div>

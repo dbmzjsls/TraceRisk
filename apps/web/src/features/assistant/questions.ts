@@ -6,6 +6,12 @@ export const recommendedQuestions = [
   { label: '司法追问', text: '请继续解释这次调查中司法规则为何计35分：展示引用原文、来源和观察日期，区分证据事实与尚待人工确认的判断，并列出下一步核查事项。' },
 ]
 
+export const contextQuestions = [
+  { label: '综合调查', text: '请汇总当前调查的规则命中、冻结证据和需要进一步核对的事项。' },
+  { label: '来源覆盖', text: '请说明本次调查检查了哪些来源、目前还有哪些资料缺口。' },
+  { label: '司法追问', text: '请说明本次司法规则为何命中，列出公告原文、来源和披露日期，并说明人工复核决定。' },
+]
+
 export const exampleDrafts = {
   '01': { companyCode: 'SYNTHETIC-COMPANY-003', question: recommendedQuestions[0].text },
   '02': { companyCode: 'SYNTHETIC-COMPANY-007', question: recommendedQuestions[1].text },

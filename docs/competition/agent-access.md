@@ -4,25 +4,26 @@
 
 ## 比赛示例页
 
-[本地示例页](http://127.0.0.1:8080/demo)可直接浏览。三张案例卡集中展示完整提示词、实跑回答、待复核状态、冻结证据与原始截图。点击「带入助手试问」，登录后即可看到预填的企业、基准日和问题。司法追问从综合调查开始，收到结果后选择「司法追问」。
+[本地示例页](http://127.0.0.1:8080/demo)展示西安银行股份有限公司的一审判决、二审判决与执行立案三份公开公告。每张卡保留披露日、摘录页码和巨潮资讯公告原文链接。登录后可另行打开调查助手及演示库。
 
-[1600×900 示例页截图](ppt-materials/screenshots/competition-demo.png) · [司法证据展开截图](ppt-materials/screenshots/competition-demo-evidence.png)
+[1600×900 示例页截图](ppt-materials/screenshots/competition-demo.png) · [公开公告摘录截图](ppt-materials/screenshots/competition-demo-evidence.png)
 
-部署后可把 HTTPS 的 `/demo` 作为案例浏览入口，将同域的 `/assistant` 和评审账号填入智能体提交信息。重新生成展示数据和原始截图资源可运行 `python scripts/export_competition_examples.py`，脚本先核对已存档的实跑文件哈希。
+部署后可用同域的 `/demo` 浏览公开案例，`/assistant` 进入调查工作台。历史演示问答及运行快照见 [三组问答存档](conversations/README.md)。
 
-## 操作路径
+## 登录后的公开资料案例
 
-本机 Docker 演示已启动，使用 `tracerisk_demo` 和真实模型配置。浏览器已验证直接打开、登录返回、刷新和企业目录加载。[本地调查助手](http://127.0.0.1:8080/assistant)
+工作台使用独立的 `tracerisk_public_demo` 数据库。案例是苏州银行股份有限公司，基准日为 2026-06-25。身份与统一社会信用代码来自[苏州银行官网披露](https://www.suzhoubank.com/suzhoubank/attachDir/2025/10/2025103108321148794.pdf)，调查使用工作区文件包中已核对哈希的[诉讼事项进展公告 2026-026](https://static.cninfo.com.cn/finalpage/2026-06-25/1225386155.PDF#page=1)。只录入该公告中当事人地位和当时的一审进展，其他领域按资料缺口展示。
 
-登录后打开 `/assistant`。选择企业与基准日，复制[三条提示词](conversations/manifest.json)并发送。示例 03 回到示例 01 的会话继续追问，点击回答中的引用查看本次冻结证据。
+分析员从企业详情设置基准日并创建调查。复核员打开待复核发现并定位公告摘录。完成复核后，可在调查详情打开报告，或通过「在调查助手中提问」继续核对同次运行的引用。
 
-## 部署准备
+## 本地运行
 
-在已授权主机上使用独立的 `tracerisk_demo` 和持久化 PostgreSQL 卷。按 [Compose 生命周期说明](../operations/docker-compose.md)使用默认 Mock/Fake 配置执行 `bootstrap-demo` 和 `verify-target --target tracerisk_demo`。随后在私有配置中设置 `MODEL_BASE_URL`、`MODEL_NAME`、`MODEL_API_KEY` 和 `JWT_SECRET`，启动真实模型服务。
+首次运行需创建空的 `tracerisk_public_demo`，定向执行 Alembic 迁移、`python -m tracerisk.workflows.queue`、`python -m tracerisk.workflows.spike_graph` 和 `python -m tracerisk.auth.seed`。使用项目 API 虚拟环境和可用的 BGE 模型，设置 `POSTGRES_DB=tracerisk_public_demo`、`EMBEDDING_PROVIDER=bge` 与 `EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5` 后，从仓库根目录运行 `python -m scripts.seed_public_demo`。脚本验证目标库并在同一事务内校对身份、公告记录和 BGE 索引。
+
+准备本地数据库、签名和模型环境变量后，可切到公开资料工作台：
 
 ```powershell
-docker compose -f compose.yaml -f compose.competition.yaml config --quiet
-docker compose -f compose.yaml -f compose.competition.yaml up -d --build --wait --wait-timeout 180 api worker web
+docker compose -f compose.yaml -f compose.competition.yaml -f compose.public-demo.yaml up -d --build --wait api worker web
 ```
 
-覆盖文件把 API 与 Worker 指向同一展示库和模型配置，保留 Fake 检索。HTTPS 入口反向代理 Web 的本机端口，转发 `/demo`、`/assistant` 和同源 `/api`，SSE 路径保持流式传输。公开前配置独立分析员账号，更换或停用默认账号，并在独立浏览器验收示例页浏览、登录返回、预填、刷新、问答、引用及断流后的轮询。上线后将同一 HTTPS 助手地址用于 PPT 链接和二维码，并在最终 PPT 与手机上各验证一次。
+网页运行于 [本地工作台](http://127.0.0.1:8080)。公开案例页和鉴权后的工作台都在该入口。历史测试库与素材保留原有来源标识。
