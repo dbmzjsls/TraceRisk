@@ -1,0 +1,10 @@
+services:
+  api:
+    environment: &competition_environment
+      POSTGRES_DB: tracerisk_demo
+      MODEL_ADAPTER: openai_compatible
+      MODEL_BASE_URL: ${MODEL_BASE_URL:?Set MODEL_BASE_URL for the competition model}
+      MODEL_NAME: ${MODEL_NAME:?Set MODEL_NAME for the competition model}
+      MODEL_API_KEY: ${MODEL_API_KEY:?Set MODEL_API_KEY in private deployment configuration}
+  worker:
+    environment: *competition_environment

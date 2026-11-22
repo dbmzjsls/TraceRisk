@@ -1,0 +1,17 @@
+﻿dataset,group,metric,value,denominator,ledger_id
+mapping,context_only,records,34,55,E01/E02
+mapping,rule_mapped,records,18,55,E01/E02
+mapping,not_importable,records,3,55,E01/E02
+historical40,before,required_review_routed,1,10,E04
+historical40,before,unnecessary_review,0,30,E04
+historical40,after,required_review_routed,9,10,E04
+historical40,after,unnecessary_review,15,30,E04
+challenge20,accept,accept,0,20,E04
+challenge20,accept,manual_review,5,20,E04
+challenge20,accept,reject,0,20,E04
+challenge20,manual_review,accept,0,20,E04
+challenge20,manual_review,manual_review,2,20,E04
+challenge20,manual_review,reject,3,20,E04
+challenge20,reject,accept,0,20,E04
+challenge20,reject,manual_review,0,20,E04
+challenge20,reject,reject,10,20,E04

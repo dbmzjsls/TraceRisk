@@ -10,7 +10,7 @@ from tracerisk.audit.service import append_audit_event
 from tracerisk.config import Settings
 from tracerisk.investigations.models import Investigation, WorkflowRun, WorkflowStep
 from tracerisk.retrieval.indexing import IndexContract, check_index
-from tracerisk.workflows.errors import PermanentWorkflowError
+from tracerisk.workflows.errors import FailureCode, PermanentWorkflowError
 from tracerisk.workflows.events import append_workflow_event
 from tracerisk.workflows.queue import QUEUE_NAME, TASK_NAME, create_queue
 from tracerisk.workflows.spike_graph import execute_workflow
@@ -68,7 +68,10 @@ async def execute_probe(
 
 
 async def mark_run_failed(
-    sessions: async_sessionmaker[AsyncSession], run_id: UUID
+    sessions: async_sessionmaker[AsyncSession],
+    run_id: UUID,
+    *,
+    failure_code: FailureCode = "workflow_error",
 ) -> bool:
     async with sessions.begin() as session:
         investigation = await session.scalar(
@@ -110,6 +113,7 @@ async def mark_run_failed(
             event_key="run:failed",
             event_type="run.failed",
             run_status="failed",
+            metadata={"failure_code": failure_code},
         )
         return True
 
@@ -133,8 +137,8 @@ def create_worker(
             if operation == "start":
                 await execute_probe(sessions, UUID(run_id), context.job.attempts + 1)
             await execute_workflow(settings, sessions, UUID(run_id), operation)
-        except PermanentWorkflowError:
-            await mark_run_failed(sessions, UUID(run_id))
+        except PermanentWorkflowError as exc:
+            await mark_run_failed(sessions, UUID(run_id), failure_code=exc.code)
             return
         except Exception as exc:
             if retry.get_retry_decision(exception=exc, job=context.job) is None:

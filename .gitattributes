@@ -1,0 +1,8 @@
+datasets/evaluation/model_challenge_cases.jsonl text eol=lf
+datasets/evaluation/model_challenge_config.json text eol=lf
+
+# Competition evaluation inputs and byte-exact audit records.
+datasets/evaluation/investigation_validation_cases.jsonl -text
+docs/evaluation/upgrade-2026-11-08/** -text
+docs/competition/conversations/*/prompt.txt text eol=lf
+docs/competition/conversations/**/*.json text eol=lf

@@ -129,6 +129,13 @@ class ConflictResponse(BaseModel):
     sides: list[ConflictSideResponse]
 
 
+class ModelExecutionResponse(BaseModel):
+    mode: Literal["mock", "real", "unknown"]
+    models: list[str]
+    statuses: list[str]
+    error_categories: list[str]
+
+
 class InvestigationDetailResponse(InvestigationResponse):
     retrieval_state: Literal["pending", "legacy_unavailable", "ready"]
     steps: list[StepResponse]
@@ -139,3 +146,6 @@ class InvestigationDetailResponse(InvestigationResponse):
     decisions: list[DecisionResponse]
     coverage: CoverageResponse
     conflicts: list[ConflictResponse]
+    failure_code: str | None = None
+    review_reasons: list[str] = []
+    model_execution: ModelExecutionResponse

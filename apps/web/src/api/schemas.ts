@@ -42,7 +42,41 @@ const coverageEntriesSchema = z.array(coverageEntrySchema).length(4).superRefine
 const coverageSchema = z.object({ entries: coverageEntriesSchema, insufficiency_details: z.array(z.string()), evidence_sufficiency: z.enum(['sufficient', 'insufficient', 'unavailable']) })
 const conflictSideSchema = z.object({ source_type: z.string(), fact_value: z.string(), observed_at: z.iso.date(), evidence_id: z.guid(), content_hash: z.string() })
 const conflictSchema = z.object({ company_id: z.guid(), risk_type: z.string(), fact_type: z.string(), fact_key: z.string(), authority_source: z.string().nullable(), resolved_value: z.string().nullable(), resolution_state: z.enum(['resolved', 'unresolved']), sides: z.array(conflictSideSchema).min(2) })
-export const investigationDetailSchema: z.ZodType<InvestigationDetail> = z.object({ ...investigationFields, retrieval_state: z.enum(['pending', 'legacy_unavailable', 'ready']), steps: z.array(z.object({ name: z.string(), attempt_count: z.number().int().nonnegative() })), rule_score: z.number().int(), rule_findings: z.array(ruleSchema), retrieved_evidence: z.array(retrievedSchema), ai_findings: z.array(pendingFindingSchema), decisions: z.array(decisionSchema), coverage: coverageSchema, conflicts: z.array(conflictSchema) })
+export const investigationDetailSchema: z.ZodType<InvestigationDetail> = z.object({ ...investigationFields, retrieval_state: z.enum(['pending', 'legacy_unavailable', 'ready']), steps: z.array(z.object({ name: z.string(), attempt_count: z.number().int().nonnegative() })), rule_score: z.number().int(), rule_findings: z.array(ruleSchema), retrieved_evidence: z.array(retrievedSchema), ai_findings: z.array(pendingFindingSchema), decisions: z.array(decisionSchema), coverage: coverageSchema, conflicts: z.array(conflictSchema), failure_code: z.string().nullable().optional(), review_reasons: z.array(z.string()).default([]), model_execution: z.object({ mode: z.enum(['mock', 'real', 'unknown']), models: z.array(z.string()), statuses: z.array(z.string()), error_categories: z.array(z.string()) }).default({ mode: 'unknown', models: [], statuses: [], error_categories: [] }) })
 export const reviewResponseSchema: z.ZodType<components['schemas']['ReviewResponse']> = z.object({ decision_id: z.guid() })
+export type AssistantAnswer = components['schemas']['AssistantAnswerResponse']
+const sha256Schema = z.string().regex(/^[0-9a-f]{64}$/)
+const assistantFindingSchema: z.ZodType<components['schemas']['AssistantFinding']> = z.object({
+  id: z.guid(), source: z.enum(['pending_ai', 'original_ai', 'ai', 'human']), version: z.number().int().positive(),
+  risk_type: z.enum(['business', 'judicial', 'news', 'intellectual_property']),
+  title: z.string(), summary: z.string(), support_status: supportStatusSchema, support_reason: supportReasonSchema,
+  citation_chunk_ids: z.array(z.guid()),
+})
+export const assistantAnswerSchema: z.ZodType<AssistantAnswer> = z.object({
+  answer_id: z.guid(), investigation_id: z.guid(), run_id: z.guid(), report_id: z.guid().nullable(),
+  question: z.string(), context_sha256: sha256Schema, question_sha256: sha256Schema,
+  answered_at: z.iso.datetime({ offset: true }), status: z.enum(['answer', 'clarify', 'unsupported']),
+  reason_code: z.enum(['none', 'scope_mismatch', 'no_context', 'outside_scope']),
+  run_status: z.enum(['awaiting_review', 'completed']), rule_score: z.number().int().nonnegative(),
+  review_reasons: z.array(z.string()),
+  sections: z.array(z.object({
+    kind: z.enum(['overview', 'rules', 'findings', 'original_ai', 'coverage', 'evidence', 'review_actions', 'limits']),
+    title: z.string(), lines: z.array(z.string()), citation_chunk_ids: z.array(z.guid()),
+    findings: z.array(assistantFindingSchema),
+  })),
+  citations: z.array(retrievedSchema),
+  investigation_model_execution: z.object({
+    mode: z.enum(['mock', 'real', 'unknown']), models: z.array(z.string()),
+    statuses: z.array(z.string()), error_categories: z.array(z.string()),
+  }),
+  assistant_execution: z.object({
+    mode: z.enum(['mock', 'real']), model: z.string(), prompt_version: z.literal('investigation-assistant-v1'),
+    latency_ms: z.number().int().nonnegative(),
+    usage: z.object({
+      prompt_tokens: z.number().int().nonnegative().nullable(),
+      completion_tokens: z.number().int().nonnegative().nullable(),
+    }).nullable(),
+  }),
+})
 export { reportResponseSchema as reportSchema } from './reportSnapshots'
 export type { ReportFinding, ReportSnapshot } from './reportSnapshots'

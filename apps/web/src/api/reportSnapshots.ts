@@ -39,12 +39,15 @@ const legacyRetrievedSchema = z.object({ chunk_id: guid, evidence_id: guid, cont
 const modernRetrievedSchema = z.object({
   risk_type: z.enum(['business', 'judicial', 'news', 'intellectual_property']), observed_at: z.iso.date(), fact_type: z.string(), fact_key: z.string(), fact_value: z.string(), polarity: z.string(),
   evidence_content_hash: z.string().regex(/^[0-9a-f]{64}$/), source_type: z.enum(['business', 'judicial', 'news', 'intellectual_property']), rank: z.number().int().min(1).max(5),
+  source_uri: z.string().optional(), title: z.string().optional(),
   chunk_id: guid, evidence_id: guid, content_hash: z.string().regex(/^[0-9a-f]{64}$/), content: z.string(),
 }).strict()
 const optionalReview = { review_id: guid.optional(), decision: z.enum(['approve', 'reject']).optional(), reason: z.string().optional(), kind: z.string().optional() }
 
 const modernReportFields = {
-  snapshot_version: z.literal('stage5-v1'), notice: z.string(), run_id: guid, company: z.object({ id: guid, name: z.string() }), rule_score: z.number().int(),
+  as_of_date: z.iso.date().optional(),
+  model_execution: z.object({ mode: z.enum(['mock', 'real', 'unknown']), models: z.array(z.string()), statuses: z.array(z.string()), error_categories: z.array(z.string()) }).optional(),
+  snapshot_version: z.literal('stage5-v1'), notice: z.string(), run_id: guid, company: z.object({ id: guid, name: z.string(), unified_credit_code: z.string().nullable().optional() }), rule_score: z.number().int(),
   rules: z.array(ruleSchema), ai_findings: z.array(modernFindingSchema), human_decisions: z.array(decisionSchema), final_findings: z.array(modernFindingSchema),
   evidence_references: z.array(referenceSchema), retrieved_evidence: z.array(modernRetrievedSchema),
   coverage: z.object({ scope: z.tuple([z.literal('business'), z.literal('judicial'), z.literal('news'), z.literal('intellectual_property')]), entries: coverageEntriesSchema, insufficiency_details: z.array(z.string()), evidence_sufficiency: z.enum(['sufficient', 'insufficient']) }),
@@ -55,12 +58,12 @@ export const stage6ReportSnapshotSchema = z.object({ ...modernReportFields, snap
 
 const legacyReferenceSchema = z.object({ rule_finding_id: guid, evidence_id: guid, content_hash: z.string(), title: z.string().optional(), content: z.string().optional() }).passthrough()
 export const legacyReportSnapshotSchema = z.object({
-  notice: z.string(), run_id: guid, company: z.object({ id: guid, name: z.string() }), rule_score: z.number().int(), rules: z.array(ruleSchema),
+  notice: z.string(), run_id: guid, company: z.object({ id: guid, name: z.string(), unified_credit_code: z.string().nullable().optional() }), rule_score: z.number().int(), rules: z.array(ruleSchema),
   ai_findings: z.array(legacyFindingSchema), human_decisions: z.array(decisionSchema), final_findings: z.array(legacyFindingSchema),
   evidence_references: z.array(legacyReferenceSchema), retrieved_evidence: z.array(legacyRetrievedSchema),
   coverage: z.object({ scope: z.array(z.string()) }).passthrough(), review_reasons: z.array(z.string()), evidence_sufficiency: z.string(), ...optionalReview,
 }).passthrough().refine(snapshot => !("snapshot_version" in snapshot), { message: 'Legacy snapshots must not claim a snapshot version' }).transform(snapshot => ({
-  ...snapshot, snapshot_version: 'legacy' as const, availability: 'legacy_unavailable' as const,
+  ...snapshot, as_of_date: undefined, model_execution: undefined, snapshot_version: 'legacy' as const, availability: 'legacy_unavailable' as const,
   evidence_references: snapshot.evidence_references.map(reference => ({ ...reference, chunk_id: null, chunk_content_hash: null, title: reference.title ?? null, content: reference.content ?? null })),
   coverage: { scope: snapshot.coverage.scope, entries: [], insufficiency_details: [], evidence_sufficiency: 'unavailable' as const }, conflicts: [],
 }))

@@ -1,0 +1,8 @@
+services:
+  api:
+    environment: &public_demo_environment
+      POSTGRES_DB: tracerisk_public_demo
+      EMBEDDING_PROVIDER: bge
+      EMBEDDING_MODEL: BAAI/bge-small-zh-v1.5
+  worker:
+    environment: *public_demo_environment

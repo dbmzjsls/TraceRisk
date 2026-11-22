@@ -1,0 +1,38 @@
+{
+  "database": "tracerisk_eval_2deab9b1eb47408180c0d4eca3fa2646",
+  "mode": "real-model-api-queue-workflow",
+  "status_before_review": "awaiting_review",
+  "review_reasons": [
+    "high_risk",
+    "model_evidence_insufficient",
+    "model_recommended",
+    "unverified_free_text_extension"
+  ],
+  "model_execution": {
+    "mode": "real",
+    "models": [
+      "deepseek-flash"
+    ],
+    "statuses": [
+      "succeeded"
+    ],
+    "error_categories": []
+  },
+  "rule_score": 95,
+  "final_status": "completed",
+  "failure_code": null,
+  "report_created": true,
+  "elapsed_ms": 21297,
+  "human_review": "automated protocol submission; human quality/time not measured",
+  "attempts": [
+    {
+      "model": "deepseek-flash",
+      "status": "succeeded",
+      "latency_ms": 9375,
+      "input_tokens": 2667,
+      "output_tokens": 1833,
+      "error_category": null
+    }
+  ],
+  "owned_database_cleaned": true
+}

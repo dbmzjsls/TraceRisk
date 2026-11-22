@@ -1,0 +1,35 @@
+{
+  "database": "tracerisk_eval_3f53166ae40844b9ae4726d7e038000f",
+  "mode": "real-model-api-queue-workflow",
+  "status_before_review": "failed",
+  "review_reasons": [
+    "high_risk"
+  ],
+  "model_execution": {
+    "mode": "real",
+    "models": [
+      "deepseek-flash"
+    ],
+    "statuses": [
+      "succeeded"
+    ],
+    "error_categories": []
+  },
+  "rule_score": 95,
+  "final_status": "failed",
+  "failure_code": "citation_validation_failed",
+  "report_created": false,
+  "elapsed_ms": 24750,
+  "human_review": "automated protocol submission; human quality/time not measured",
+  "attempts": [
+    {
+      "model": "deepseek-flash",
+      "status": "succeeded",
+      "latency_ms": 19327,
+      "input_tokens": 2366,
+      "output_tokens": 3168,
+      "error_category": null
+    }
+  ],
+  "owned_database_cleaned": true
+}

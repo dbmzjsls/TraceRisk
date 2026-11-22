@@ -329,6 +329,7 @@ async def build_risk_context(session: AsyncSession, *, run_id: UUID) -> RiskCont
                 {
                     "evidence_id": chunk.evidence_id,
                     "chunk_id": chunk.id,
+                    "source_type": chunk.source_type,
                     "risk_type": retrieval.risk_type,
                     **{
                         name: getattr(chunk, name)

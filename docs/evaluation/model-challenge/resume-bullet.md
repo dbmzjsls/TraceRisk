@@ -1,0 +1,1 @@
+- 发现问题—完成改进—过程指标变化：在 TraceRisk 的 40 条逐条手工合成挑战样本上，使用真实 DeepSeek 调用（返回模型 deepseek-flash，system fingerprint e72d3c7f663d3e1383b00b3884cb4501）定位 `human_judgment`，仅调整 `review_routing`；完成定向改进，相关归因案例由 20 变为 7。结果来自一组本地非生产环境前后实验，不代表生产分布或普遍提升。

@@ -217,6 +217,13 @@ async def test_report_paths(database: Settings, decision: str | None) -> None:
             snapshot = cast(dict[str, Any], report.snapshot)
             assert run.status == "completed"
             assert snapshot["snapshot_version"] == "stage6-v1"
+            assert snapshot["as_of_date"] == "2026-09-11"
+            assert snapshot["company"]["unified_credit_code"] == "SYN-REPORT"
+            assert snapshot["model_execution"]["mode"] == "unknown"
+            assert (
+                snapshot["retrieved_evidence"][0]["source_uri"] == evidence.source_uri
+            )
+            assert snapshot["retrieved_evidence"][0]["title"] == evidence.title
             assert [
                 entry["source_type"] for entry in snapshot["coverage"]["entries"]
             ] == ["business", "judicial", "news", "intellectual_property"]

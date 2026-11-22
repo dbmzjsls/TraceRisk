@@ -4,10 +4,12 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tracerisk.ai.models import AIFinding
+from tracerisk.ai.provenance import load_model_execution
 from tracerisk.audit.service import append_audit_event
 from tracerisk.companies.models import Company
 from tracerisk.evidence.conflicts import load_retrieved_conflicts
 from tracerisk.evidence.coverage import SOURCE_ORDER, load_coverage
+from tracerisk.evidence.models import Evidence
 from tracerisk.evidence.service import load_frozen_retrieval
 from tracerisk.investigations.models import Investigation, WorkflowRun
 from tracerisk.reports.models import RiskReport
@@ -205,13 +207,30 @@ async def generate_report(
                     "human_version": human.version if human else None,
                 }
             )
+        sources = {
+            evidence.id: evidence
+            for evidence in (
+                await session.scalars(
+                    select(Evidence).where(
+                        Evidence.id.in_([chunk.evidence_id for chunk, _ in frozen_rows])
+                    )
+                )
+            ).all()
+        }
         snapshot: dict[str, object] = {
             "snapshot_version": "stage6-v1",
-            "notice": "合成数据，仅供演示",
+            "notice": "合成数据，仅供演示"
+            if company and company.is_synthetic
+            else "样本数据，仅供调查辅助",
+            "as_of_date": investigation.as_of_date.isoformat(),
+            "model_execution": (
+                await load_model_execution(session, run_id)
+            ).model_dump(),
             "run_id": str(run_id),
             "company": {
                 "id": str(investigation.company_id),
                 "name": company.name if company else "未知企业",
+                "unified_credit_code": company.unified_credit_code if company else None,
             },
             "rule_score": score,
             "rules": [
@@ -251,6 +270,8 @@ async def generate_report(
             "evidence_references": references,
             "retrieved_evidence": [
                 {
+                    "source_uri": sources[c.evidence_id].source_uri,
+                    "title": sources[c.evidence_id].title,
                     "risk_type": retrieval.risk_type,
                     "chunk_id": str(c.id),
                     "evidence_id": str(c.evidence_id),

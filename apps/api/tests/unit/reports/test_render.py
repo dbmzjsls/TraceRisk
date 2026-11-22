@@ -19,3 +19,19 @@ def test_report_escapes_every_section() -> None:
     assert "approved" in final
     assert "rejected" not in final
     assert "合成数据，仅供演示" in result
+
+
+def test_report_explains_score_coverage_and_model_source() -> None:
+    result = render_report(
+        {
+            "rule_score": 0,
+            "as_of_date": "2026-11-08",
+            "model_execution": {"mode": "mock", "models": ["mock"]},
+            "coverage": {"evidence_sufficiency": "insufficient"},
+        }
+    )
+    assert "零分不代表企业安全" in result
+    assert "Mock 模拟模型" in result
+    assert "2026-11-08" in result
+    assert "最高95" in result
+    assert "模型来源未记录" in render_report({})

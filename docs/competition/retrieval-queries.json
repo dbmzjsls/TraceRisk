@@ -1,0 +1,209 @@
+{
+  "schema_version": "competition-public-queries-v1",
+  "status": "frozen_before_retrieval_not_run",
+  "frozen_date": "2026-11-08",
+  "review": "single_agent_provisional_labels_not_independently_reviewed",
+  "scope": "offline package candidates; not imported chunk IDs",
+  "chunk_schema_version": "v1",
+  "visibility_policy": "Use source.published_at for observed_at at future import, preserve event_date separately.",
+  "input_evidence_sha256": "2cec999e7632a5910152eb79c3dd5edbfcbc67bab281806b860a5d3878ee5714",
+  "input_sources_sha256": "c11befa254c77bff6c5bd3a77aefe6faaf5ae24104ff379aeec036b26adda59b",
+  "queries": [
+    {
+      "query_id": "PUB-Q01",
+      "category": "exact_case_number",
+      "entity_id": "REAL-600816",
+      "as_of_date": "2025-12-13",
+      "risk_type": "judicial",
+      "query": "（2025）沪民终567号是否已受理？",
+      "relevant_evidence_ids": [
+        "5462f558-cf8f-5aa3-826a-72684e2455a3",
+        "86099ee7-8f47-541d-8624-d77a2d0367b4",
+        "08d42def-4d2a-51b5-a53e-458bc09b7102",
+        "bde86eba-8648-5586-bc83-8173f5610379"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "7e4b5b3f-67df-55c4-b1c7-054e6d6c5e61",
+        "13f659df-4e99-5675-8357-d8e052ee46ee",
+        "ff97180f-e8d7-57ae-bc6f-e67bc9053af0",
+        "5da6aa55-2432-53bc-b0b5-ea1d1a21f8b9"
+      ],
+      "labels_basis": "同公告重复引用均指二审已受理；重复记录尚未去重。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q02",
+      "category": "enforcement_status",
+      "entity_id": "REAL-600816",
+      "as_of_date": "2026-06-26",
+      "risk_type": "judicial",
+      "query": "青岛贵隆执行案目前执行程序是什么状态？",
+      "relevant_evidence_ids": [
+        "3406c8d7-bd41-5d4d-b6a7-af732a7a8372"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "7ce20d8a-6cd2-52cd-9c82-7c058de09829"
+      ],
+      "labels_basis": "终结本次执行程序；不推断债务消灭，不等同诉讼closed。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q03",
+      "category": "party_role",
+      "entity_id": "REAL-600928",
+      "as_of_date": "2026-01-06",
+      "risk_type": "judicial",
+      "query": "（2025）陕04民初34号中西安银行是哪方当事人？",
+      "relevant_evidence_ids": [
+        "ebdad3f0-22d5-59ff-977b-eef99236d306"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "d788e18a-37da-52f9-98c7-80604813a167"
+      ],
+      "labels_basis": "银行为原告，不可把借款人风险直接归属于银行。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q04",
+      "category": "status_before_update",
+      "entity_id": "REAL-600928",
+      "as_of_date": "2026-01-06",
+      "risk_type": "judicial",
+      "query": "（2025）陕04民初34号在一月披露时状态如何？",
+      "relevant_evidence_ids": [
+        "2fec1d4e-047e-5320-a79b-92628dfcae29",
+        "2f5e2a33-8593-53dc-9523-4b00563eb948",
+        "fab35807-47f0-5657-82b0-67e3a474b023",
+        "a54808f7-27d8-568f-a0ce-4ebdf5ae4d3d"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "9e73ba97-f017-510a-953d-b28e70d6e1fd",
+        "a0aa5fde-8580-58ad-bfac-1f65bf564d21",
+        "9e032de0-2e3b-510a-994d-3e1184a6dd5b",
+        "02d341cc-b51e-58ad-bcac-f1ffaf9758a2"
+      ],
+      "labels_basis": "仅用当时已披露的open，不纳入六月closed。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q05",
+      "category": "status_after_update",
+      "entity_id": "REAL-600928",
+      "as_of_date": "2026-06-16",
+      "risk_type": "judicial",
+      "query": "（2025）陕04民初34号在六月更新后的状态如何？",
+      "relevant_evidence_ids": [
+        "9eb24717-6073-508a-b275-e17ae4ac4f90",
+        "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+        "ca22db21-df72-52c3-b26b-78c9a514f541"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "5e31b8e4-d8f5-5de9-adf4-7fee01da858e",
+        "8a0cb3c9-1f7a-5564-bf9f-61e4a8de995f",
+        "780c9b17-6c8e-5ff4-bd09-37adc005c363"
+      ],
+      "labels_basis": "六月二审判决closed；旧open是历史背景，不能单独当最新状态。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q06",
+      "category": "defendant_role",
+      "entity_id": "REAL-002966",
+      "as_of_date": "2026-06-25",
+      "risk_type": "judicial",
+      "query": "（2024）内06民初70号中苏州银行是何当事人身份？",
+      "relevant_evidence_ids": [
+        "6a57dfdd-0594-54f2-95c8-6bff3352592b"
+      ],
+      "relevant_candidate_chunk_ids": [
+        "11ebb3e1-917b-53a8-bbd0-d78a4d4478ac"
+      ],
+      "labels_basis": "公告摘录标被告之一，不能推断所有请求均针对银行或已败诉。",
+      "expected_behavior": "retrieve_and_cite",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q07",
+      "category": "cross_entity_distractor",
+      "entity_id": "REAL-600928",
+      "as_of_date": "2026-06-25",
+      "risk_type": "judicial",
+      "query": "西安银行是否在（2024）内06民初70号中被诉？",
+      "relevant_evidence_ids": [],
+      "relevant_candidate_chunk_ids": [],
+      "labels_basis": "案号属于苏州银行材料；西安企业过滤后无支持。",
+      "expected_behavior": "no_support_or_explicit_no_evidence",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q08",
+      "category": "publication_boundary",
+      "entity_id": "REAL-002966",
+      "as_of_date": "2026-06-24",
+      "risk_type": "judicial",
+      "query": "（2024）内06民初70号中苏州银行的一审是否尚未开庭？",
+      "relevant_evidence_ids": [],
+      "relevant_candidate_chunk_ids": [],
+      "labels_basis": "公告2026-06-25公开；6月23日事件不代表当时已公开。",
+      "expected_behavior": "no_support_or_explicit_no_evidence",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q09",
+      "category": "missing_source",
+      "entity_id": "REAL-600816",
+      "as_of_date": "2026-10-01",
+      "risk_type": "business",
+      "query": "工商来源能否证明建元信托截至基准日经营正常？",
+      "relevant_evidence_ids": [],
+      "relevant_candidate_chunk_ids": [],
+      "labels_basis": "真实包仅司法公告；无工商来源不得将缺证据写成经营安全。",
+      "expected_behavior": "no_support_or_explicit_no_evidence",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    },
+    {
+      "query_id": "PUB-Q10",
+      "category": "missing_exact_case",
+      "entity_id": "REAL-600155",
+      "as_of_date": "2026-07-31",
+      "risk_type": "judicial",
+      "query": "能否给出华创证券系列诉讼的唯一案号和对应判决？",
+      "relevant_evidence_ids": [],
+      "relevant_candidate_chunk_ids": [],
+      "labels_basis": "相关两条状态记录fact_key为空；系列案件摘要不支持唯一案号判决。",
+      "expected_behavior": "no_support_or_explicit_no_evidence",
+      "run_status": "not_run",
+      "retrieved_chunk_ids": null
+    }
+  ],
+  "measurement": {
+    "recall_at_5": null,
+    "cross_company_false_retrieval_count": null,
+    "citation_locatable_ratio": null,
+    "no_evidence_behavior": null,
+    "status": "not_run"
+  },
+  "metric_protocol": {
+    "recall_at_5": "Per positive query: |top5 intersect relevant| / |relevant|; macro mean over 6 positive queries only. Preserve actual returned IDs.",
+    "cross_company_false_retrieval": "Count returned chunks whose company differs from requested company over all 10 queries.",
+    "citation_locatable_ratio": "Number of actual returned citations locating verified source+page+excerpt / all actual returned citations. Zero denominator is unmeasured.",
+    "no_evidence": "Four empty-label queries assessed separately for unsupported answer or no-evidence behavior.",
+    "runner_boundary": "Existing workflow selects four fixed risk queries; these 10 explicit question probes require a separate scoped retrieval harness. Do not claim they ran through current workflow.",
+    "label_change": "Deduplicating/altering candidate import invalidates chunk labels; refreeze hash before measurements."
+  },
+  "labels_sha256": "c8e3734bb86f51a66e61760686f1871d19feb36096d905d567eb2656f1f23903"
+}

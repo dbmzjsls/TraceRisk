@@ -27,7 +27,8 @@ const fallbackRows = computed(() => props.steps.map(step => ({
 <template>
   <section class="panel run-timeline">
     <header class="timeline-heading">
-      <div><h2>第 {{ run.run_number }} 次运行 · {{ statusLabel(run.status) }}</h2><p class="mono muted">运行 {{ run.id }}</p></div>
+      <h2>运行时间线</h2>
+      <div><h3 class="status-label" :data-status="run.status">第 {{ run.run_number }} 次运行 · {{ statusLabel(run.status) }}</h3><p class="mono muted">运行 {{ run.id }}</p></div>
       <RouterLink v-if="run.report_id" :to="`/reports/${run.report_id}`">查看本次运行报告</RouterLink><span v-else class="muted">报告尚未生成</span>
     </header>
     <p v-if="historyAvailable === null" class="muted">正在核对事件历史。</p>
@@ -44,9 +45,11 @@ const fallbackRows = computed(() => props.steps.map(step => ({
 </template>
 
 <style scoped>
-.timeline-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.timeline-heading h2 { margin-top: 0; }
+.timeline-heading { display: grid; align-items: start; gap: .3rem; }
+.timeline-heading h2 { margin: 0 0 .35rem; }
 .timeline-list { display: grid; gap: 0.75rem; margin: 1rem 0 0; padding: 0; list-style: none; }
-.timeline-item { display: flex; justify-content: space-between; gap: 1rem; border-left: 2px solid var(--primary-color, #2563eb); padding-left: 0.875rem; }
+.timeline-item { display: grid; gap: .2rem; border-left: 2px solid var(--accent); padding-left: .65rem; }
+.timeline-heading .status-label { font-size: 13px; }
+.timeline-heading p { margin: .25rem 0; }
 .legacy-notice { border-radius: 0.5rem; background: rgba(148, 163, 184, 0.14); padding: 0.75rem; }
 </style>

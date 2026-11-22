@@ -19,10 +19,12 @@ export const router = createRouter({ history: createWebHistory(), routes: [
   { path: '/login', component: LoginPage, meta: { public: true } },
   { path: '/403', component: ErrorPage, props: { status: '403' } },
   { path: '/unavailable', component: ErrorPage, props: { status: '500' }, meta: { public: true } },
+  { path: '/demo', name: 'competition-demo', component: () => import('../features/demo/DemoPage.vue'), meta: { public: true } },
   { path: '/', component: WorkspaceLayout, children: [
     { path: '', redirect: '/companies' },
     { path: 'companies', component: CompanyListPage }, { path: 'companies/:id', component: CompanyDetailPage },
     { path: 'investigations', component: InvestigationListPage }, { path: 'investigations/:id', component: InvestigationDetailPage },
+    { path: 'assistant', component: () => import('../features/assistant/AssistantPage.vue') },
     { path: 'reviews', component: ReviewListPage, meta: { roles: ['reviewer', 'admin'] } }, { path: 'reviews/:id', component: ReviewDetailPage, meta: { roles: ['reviewer', 'admin'] } },
     { path: 'reports/:id', component: ReportPage },
   ] },
@@ -30,6 +32,7 @@ export const router = createRouter({ history: createWebHistory(), routes: [
 ] })
 let verifiedToken: string | null = null
 router.beforeEach(async to => {
+  if (to.name === 'competition-demo') return
   const auth = useAuthStore()
   if (auth.token && verifiedToken !== auth.token && to.path !== '/unavailable') {
     try { await refreshSession(); verifiedToken = auth.token } catch (error) {

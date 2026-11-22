@@ -42,3 +42,12 @@ export function useCreateInvestigation() {
   }
   return { ...mutation, submit }
 }
+
+export function useCompanyInvestigations(companyId: MaybeRefOrGetter<string>) {
+  return useQuery(computed(() => ({
+    queryKey: [...investigationKeys.list, 'company', toValue(companyId)],
+    queryFn: ({ signal }: { signal: AbortSignal }) => apiRequest(`/investigations?limit=100&company_id=${encodeURIComponent(toValue(companyId))}`, investigationsSchema, { signal }),
+    retry: false,
+    enabled: !!toValue(companyId),
+  })))
+}

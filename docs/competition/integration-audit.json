@@ -1,0 +1,970 @@
+{
+  "mode": "read_only_dry_run",
+  "scope": "real_public evidence rows only",
+  "accepted": 0,
+  "rejected": 55,
+  "reason_counts_nonexclusive": {
+    "identity_not_verified_uscc": 55,
+    "fact_review_not_verified": 55,
+    "observed_at_precedes_publication": 26,
+    "missing_fact_key": 2
+  },
+  "input_sha256": {
+    "data/cases.jsonl": "ded8785ad91a462e4761558e234083c55b0c17b78a6d51c06d35c2dc502a717d",
+    "data/chunks.jsonl": "dc4c4ba208114091f908e8aaf58a29f73ffaf5ea363ef84f2f66fc9832de5505",
+    "data/claims.jsonl": "7d77a154acdd3b877912f747fbb9549d56949b17ae811f8d4c23f52e2afd383a",
+    "data/coverage.jsonl": "8824ebf76818cd87092c07a847968f69bf07f401ae905c5dbb0643129f5ee410",
+    "data/entities.jsonl": "09924420b6779fd2f1232d6a478601e5a7f543183228c4159104491205214aab",
+    "data/evidence.jsonl": "2cec999e7632a5910152eb79c3dd5edbfcbc67bab281806b860a5d3878ee5714",
+    "data/labels.jsonl": "f39d6d56b72703897fda24471433a597edec48fd03d922668c7695503856532a",
+    "data/sources.jsonl": "c11befa254c77bff6c5bd3a77aefe6faaf5ae24104ff379aeec036b26adda59b",
+    "data/synthetic_generation.jsonl": "42e7f4f928dd8d54bd6fc0f07ace1c7d504888523c6eeab162e146532d63d5ae"
+  },
+  "records": [
+    {
+      "evidence_id": "29362ec1-b272-5560-a31a-e5f2794673f2",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2025-12-13",
+      "input_observed_at": "2025-12-13",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "5462f558-cf8f-5aa3-826a-72684e2455a3",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-11",
+      "input_observed_at": "2025-12-11",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "6036c89c-6a88-5cda-af1f-d8e65071b3ad",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-08-27",
+      "input_observed_at": "2025-08-27",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "8681fa3f-fa08-5642-8b74-8f642a8231af",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2025-12-13",
+      "input_observed_at": "2025-12-13",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "0630d4f8-6e40-53b2-81b6-928f795ee010",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2025-12-13",
+      "input_observed_at": "2025-12-13",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "86099ee7-8f47-541d-8624-d77a2d0367b4",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-11",
+      "input_observed_at": "2025-12-11",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "23f7937a-fca5-5fd9-872c-53f6924b9339",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-26",
+      "input_observed_at": "2026-06-26",
+      "published_at": "2026-06-26",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-26"
+    },
+    {
+      "evidence_id": "3406c8d7-bd41-5d4d-b6a7-af732a7a8372",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-24",
+      "input_observed_at": "2026-06-24",
+      "published_at": "2026-06-26",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-26"
+    },
+    {
+      "evidence_id": "4e0edd04-5ada-5d1b-96d9-2f0b47dbf945",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-26",
+      "input_observed_at": "2026-06-26",
+      "published_at": "2026-06-26",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-26"
+    },
+    {
+      "evidence_id": "5ca44326-2339-59dd-a65f-4fc6be7c30ca",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225388226",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-26",
+      "input_observed_at": "2026-06-26",
+      "published_at": "2026-06-26",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-26"
+    },
+    {
+      "evidence_id": "08d42def-4d2a-51b5-a53e-458bc09b7102",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-11",
+      "input_observed_at": "2025-12-11",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "f36757f1-d1b1-50f6-aa3d-722e08041b51",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-09-23",
+      "input_observed_at": "2026-09-23",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "2fb121b5-a827-575b-ba2d-561a09bb7e10",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-15",
+      "input_observed_at": "2026-09-15",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "09af773b-9e7e-59d9-a627-c51f802888bb",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-15",
+      "input_observed_at": "2026-09-15",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "8d2e3dad-f1c4-5241-8d5a-01aff08c9f87",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-15",
+      "input_observed_at": "2026-09-15",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "09b60a33-d3aa-51ff-ac55-af8b13596476",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-10",
+      "input_observed_at": "2026-09-10",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "bde86eba-8648-5586-bc83-8173f5610379",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1224871976",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-11",
+      "input_observed_at": "2025-12-11",
+      "published_at": "2025-12-13",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2025-12-13"
+    },
+    {
+      "evidence_id": "a35f1a46-87ef-5d7e-925f-36057d83b0bf",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225577082",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-15",
+      "input_observed_at": "2026-09-15",
+      "published_at": "2026-09-23",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-09-23"
+    },
+    {
+      "evidence_id": "fba93bc1-4887-5fed-be7b-32e810eef63a",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-10-01",
+      "input_observed_at": "2026-10-01",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-10-01"
+    },
+    {
+      "evidence_id": "33434ed4-0862-5e0d-9429-cc36dbfc9422",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2020-06-30",
+      "input_observed_at": "2020-06-30",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-10-01"
+    },
+    {
+      "evidence_id": "f05bda57-3359-531f-82c9-5231d1751270",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-09-30",
+      "input_observed_at": "2026-09-30",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-10-01"
+    },
+    {
+      "evidence_id": "bc8b7af6-57a2-5da9-ac97-ecb646736f18",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-10-01",
+      "input_observed_at": "2026-10-01",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-10-01"
+    },
+    {
+      "evidence_id": "affebea7-c5d4-5e9a-885e-8fd939ad634c",
+      "entity_id": "REAL-600816",
+      "source_id": "CNINFO-1225590975",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-10-01",
+      "input_observed_at": "2026-10-01",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-10-01"
+    },
+    {
+      "evidence_id": "f780411d-f5d0-566d-9325-a876d8753faf",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-01-06",
+      "input_observed_at": "2026-01-06",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "2fec1d4e-047e-5320-a79b-92628dfcae29",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-30",
+      "input_observed_at": "2025-12-30",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "2f5e2a33-8593-53dc-9523-4b00563eb948",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-30",
+      "input_observed_at": "2025-12-30",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "ebdad3f0-22d5-59ff-977b-eef99236d306",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-01-06",
+      "input_observed_at": "2026-01-06",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "14299321-5ac4-59db-bf6e-0282a11a3813",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-01-06",
+      "input_observed_at": "2026-01-06",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "b3be717e-0c0e-54fd-8620-42cfc3e157c7",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-04-17",
+      "input_observed_at": "2025-04-17",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "f7bb06fb-9d70-5f8c-ada0-356d7c211bd0",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-01-06",
+      "input_observed_at": "2026-01-06",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "fab35807-47f0-5657-82b0-67e3a474b023",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-30",
+      "input_observed_at": "2025-12-30",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "7ab36db0-3257-54a5-aa1c-421f4548a37d",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-16",
+      "input_observed_at": "2026-06-16",
+      "published_at": "2026-06-16",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-16"
+    },
+    {
+      "evidence_id": "9eb24717-6073-508a-b275-e17ae4ac4f90",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-10",
+      "input_observed_at": "2026-06-10",
+      "published_at": "2026-06-16",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-16"
+    },
+    {
+      "evidence_id": "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-10",
+      "input_observed_at": "2026-06-10",
+      "published_at": "2026-06-16",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-16"
+    },
+    {
+      "evidence_id": "80510a12-6fd9-5992-921e-1b23837a2f88",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-10",
+      "input_observed_at": "2026-06-10",
+      "published_at": "2026-06-16",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-16"
+    },
+    {
+      "evidence_id": "9b4f48dd-3414-5db2-ae2f-9b95b6dc6343",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-01-06",
+      "input_observed_at": "2026-01-06",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "a54808f7-27d8-568f-a0ce-4ebdf5ae4d3d",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1224919319",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2025-12-30",
+      "input_observed_at": "2025-12-30",
+      "published_at": "2026-01-06",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-01-06"
+    },
+    {
+      "evidence_id": "ca22db21-df72-52c3-b26b-78c9a514f541",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225371694",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-10",
+      "input_observed_at": "2026-06-10",
+      "published_at": "2026-06-16",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-16"
+    },
+    {
+      "evidence_id": "3e6a8131-aeef-5c20-a438-727fb63ce0c2",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-07-10",
+      "input_observed_at": "2026-07-10",
+      "published_at": "2026-07-10",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-10"
+    },
+    {
+      "evidence_id": "e0b70071-b751-5a84-a968-2c33c24a2f5b",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-07-09",
+      "input_observed_at": "2026-07-09",
+      "published_at": "2026-07-10",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-10"
+    },
+    {
+      "evidence_id": "cef7ec02-ddce-57b7-b2d2-1acc2798035f",
+      "entity_id": "REAL-600928",
+      "source_id": "CNINFO-1225417168",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-07-09",
+      "input_observed_at": "2026-07-09",
+      "published_at": "2026-07-10",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-10"
+    },
+    {
+      "evidence_id": "f5affd45-17bc-5622-9e2e-23a5671c063b",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-05-22",
+      "input_observed_at": "2026-05-22",
+      "published_at": "2026-05-22",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-05-22"
+    },
+    {
+      "evidence_id": "043e48df-0b7a-5958-8494-f27edc7c3069",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "missing_fact_key"
+      ],
+      "event_date": "2026-06-04",
+      "input_observed_at": "2026-06-04",
+      "published_at": "2026-05-22",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-05-22"
+    },
+    {
+      "evidence_id": "82b191f2-cb9e-5c04-941f-ec1772e397fd",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-05-22",
+      "input_observed_at": "2026-05-22",
+      "published_at": "2026-05-22",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-05-22"
+    },
+    {
+      "evidence_id": "b4fdf063-dba6-5d32-937a-1adb456ad93e",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-05-22",
+      "input_observed_at": "2026-05-22",
+      "published_at": "2026-05-22",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-05-22"
+    },
+    {
+      "evidence_id": "f5f2decf-b0dc-53c4-aa48-18dcba17fe5e",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225323533",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-05-22",
+      "input_observed_at": "2026-05-22",
+      "published_at": "2026-05-22",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-05-22"
+    },
+    {
+      "evidence_id": "6fb91b74-cb6a-5424-b2e4-7f1867e147bd",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-07-31",
+      "input_observed_at": "2026-07-31",
+      "published_at": "2026-07-31",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-31"
+    },
+    {
+      "evidence_id": "a56f7d5b-28f3-56f1-ad59-4e31ebf5ff58",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "missing_fact_key"
+      ],
+      "event_date": "2026-07-31",
+      "input_observed_at": "2026-07-31",
+      "published_at": "2026-07-31",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-31"
+    },
+    {
+      "evidence_id": "daaea6cf-57a5-5b88-ac0f-cf9f7a85ad97",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-07-31",
+      "input_observed_at": "2026-07-31",
+      "published_at": "2026-07-31",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-31"
+    },
+    {
+      "evidence_id": "972ec052-1072-5b7a-b172-0ccf9d27cf7b",
+      "entity_id": "REAL-600155",
+      "source_id": "CNINFO-1225448825",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-07-31",
+      "input_observed_at": "2026-07-31",
+      "published_at": "2026-07-31",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-07-31"
+    },
+    {
+      "evidence_id": "b308d1aa-4544-5c76-af85-70402fa60d31",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-25",
+      "input_observed_at": "2026-06-25",
+      "published_at": "2026-06-25",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-25"
+    },
+    {
+      "evidence_id": "50b2149d-0846-546d-8e5f-5efd00e9a9d9",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2026-06-23",
+      "input_observed_at": "2026-06-23",
+      "published_at": "2026-06-25",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-25"
+    },
+    {
+      "evidence_id": "e5702c58-7dba-5a44-ad3b-011eb5a932a1",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-25",
+      "input_observed_at": "2026-06-25",
+      "published_at": "2026-06-25",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-25"
+    },
+    {
+      "evidence_id": "6a57dfdd-0594-54f2-95c8-6bff3352592b",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified"
+      ],
+      "event_date": "2026-06-25",
+      "input_observed_at": "2026-06-25",
+      "published_at": "2026-06-25",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-25"
+    },
+    {
+      "evidence_id": "c9f4ab9e-7c9a-5567-a2a2-fb26240505cf",
+      "entity_id": "REAL-002966",
+      "source_id": "CNINFO-1225386155",
+      "accepted": false,
+      "reasons": [
+        "identity_not_verified_uscc",
+        "fact_review_not_verified",
+        "observed_at_precedes_publication"
+      ],
+      "event_date": "2024-06-12",
+      "input_observed_at": "2024-06-12",
+      "published_at": "2026-06-25",
+      "accessed_at": "2026-11-08",
+      "required_visibility_date": "2026-06-25"
+    }
+  ],
+  "limitations": [
+    "Package identity declarations are unverified; no external identity registry is consumed.",
+    "Local PDF hashes and locator presence do not establish semantic correctness or independent review.",
+    "Passing this dry-run alone never authorizes import; source, identity, review and ownership must be verified.",
+    "Duplicate content and per-case reused evidence require deduplication before any future import."
+  ],
+  "status": "blocked_real_import",
+  "execution_date": "2026-11-08",
+  "package_root": "C:\\Users\\jsls\\Desktop\\作业\\人工智能应用创新大赛\\TraceRisk_金融机构数据包_含预处理及对接要求",
+  "code_version": "3b7d020533d63287cac6390f9f24af2d8244b91c",
+  "branch": "competition/credit-investigation",
+  "database_actions": {
+    "public_import_database": null,
+    "public_import_written_rows": 0,
+    "retained_database_accessed": false,
+    "public_index_built": false,
+    "public_real_embedding_run": false,
+    "public_workflow_run": false,
+    "regression": "Existing database fixture creates random tracerisk_test_<uuid> databases, migrates, and drops only that fixture-owned exact name."
+  },
+  "versions": {
+    "python": "3.12.8",
+    "tracerisk": "0.1.0",
+    "pytest": "9.1.1",
+    "sqlalchemy": "2.0.52",
+    "psycopg": "3.3.5",
+    "pgvector": "0.5.0",
+    "sentence-transformers": "5.7.0"
+  },
+  "embedding_plan": {
+    "provider": "bge",
+    "model": "BAAI/bge-small-zh-v1.5",
+    "dimensions": 512,
+    "distance": "cosine",
+    "chunk_schema_version": "v1",
+    "index_version": null,
+    "run_status": "not_run_identity_and_review_blocked"
+  },
+  "tests": [
+    {
+      "command": "pytest apps/api/tests/unit/retrieval/test_chunking.py apps/api/tests/unit/test_database_lifecycle.py -q -p no:cacheprovider",
+      "passed": 9,
+      "failed": 0,
+      "duration_seconds": 0.44
+    },
+    {
+      "command": "pytest apps/api/tests/integration/test_hybrid_retrieval.py -q -p no:cacheprovider --basetemp=C:/Project/TraceRisk/apps/api/.tmp/competition-integration-20261108",
+      "passed": 19,
+      "failed": 0,
+      "duration_seconds": 20.67,
+      "embedding": "Fake regression only"
+    },
+    {
+      "command": "pytest apps/api/tests/unit/test_public_evidence_audit.py -q -p no:cacheprovider --basetemp=C:/Project/TraceRisk/apps/api/.tmp/competition-audit-uscc-final-20261108",
+      "passed": 12,
+      "failed": 0,
+      "duration_seconds": 0.23
+    }
+  ],
+  "metrics": {
+    "recall_at_5": null,
+    "cross_company_false_retrieval_count": null,
+    "citation_locatable_ratio": null,
+    "real_investigation_success": null,
+    "status": "not_run"
+  },
+  "identity_followup": {
+    "entity_id": "REAL-002966",
+    "candidate_uscc": "91320000768299855B",
+    "status": "unverified_search_snippet_only_do_not_import",
+    "candidate_source": "https://www.suzhoubank.com/suzhoubank/attachDir/2025/04/2025042822523362319.pdf",
+    "limitation": "Inventory agent reported web original timeout and local TLS legacy negotiation failure; candidate is not verified identity."
+  },
+  "artifact_sha256": {
+    "scripts/audit_public_evidence.py": "f373b2f281e2787f85e4d83645f1a1226acf2a2d8d5562006842df2ddd31f81a",
+    "docs/competition/retrieval-queries.json": "7cc46965018adc364464793dea2954d56651af744d309ef0810f935536918b1c",
+    "apps/api/tests/unit/test_public_evidence_audit.py": "93958ff6ef002be54eb8a55ca686a27195c078f5bc0d551824e06d833686a28b"
+  },
+  "contract_sha256": {
+    "apps/api/src/tracerisk/evidence/models.py": "41da1b361ac7134fa8fb84b21ca2539e1619994fc12193e7fc0918bbbd461a18",
+    "apps/api/src/tracerisk/evidence/service.py": "07904aefc901e232ffffa10f702b11077ae12027a30dcf94a008860b028846b6",
+    "apps/api/src/tracerisk/retrieval/chunking.py": "18302cd5fa45113c4bde2f6f8fd3bead5c003765096cb356815d890b33ff7469",
+    "apps/api/src/tracerisk/retrieval/indexing.py": "5e26e6f3232214d00d64d8838238e8aa9a657d3e8f4b66ffcd0b6ae8ba8fe957",
+    "apps/api/src/tracerisk/retrieval/index_cli.py": "2e85fcb1dce269ac1fba34197ece59b28ce12a957965e1a109df6955cec93683",
+    "scripts/database_lifecycle.py": "8f6669db709891d17b35f8868557ad1a52ff9a7fc9f0eecfce6038cd1fd57af2"
+  },
+  "manifest_sha256": "e15b9e09fc30ead2afcc5ab10ea4183b142801dacfd3e9f67cc66bffcb2451b6",
+  "static_checks": {
+    "ruff_check": "passed",
+    "git_diff_check": "passed"
+  },
+  "identity_gate_validation": "Requires verified identity declaration and a nonempty 18-character USCC using allowed alphabet and MOD 31 check digit; structural validity does not verify registration."
+}

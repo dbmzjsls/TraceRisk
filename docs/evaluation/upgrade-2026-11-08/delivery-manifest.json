@@ -1,0 +1,298 @@
+{
+  "base_commit": "4cd2ada10472a233255a04cce13497eb22b06ba1",
+  "working_tree_changes_uncommitted": true,
+  "files": {
+    "apps/api/src/tracerisk/ai/prompts.py": {
+      "sha256": "adfb26c5fb3f78c44ac5d69566e235217f5ca03e8cb2a648bbe7716325b6246c",
+      "bytes": 2513
+    },
+    "apps/api/src/tracerisk/ai/provenance.py": {
+      "sha256": "f2cef8fd6acc444500f42ef7b2efb49646e6e97282dac10a30c33a50e7194e1b",
+      "bytes": 1127
+    },
+    "apps/api/src/tracerisk/ai/schemas.py": {
+      "sha256": "8b08c11954d52fdd4f56a4cd31ad086e135c7628080a84a8db1eabd1efd5b698",
+      "bytes": 2427
+    },
+    "apps/api/src/tracerisk/ai/service.py": {
+      "sha256": "aebb891753f6146a33d3285682a34c7cb1a3f8fe0f1b9270f0f27b63a8580fed",
+      "bytes": 7649
+    },
+    "apps/api/src/tracerisk/challenge_eval/validation.py": {
+      "sha256": "94150add5f1c0aff442d98f77d851296e8aa6f53cc4ce44925519733b498a835",
+      "bytes": 7084
+    },
+    "apps/api/src/tracerisk/evidence/service.py": {
+      "sha256": "07904aefc901e232ffffa10f702b11077ae12027a30dcf94a008860b028846b6",
+      "bytes": 13394
+    },
+    "apps/api/src/tracerisk/investigations/router.py": {
+      "sha256": "d1d2bc651a9b6f28dc9dbba8e6c664860e06765ae8d198347c88a11ff57a0083",
+      "bytes": 17252
+    },
+    "apps/api/src/tracerisk/investigations/schemas.py": {
+      "sha256": "cf8eee54bbc15b56ac999db75aa5efb300093541d24dcefd30cf1d4e12d79c7b",
+      "bytes": 3832
+    },
+    "apps/api/src/tracerisk/reports/render.py": {
+      "sha256": "afb2349d647490d02a32f851e4e337f80eca2209d9bc5886a1639c1ca2e95b96",
+      "bytes": 2666
+    },
+    "apps/api/src/tracerisk/reports/service.py": {
+      "sha256": "1f593575dc58ee488ffb3700febd4d76453b35758c716ed47bd2e74021f60d63",
+      "bytes": 17026
+    },
+    "apps/api/src/tracerisk/workflows/errors.py": {
+      "sha256": "2d03e106d1ed1d2f5a63e878634759197b99f6a21b55f0bb597ba38420e93097",
+      "bytes": 501
+    },
+    "apps/api/src/tracerisk/workflows/worker.py": {
+      "sha256": "4ca9a816411383e270639e8e2a1075f37af5c357157fadc074c83c6f9dda383e",
+      "bytes": 6198
+    },
+    "apps/api/tests/challenge_eval/test_runner.py": {
+      "sha256": "811ab89a9890d1d2027baa7b211fec774cbf4bd5a0e7fadc8537dd497da52ca7",
+      "bytes": 28482
+    },
+    "apps/api/tests/challenge_eval/test_validation.py": {
+      "sha256": "f58ce280fdf4284d29958019af5831d86dd4810cd1ddeb373cf0ec26ec308885",
+      "bytes": 14766
+    },
+    "apps/api/tests/integration/test_investigation_api.py": {
+      "sha256": "af03af4f6765c39e21bc44ef31a24d1a6973dc377b4ddb8a7b18fd9fd35430e0",
+      "bytes": 36564
+    },
+    "apps/api/tests/integration/test_reports.py": {
+      "sha256": "61392e9b3b1303ec54d8ee439c726ab0f2ea59e256265926469b724f00326f99",
+      "bytes": 18191
+    },
+    "apps/api/tests/integration/test_workflow_event_lifecycle.py": {
+      "sha256": "1e1b90fb80d6aacf4ae2cdabebd03be7cffa06eac389037c2f1bbad85b79aef1",
+      "bytes": 18500
+    },
+    "apps/api/tests/unit/ai/test_prompt_injection.py": {
+      "sha256": "97901b2dddefe1cbad645bca75327c48d565640094bdfff928f86d4826217438",
+      "bytes": 1472
+    },
+    "apps/api/tests/unit/ai/test_provenance.py": {
+      "sha256": "cf060d8376df829eb76e67be47cbf9ba6963b35f0be7284bf76b91594ef95972",
+      "bytes": 936
+    },
+    "apps/api/tests/unit/reports/test_render.py": {
+      "sha256": "020d1c55086546dcdc836df4d01679e1f497b27920eca263fcd7f216d916812c",
+      "bytes": 1488
+    },
+    "apps/web/e2e/investigation.spec.ts": {
+      "sha256": "7f7b8ebef7ed72112a6f2541c0552bb39598f74fe1ace71a1efdfcc73f9be0e2",
+      "bytes": 27514
+    },
+    "apps/web/src/api/generated.ts": {
+      "sha256": "d291cd038851bbb696b694a035d975c39aa7d56ac3850bbf1e5834f66c68d963",
+      "bytes": 34745
+    },
+    "apps/web/src/api/reportSnapshots.ts": {
+      "sha256": "17b7161cbf232140f5e70bcdc813130ffd4f61a2156724f9241670376b6580b7",
+      "bytes": 9155
+    },
+    "apps/web/src/api/schemas.ts": {
+      "sha256": "3f059b2e90b39ce53b11e640f3dc209055857351c6fb578223be53f6393d4b1d",
+      "bytes": 7229
+    },
+    "apps/web/src/features/auth/LoginPage.vue": {
+      "sha256": "ca2a5f1fe6786111136c585c6b4d1b0feb9ccdd909f13867f394237323664821",
+      "bytes": 1176
+    },
+    "apps/web/src/features/companies/CompanyDetailPage.vue": {
+      "sha256": "0b28177dcac8414d9e3ec671551a7989054b50f9c15b58dcbc6d1c7b2ba36a7f",
+      "bytes": 2657
+    },
+    "apps/web/src/features/investigations/analysisLabels.ts": {
+      "sha256": "515cd657eda985702f111544a0942369e15419ecd3388c11ed414ae645b9b60c",
+      "bytes": 1440
+    },
+    "apps/web/src/features/investigations/RiskResultSections.vue": {
+      "sha256": "fb77aa0cae768fb348c58754bfcbaee6dad4e567387dd0c6dec32288c9a1692d",
+      "bytes": 5942
+    },
+    "apps/web/src/features/investigations/RiskScoreSummary.vue": {
+      "sha256": "da355f3a34bb0a182cb95d2faa61adede581d0e221beb96fc53ac2e51aadb60b",
+      "bytes": 2271
+    },
+    "apps/web/src/features/investigations/useInvestigations.ts": {
+      "sha256": "9307bb56d029e387d4c7ecaf5fa1fc860ff73dcf1999b7f73a1062e939a56949",
+      "bytes": 3646
+    },
+    "apps/web/src/features/reports/ReportSections.vue": {
+      "sha256": "7c1e13c75e1c361b3d4a1430c642391f92200375e396365d2b14f95bd8772cd2",
+      "bytes": 6314
+    },
+    "apps/web/src/layouts/WorkspaceLayout.vue": {
+      "sha256": "fd87006659cc518cb567e8e366bb7b2a3bd1346a0ff2b990c301ca305c7c40b7",
+      "bytes": 3060
+    },
+    "apps/web/tests/stage5-event-boundaries.ts": {
+      "sha256": "48e84806a13ccd8056a6518c2c30f0130614cad7e0120b822251752d280330fd",
+      "bytes": 43831
+    },
+    "datasets/evaluation/investigation_validation_cases.jsonl": {
+      "sha256": "7002dfc8ee02977bd91cb495108cb841b18b74502ab306cef18e61bdb6f8038c",
+      "bytes": 27410
+    },
+    "docs/acceptance.md": {
+      "sha256": "6b4de990794bb6344799ffb6fdc50f18596972c9f28e2a517597956edeb40b2c",
+      "bytes": 3215
+    },
+    "docs/demo-script.md": {
+      "sha256": "18c7d9d3d8c609d0fef719fe4c02db0079e191e4de75941c67a44a23192d447b",
+      "bytes": 4210
+    },
+    "docs/evaluation/upgrade-2026-11-08/e2e-summary.json": {
+      "sha256": "a14e21bf9e381b5dc1d0ac29bd325bbe4a407d88bf7616a8f79f6f5e8656648f",
+      "bytes": 398
+    },
+    "docs/evaluation/upgrade-2026-11-08/images/company.png": {
+      "sha256": "f7f9b17da5ec00207e212e8c0d7cf8b0b7cec9abe2dc9b18d3d7f7fc3328d290",
+      "bytes": 67115
+    },
+    "docs/evaluation/upgrade-2026-11-08/images/missing-coverage.png": {
+      "sha256": "5851695fdfd044aba958e6d7159ecd50ff2fbe49f30fc26e19551d2f1ee50bf5",
+      "bytes": 115320
+    },
+    "docs/evaluation/upgrade-2026-11-08/images/report.png": {
+      "sha256": "9f5104472a914c5ddec463f6a1d22ada006073ac63b092bb4b59999b019fb217",
+      "bytes": 83744
+    },
+    "docs/evaluation/upgrade-2026-11-08/images/risk-profile.png": {
+      "sha256": "9412ddaf5945cfddab537ee5f30397ea8b2d6cb348e511ae8e74281eea2b4f75",
+      "bytes": 101176
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/attempts.jsonl": {
+      "sha256": "9fa4cf1fb42cbf561c17042cb60d6b60639a14b9b8f05bfbc1ea679ff2458963",
+      "bytes": 30248
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/case-events.jsonl": {
+      "sha256": "04bbd23d1ddb0303bc9ff31801c5c2faaf8a593f6ff083f20baa4a806db7a176",
+      "bytes": 58345
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/cases.jsonl": {
+      "sha256": "d48c7b9d64f0713389cec6ffe90cb87bb47c2d9c348e56d38ffc74a057d249dc",
+      "bytes": 50587
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/config.json": {
+      "sha256": "e7501d3ffd0164aa1c9c7e9562ad8cdea65d218fa17c03fb6eae952123aa0133",
+      "bytes": 1307
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/dataset.jsonl": {
+      "sha256": "7002dfc8ee02977bd91cb495108cb841b18b74502ab306cef18e61bdb6f8038c",
+      "bytes": 27410
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/manifest.json": {
+      "sha256": "ddd7c768b93567c9d2f374c6a96cf4a5dc617ae5f4b10c0505e54d4d9058e5b5",
+      "bytes": 53626
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-final-live/summary.json": {
+      "sha256": "c8f8787c6e15c6854ec3d023f1d55060cf61203c2197a8b0ec0fe04b807e24eb",
+      "bytes": 1100
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/attempts.jsonl": {
+      "sha256": "e09d534672dbc5c06439f6c6327363a952f361ed55bf99512c6662c86a1a8f98",
+      "bytes": 32710
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/case-events.jsonl": {
+      "sha256": "56b25e7d668357de0f2ceb1d002e60bfda60b34aaf2968b65d1b314653447182",
+      "bytes": 61132
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/cases.jsonl": {
+      "sha256": "2ff88af56af37cfed85cbe571244cdc7efe726ccb1ea8fc7a6b40ec78d41ba1a",
+      "bytes": 53163
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/config.json": {
+      "sha256": "e7501d3ffd0164aa1c9c7e9562ad8cdea65d218fa17c03fb6eae952123aa0133",
+      "bytes": 1307
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/dataset.jsonl": {
+      "sha256": "7002dfc8ee02977bd91cb495108cb841b18b74502ab306cef18e61bdb6f8038c",
+      "bytes": 27410
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/manifest.json": {
+      "sha256": "f70cc1bbf96b17a9b19518e8af1f4a96f41e9e80ee6caf0997d2487c687fcfed",
+      "bytes": 53620
+    },
+    "docs/evaluation/upgrade-2026-11-08/independent-live/summary.json": {
+      "sha256": "4f65c6ff969a200bfb6a855a9f09a02fe919643aa4743cafa5f1d2b87461f02c",
+      "bytes": 1099
+    },
+    "docs/evaluation/upgrade-2026-11-08/label-disputes.md": {
+      "sha256": "e3fc91c10713332ccd54d3e5664cee40091f3392b7053170a8ae7602966ef70c",
+      "bytes": 1033
+    },
+    "docs/evaluation/upgrade-2026-11-08/README.md": {
+      "sha256": "41150e03e17204701367ccea07db3224744c24fcc1886799c1d8a7f7d8073585",
+      "bytes": 9948
+    },
+    "docs/evaluation/upgrade-2026-11-08/real-workflow/result.json": {
+      "sha256": "d7833eb7439b73e99584ae5cfbf4072dd0229aecdb6bbdc1dd82cefb406dc5d0",
+      "bytes": 859
+    },
+    "docs/evaluation/upgrade-2026-11-08/real-workflow-v2/report.json": {
+      "sha256": "4c0eaa5503dba47cd301a2507e04a65c6a39588b8b00bde3382e9c7881befb8f",
+      "bytes": 59938
+    },
+    "docs/evaluation/upgrade-2026-11-08/real-workflow-v2/result.json": {
+      "sha256": "7b453ceb29fc70c0b46feccb3ee778eb7b693e9af48c55430e4491c2dac0a90d",
+      "bytes": 946
+    },
+    "docs/evaluation/upgrade-2026-11-08/replay/replay.json": {
+      "sha256": "50b1a1e70694b4885f91c23ee1c2a7b7c32ca28863fa7761e21e614dddc0001a",
+      "bytes": 4891
+    },
+    "docs/evaluation/upgrade-2026-11-08/replay-final/replay.json": {
+      "sha256": "4a862fc4b7fefa61377832390f7bf0f4def7282d8055b976a46d03f9e64c3673",
+      "bytes": 4947
+    },
+    "docs/evaluation/upgrade-2026-11-08/retained-check.json": {
+      "sha256": "186c75ecce2556c14ffcec6dd2e9425fc7b2568382721eddd18e8b81baf21baf",
+      "bytes": 106
+    },
+    "docs/evaluation/upgrade-2026-11-08/TraceRisk五分钟讲解.mp4": {
+      "sha256": "334b231a3f9468a50691c26fbf388fd3397c617b3ec8f4c3103a394562e975da",
+      "bytes": 4161568
+    },
+    "docs/evaluation/upgrade-2026-11-08/validation-summary.json": {
+      "sha256": "2145470e0d12e90d7abfddeddaf873c1d684b9fb8f2d6ea9d565860f2de8df39",
+      "bytes": 70715
+    },
+    "docs/evaluation/upgrade-2026-11-08/video-metadata.json": {
+      "sha256": "3fd4931f67967aa7e95a7e7cc7c2749a092a75e554f48aa818a1b0f4960d20ea",
+      "bytes": 388
+    },
+    "docs/evaluation/upgrade-2026-11-08/讲解稿.md": {
+      "sha256": "85dbbce899e901e708533c0fbd20cf4bda4ccff3df2998b7d661d8e4873576f5",
+      "bytes": 4365
+    },
+    "docs/interview-notes.md": {
+      "sha256": "f1f468e125fcfe99fbe67de659eebe688411f277a365a0b0f9496b9877ff0f4d",
+      "bytes": 6019
+    },
+    "docs/resume-bullets.md": {
+      "sha256": "8e76690f263643ca02b9028fc46e1416af38549b13142a30083d2aaf4b66263a",
+      "bytes": 2424
+    },
+    "docs/项目改造计划书.md": {
+      "sha256": "b592eae08bd2dc0699d54c82916ccebc1767d46b74e261be691ad2c0cd8b4aaf",
+      "bytes": 12825
+    },
+    "README.md": {
+      "sha256": "079aa51011e71e368a90986260d848ee17b5112030e0f693a53a05cbb9d6cb48",
+      "bytes": 9061
+    },
+    "scripts/validate_investigation_upgrade.py": {
+      "sha256": "e1683c30ed9e24fe47d558cc43443646163915485271761d6217bd433fed12f9",
+      "bytes": 7562
+    },
+    "scripts/validate_real_workflow.py": {
+      "sha256": "c795fc44d8f2b931e44cfce875b2f72632e5b6dc17216ba1cfdda15ccb99a4ed",
+      "bytes": 10285
+    }
+  }
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "id": "CNINFO-1224919319",
+    "title": "一审判决",
+    "company": "西安银行股份有限公司",
+    "publishedAt": "2026-01-06",
+    "announcementNo": "2026-001",
+    "url": "https://static.cninfo.com.cn/finalpage/2026-01-06/1224919319.PDF",
+    "description": "公告披露一审判决进展，西安银行咸阳分行为原告。",
+    "quotes": [
+      {
+        "id": "ebdad3f0-22d5-59ff-977b-eef99236d306",
+        "page": "第1页",
+        "text": "上市公司所处的当事人地位：西安银行股份有限公司（以下简称“本公司”）咸阳分行为原告。"
+      },
+      {
+        "id": "2fec1d4e-047e-5320-a79b-92628dfcae29",
+        "page": "第2页",
+        "text": "近日，本公司收到陕西省咸阳市中级人民法院民事判决书（2025）陕04民初34号"
+      }
+    ]
+  },
+  {
+    "id": "CNINFO-1225371694",
+    "title": "二审判决",
+    "company": "西安银行股份有限公司",
+    "publishedAt": "2026-06-16",
+    "announcementNo": "2026-020",
+    "url": "https://static.cninfo.com.cn/finalpage/2026-06-16/1225371694.PDF",
+    "description": "后续公告披露二审判决，并注明该判决为终审判决。",
+    "quotes": [
+      {
+        "id": "2d1e60ef-2c0d-51b9-820b-2cfad200a864",
+        "page": "第3页",
+        "text": "本判决为终审判决。"
+      }
+    ]
+  },
+  {
+    "id": "CNINFO-1225417168",
+    "title": "执行立案",
+    "company": "西安银行股份有限公司",
+    "publishedAt": "2026-07-10",
+    "announcementNo": "2026-023",
+    "url": "https://static.cninfo.com.cn/finalpage/2026-07-10/1225417168.PDF",
+    "description": "公告披露西安银行申请强制执行，以及法院受理和执行案号。",
+    "quotes": [
+      {
+        "id": "e0b70071-b751-5a84-a968-2c33c24a2f5b",
+        "page": "第2页",
+        "text": "本公司咸阳分行向陕西省咸阳市中级人民法院申请了强制执行并于近日被受理立案，执行案号为（2026）陕04执505号。"
+      }
+    ]
+  }
+]

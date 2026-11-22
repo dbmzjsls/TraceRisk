@@ -87,7 +87,8 @@ async def events(sessions: Sessions, run_id: UUID) -> list[WorkflowEvent]:
     assert [r.sequence for r in rows] == list(range(1, len(rows) + 1))
     assert len({r.event_key for r in rows}) == len(rows)
     assert all(
-        set(r.metadata_json) <= {"run_number", "attempt_count", "reason_codes"}
+        set(r.metadata_json)
+        <= {"run_number", "attempt_count", "reason_codes", "failure_code"}
         for r in rows
     )
     return rows

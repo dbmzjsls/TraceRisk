@@ -2,21 +2,29 @@
 import { citationSchema, type PendingFinding } from '../../api/schemas'
 import type { CitationEntry } from './CitationList.vue'
 import CitationList from './CitationList.vue'
-defineProps<{ findings: PendingFinding[]; reviewLinks?: boolean }>()
+defineProps<{ findings: PendingFinding[]; reviewLinks?: boolean; headingId?: string; selectedChunkId?: string | null; citationNumbers?: ReadonlyMap<string, number> }>()
 defineEmits<{ navigate: [chunkId: string | null, origin: unknown] }>()
 function citationsFor(finding: PendingFinding): CitationEntry[] { return finding.citations.map(citation => citationSchema.parse(citation)) }
 </script>
 <template>
   <section class="panel">
-    <h2>原始 AI 发现</h2>
-    <p class="muted">支持性校验核对引用合法性、结构化事实与声明代码，不能证明任意自然语言推论绝对正确；无法确定的文本标记为 indeterminate 并进入人工复核。</p>
+    <h2 :id="headingId">原始 AI 发现</h2>
+    <details class="finding-explanation">
+      <summary>发现与评分说明</summary>
+      <p class="muted">支持性校验核对引用合法性、结构化事实与声明代码，不能证明任意自然语言推论绝对正确；无法确定的文本标记为 indeterminate 并进入人工复核。</p>
     <p class="muted">AI 发现与人工决定分别保留；评分只来自版本化规则，AI 不修改分值。</p>
+    </details>
     <article v-for="finding in findings" :key="finding.finding_id" class="finding">
       <h3>{{ finding.title }} <span class="muted">版本 {{ finding.finding_version }}</span></h3><p class="muted">{{ finding.risk_type }} · {{ finding.claim_code }} · 证据充分性 {{ finding.evidence_sufficiency }} · 置信度 {{ finding.confidence_level }} · 建议复核 {{ finding.review_recommended ? '是' : '否' }}</p>
       <p class="support-line">支持状态 {{ finding.support_status }} · {{ finding.support_reason }}</p>
-      <p>{{ finding.summary }}</p><p>{{ finding.reasoning }}</p><CitationList :citations="citationsFor(finding)" @navigate="(chunkId, origin) => $emit('navigate', chunkId, origin)" />
+      <p>{{ finding.summary }}</p><p>{{ finding.reasoning }}</p><CitationList :citations="citationsFor(finding)" :selected-chunk-id="selectedChunkId" :citation-numbers="citationNumbers" @navigate="(chunkId, origin) => $emit('navigate', chunkId, origin)" />
       <RouterLink v-if="reviewLinks" :to="`/reviews/${finding.finding_id}`">复核此发现</RouterLink>
     </article>
     <p v-if="!findings.length" class="muted">本次运行暂无 AI 发现。</p>
   </section>
 </template>
+
+<style scoped>
+.finding-explanation { font-size: 13px; color: var(--ink-soft); }
+.finding-explanation summary { cursor: pointer; }
+</style>

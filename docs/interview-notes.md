@@ -1,5 +1,7 @@
 # 面试讲解与证据
 
+项目定位为面向金融机构的中小企业授信前调查助手，企业是被调查对象。本轮画像、真实模型与未达标结果见[2026-11-08实施记录](evaluation/upgrade-2026-11-08/README.md)；下列技术机制不代表授信审批或违约预测。
+
 ## 事务与所有权
 
 API 认证和参数校验后，service 用 `sessions.begin()` 定义事务；调查创建同时写 Investigation、Run、Outbox、审计和事件，保存任务意图。复核和报告锁 Investigation/Run，检查 current Run，拒绝历史版本写入。见 [调查 service](../apps/api/src/tracerisk/investigations/service.py)、[复核 service](../apps/api/src/tracerisk/reviews/service.py)、[报告 service](../apps/api/src/tracerisk/reports/service.py)。

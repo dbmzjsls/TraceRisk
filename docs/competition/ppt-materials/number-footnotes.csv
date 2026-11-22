@@ -1,0 +1,13 @@
+﻿ledger_id,statement,source,limitation
+E01,4家金融机构、10篇公告、55条真实证据记录；混合95证据31案例,C:\Users\jsls\Desktop\作业\人工智能应用创新大赛\TraceRisk_金融机构数据包_含预处理及对接要求\data\evidence.jsonl,文件复点；记录可复用，不是独立事实或已入库数
+E02,真实记录映射18/34/3,C:\Project\TraceRisk\docs\competition\tables\mapping-status.csv,结构候选不是身份/时间/语义已核实
+E03,企业、时间、片段哈希和冻结检索约束,C:\Project\TraceRisk\apps\api\src\tracerisk\evidence\service.py,既有机制与合成回归；真实资料指标未测量
+E04,40例路由1/10到9/10，额外复核0/30到15/30；20例应复核2/5、硬拒绝3/5,C:\Project\TraceRisk\docs\competition\analysis-audit.json,两个数据集分开；不是生产v2质量或真实业务准确率
+E05,合成95分，真实模型生产流程完成,C:\Project\TraceRisk\docs\competition\cases\A-report-real-model-synthetic.json,合成证据、Fake embedding、自动复核；不证明真人质量
+E06,实际页面展示95分及规则画像,C:\Project\TraceRisk\docs\competition\ppt-materials\screenshots\report-mock.png,与E05不是同一运行，截图明确Mock
+E07,缺来源零分进入运行级复核、无报告,C:\Project\TraceRisk\apps\web\e2e\investigation.spec.ts,未留存此例独立完整API副本；不补造运行ID
+E08,西安银行披露日35→0→0，三例建议复核,C:\Project\TraceRisk\docs\competition\cases\C-public-status-records.json,离线解析；金融机构原告/申请执行人，执行状态未覆盖
+E09,陈旧声明错误仍被字段契约支持,C:\Users\jsls\Desktop\作业\人工智能应用创新大赛\TraceRisk_金融机构数据包_含预处理及对接要求\runs\per_claim.jsonl,改编虚构；22/22只能说明字段契约一致，不能当语义正确率
+E10,真实证据预检0接受55拒绝,C:\Project\TraceRisk\docs\competition\integration-audit.json,只读预检；用户已明确展示不以真实接入为前提
+E11,12例六类展示设计，尚未新运行,C:\Project\TraceRisk\docs\competition\frozen-cases.json,开发复用/改编，单人标签，不泄露标签至模型输入
+E12,真人效率未测量,C:\Project\TraceRisk\docs\competition\cases\A-workflow-result.json,21.297秒不是人工任务时间，不推导效率比例
