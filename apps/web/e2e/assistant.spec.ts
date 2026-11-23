@@ -97,13 +97,18 @@ test('sends three real browser questions and reuses the first Run', async ({ pag
       if (casePath) mkdirSync(casePath)
       if (example.id === '03') {
         await capturePage.getByRole('button', { name: new RegExp(example.company.replace(/[（）]/g, '.')) }).click()
-      } else {
-        if (example.id === '02') await capturePage.getByRole('button', { name: '新对话' }).click()
+      } else if (example.id === '02') {
+        await capturePage.getByRole('button', { name: '新对话' }).click()
         await company.selectOption({ label: example.company })
         await date.fill('2026-09-11')
       }
       const question = readFileSync(join(root, 'docs/competition/conversations', example.id, 'prompt.txt'), 'utf8').trimEnd()
-      await capturePage.getByRole('button', { name: example.recommendation, exact: true }).click()
+      if (example.id === '01') {
+        await expect(company.locator('option:checked')).toHaveText(example.company)
+        await expect(company.locator('option').filter({ hasText: '同名科技（合成）有限公司' })).toHaveCount(0)
+      } else {
+        await capturePage.getByRole('button', { name: example.recommendation, exact: true }).click()
+      }
       await expect(input).toHaveValue(question)
       if (capture) await capturePage.waitForTimeout(2300)
 

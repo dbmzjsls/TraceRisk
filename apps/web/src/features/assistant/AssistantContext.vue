@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { NButton } from 'naive-ui'
 import type { Company } from '../../api/schemas'
 
-defineProps<{
+const props = defineProps<{
   companies: Company[]
   companyId: string
   date: string
@@ -11,6 +12,9 @@ defineProps<{
   sessions: { id: string; companyName: string; date: string }[]
   selectedId?: string
 }>()
+const selectableCompanies = computed(() => props.companies.filter(company =>
+  company.id === props.companyId || !['SYNTHETIC-COMPANY-004', 'SYNTHETIC-COMPANY-005'].includes(company.unified_credit_code),
+))
 const emit = defineEmits<{
   company: [id: string]
   date: [value: string]
@@ -27,7 +31,7 @@ const emit = defineEmits<{
       id="assistant-company" :value="companyId" :disabled="busy || !canCreate"
       @change="emit('company', ($event.target as HTMLSelectElement).value)">
       <option value="" disabled>选择企业</option>
-      <option v-for="company in companies" :key="company.id" :value="company.id">
+      <option v-for="company in selectableCompanies" :key="company.id" :value="company.id">
         {{ company.name }}
       </option>
     </select>

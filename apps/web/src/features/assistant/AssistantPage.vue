@@ -26,8 +26,8 @@ const assistant = useAssistant(companies, canCreate, initialId)
 const { sessions, active, companyId, date, draft, notice, busy, detail, events, currentRunChanged } = assistant
 const prompts = computed(() => companies.value?.find(item => item.id === companyId.value)?.is_synthetic
   ? recommendedQuestions : contextQuestions)
-const exampleId = route.query.example
-if (!initialId && (exampleId === '01' || exampleId === '02')) {
+const exampleId = route.query.example === '02' ? '02' : '01'
+if (!initialId) {
   const example = exampleDrafts[exampleId]
   let applied = false
   watch(companies, items => {
@@ -109,7 +109,7 @@ async function cite(answer: Answer, chunk: string, origin: unknown) {
 </NButton>
           </div>
         </section>
-        <p v-if="!active?.turns.length" class="state-note empty-conversation">选择企业和基准日，然后发送问题。后续追问沿用本次运行。</p>
+        <p v-if="!active?.turns.length" class="state-note empty-conversation">{{ companyId && draft ? '已准备好示例调查，可直接点击发送；也可以更换企业和问题。' : '选择企业和基准日，然后发送问题。' }}后续追问沿用本次运行。</p>
         <p v-if="detail.error.value && !lastTurn?.error" role="alert">
           {{ detail.error.value.message }} <button type="button" class="text-action" @click="detail.refetch()">刷新调查</button>
         </p>
